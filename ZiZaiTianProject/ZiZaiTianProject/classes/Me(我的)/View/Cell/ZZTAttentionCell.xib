@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ZZTAttentionCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="自在动漫" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rJM-wt-LXV">
+                        <rect key="frame" x="103" y="42" width="58" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="qTA-xT-n26"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hfh-DS-4dU">
+                        <rect key="frame" x="311" y="35" width="46" height="30"/>
+                        <color key="backgroundColor" red="0.92549019610000005" green="0.92549019610000005" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="NdU-cy-v5e"/>
+                        </constraints>
+                        <state key="normal" title="已关注">
+                            <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                    </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="认证信息:自在动漫社区官方账号" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8zM-9J-P3M">
+                        <rect key="frame" x="102" y="73" width="204" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="iq7-ti-U3L"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" image="kaKaXi" translatesAutoresizingMaskIntoConstraints="NO" id="kZd-Os-IsG" customClass="ZZTCircleImage">
+                        <rect key="frame" x="10" y="10" width="80" height="80"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="80" id="jTy-kd-FYt"/>
+                        </constraints>
+                    </imageView>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="8zM-9J-P3M" firstAttribute="top" secondItem="rJM-wt-LXV" secondAttribute="bottom" constant="14" id="CLx-3R-QZh"/>
+                <constraint firstItem="rJM-wt-LXV" firstAttribute="centerY" secondItem="kZd-Os-IsG" secondAttribute="centerY" id="DUK-tD-Jpy"/>
+                <constraint firstAttribute="bottom" secondItem="kZd-Os-IsG" secondAttribute="bottom" constant="10" id="In6-Ny-8mz"/>
+                <constraint firstItem="kZd-Os-IsG" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="NHq-Kh-6hN"/>
+                <constraint firstItem="kZd-Os-IsG" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="T6J-wg-ePq"/>
+                <constraint firstAttribute="bottom" secondItem="8zM-9J-P3M" secondAttribute="bottom" constant="10" id="Xxn-2B-nFW"/>
+                <constraint firstAttribute="trailing" secondItem="Hfh-DS-4dU" secondAttribute="trailing" constant="18" id="YfN-Pf-Gvg"/>
+                <constraint firstItem="rJM-wt-LXV" firstAttribute="leading" secondItem="kZd-Os-IsG" secondAttribute="trailing" constant="13" id="aEg-62-yg6"/>
+                <constraint firstItem="Hfh-DS-4dU" firstAttribute="centerY" secondItem="kZd-Os-IsG" secondAttribute="centerY" id="auB-9n-X7g"/>
+                <constraint firstItem="Hfh-DS-4dU" firstAttribute="leading" secondItem="rJM-wt-LXV" secondAttribute="trailing" constant="150" id="iNM-DI-qzm"/>
+                <constraint firstItem="8zM-9J-P3M" firstAttribute="leading" secondItem="kZd-Os-IsG" secondAttribute="trailing" constant="12" id="iVR-iV-zJm"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
+            <connections>
+                <outlet property="attentionBtn" destination="Hfh-DS-4dU" id="9nk-Mk-S0K"/>
+                <outlet property="userDetail" destination="8zM-9J-P3M" id="XuE-Cv-lRN"/>
+                <outlet property="userHead" destination="kZd-Os-IsG" id="ka6-wv-tIP"/>
+                <outlet property="userTitle" destination="rJM-wt-LXV" id="xKC-j7-hiM"/>
+            </connections>
+            <point key="canvasLocation" x="-1187" y="62"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="kaKaXi" width="1100" height="825"/>
+    </resources>
+</document>

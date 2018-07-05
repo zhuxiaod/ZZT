@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>title</key>
+		<string>低流量模式</string>
+		<key>detail</key>
+		<string>非WIFI环境下加载低质量图片，可为您节省70%流量</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>回复推送</string>
+		<key>detail</key>
+		<string>开启后及时收到别人的评论</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>更新提示</string>
+		<key>detail</key>
+		<string>关注作品更新后会及时提醒</string>
+	</dict>
+	<dict>
+		<key>title</key>
+		<string>夜间模式</string>
+		<key>detail</key>
+		<string>开启后,夜间模式不伤眼睛</string>
+	</dict>
+</array>
+</plist>

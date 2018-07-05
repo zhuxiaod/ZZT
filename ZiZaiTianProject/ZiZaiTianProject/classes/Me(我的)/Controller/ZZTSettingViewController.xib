@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ZZTSettingViewController">
+            <connections>
+                <outlet property="backBtn" destination="J84-GC-GF2" id="7Ja-TW-97u"/>
+                <outlet property="tableView" destination="rSt-3o-PPq" id="uJM-et-SMU"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TYJ-Dd-ItA">
+                    <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J84-GC-GF2">
+                            <rect key="frame" x="10" y="7" width="69" height="30"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="iC2-Wf-Chb"/>
+                            </constraints>
+                            <state key="normal" title="Button" image="navigationButtonReturn"/>
+                            <connections>
+                                <action selector="clickBackBtn:" destination="-1" eventType="touchUpInside" id="wTh-rw-hov"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="设置" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D5u-OC-OTL">
+                            <rect key="frame" x="170" y="11.5" width="35" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6XX-e8-bV8">
+                            <rect key="frame" x="0.0" y="43" width="375" height="1"/>
+                            <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="gCN-r2-7Rv"/>
+                            </constraints>
+                            <viewLayoutGuide key="safeArea" id="hie-Rb-RXe"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="D5u-OC-OTL" firstAttribute="centerY" secondItem="J84-GC-GF2" secondAttribute="centerY" id="9Jq-eO-jhN"/>
+                        <constraint firstItem="J84-GC-GF2" firstAttribute="leading" secondItem="TYJ-Dd-ItA" secondAttribute="leading" constant="10" id="C3H-Ew-wT7"/>
+                        <constraint firstItem="6XX-e8-bV8" firstAttribute="leading" secondItem="TYJ-Dd-ItA" secondAttribute="leading" id="DgW-JF-OpD"/>
+                        <constraint firstAttribute="bottom" secondItem="J84-GC-GF2" secondAttribute="bottom" constant="7" id="Gon-D7-maS"/>
+                        <constraint firstItem="D5u-OC-OTL" firstAttribute="centerX" secondItem="TYJ-Dd-ItA" secondAttribute="centerX" id="LpG-vb-Kve"/>
+                        <constraint firstAttribute="trailing" secondItem="6XX-e8-bV8" secondAttribute="trailing" id="Um5-kM-Ivf"/>
+                        <constraint firstAttribute="height" constant="44" id="Wp5-sw-6GT"/>
+                        <constraint firstAttribute="bottom" secondItem="6XX-e8-bV8" secondAttribute="bottom" id="d4d-F1-Qzy"/>
+                        <constraint firstItem="J84-GC-GF2" firstAttribute="top" secondItem="TYJ-Dd-ItA" secondAttribute="top" constant="7" id="d8a-Ag-gs1"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="rSt-3o-PPq">
+                    <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="TYJ-Dd-ItA" firstAttribute="trailing" secondItem="Q5M-cg-NOt" secondAttribute="trailing" id="9ex-uK-UB9"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="rSt-3o-PPq" secondAttribute="bottom" id="FAu-xZ-AXT"/>
+                <constraint firstItem="rSt-3o-PPq" firstAttribute="top" secondItem="TYJ-Dd-ItA" secondAttribute="bottom" id="MP5-Cn-ORM"/>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="rSt-3o-PPq" secondAttribute="trailing" id="RE2-2g-wT0"/>
+                <constraint firstItem="TYJ-Dd-ItA" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" id="mTn-L6-Avk"/>
+                <constraint firstItem="TYJ-Dd-ItA" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="sT3-xs-gaE"/>
+                <constraint firstItem="rSt-3o-PPq" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="zTK-1F-5yw"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
+            <point key="canvasLocation" x="451.5" y="-62.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="navigationButtonReturn" width="15" height="21"/>
+    </resources>
+</document>
