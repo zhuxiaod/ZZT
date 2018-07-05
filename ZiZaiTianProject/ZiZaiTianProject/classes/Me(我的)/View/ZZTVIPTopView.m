@@ -12,6 +12,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *userName;
 @property (weak, nonatomic) IBOutlet UIButton *headButton;
+@property (weak, nonatomic) IBOutlet UILabel *topTitle;
+@property (weak, nonatomic) IBOutlet UILabel *topContent;
 
 @end
 
@@ -29,5 +31,10 @@
     self.userHead.layer.borderColor = [UIColor whiteColor].CGColor;
     self.userHead.layer.borderWidth = 1.0f;
     self.userName.text = @"佩恩";
+}
+-(void)setUser:(ZZTUserShoppingModel *)user{
+    _user = user;
+    _topTitle.text = user.topTitle;
+    _topContent.text = user.topContent;
 }
 @end

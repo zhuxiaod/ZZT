@@ -48,7 +48,7 @@
         [blockSelf textChange:texyField];
     };
     _meButtomView.BtnInside = ^(UIButton *btn) {
-        [self clickPickBtn:btn];
+        [blockSelf clickPickBtn:btn];
     };
     [self.buttomView addSubview:_meButtomView];
     
@@ -194,7 +194,7 @@
 - (void)pickView2:(UIButton *)tf
 {
     NSArray *array = @[@"男", @"女"];
-    
+    NSArray *array1 = @[@"男"];
     BAKit_WeakSelf
     [BAKit_PickerView ba_creatCustomPickerViewWithDataArray:array configuration:^(BAKit_PickerView *tempView) {
         BAKit_StrongSelf
@@ -205,16 +205,17 @@
         tempView.ba_pickViewTitleColor = [UIColor whiteColor];
         // 自定义 pickview title 的字体
         tempView.ba_pickViewTitleFont = [UIFont boldSystemFontOfSize:15];
-//        tempView.pickerViewPositionType = BAKit_PickerViewPositionTypeCenter;
         // 可以自由定制按钮颜色
         tempView.ba_buttonTitleColor_sure = [UIColor whiteColor];
         tempView.ba_buttonTitleColor_cancle = [UIColor whiteColor];
+        tempView.multipleTitleArray = array1;
+        tempView.isShowTitle = NO;
+
         self.pickView = tempView;
     } block:^(NSString *resultString) {
         BAKit_StrongSelf
-        [tf setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//        tf.titleLabel.textColor = [UIColor blackColor];
         tf.titleLabel.text = [NSString stringWithFormat:@"%@",resultString];
+        [tf setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     }];
 }
 

@@ -18,7 +18,8 @@
 #import "ZZTHistoryViewController.h"
 #import "ZZTSettingViewController.h"
 #import "ZZTMeEditViewController.h"
-
+#import "ZZTMeWalletViewController.h"
+#import "ZZTShoppingMallViewController.h"
 @interface ZZTMeViewController ()<UITableViewDataSource,UITableViewDelegate,ZZTSignInViewDelegate>
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property(nonatomic,strong) UITableView *tableView;
@@ -217,11 +218,22 @@ NSString *bannerID = @"MeCell";
             VIPView.hidesBottomBarWhenPushed = YES;
 
             [self.navigationController pushViewController:VIPView animated:YES];
-        }else if (indexPath.row == 2){
+        }else if(indexPath.row == 1){
+            ZZTMeWalletViewController *walletVC = [[ZZTMeWalletViewController alloc] init];
+            walletVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:walletVC animated:YES];
+        }
+        else if (indexPath.row == 2){
             ZZTBrowViewController *myAttentionVC = [[ZZTBrowViewController alloc] initWithNibName:@"ZZTBrowViewController" bundle:nil];
             myAttentionVC.viewTitle = @"我的关注";
             myAttentionVC.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:myAttentionVC animated:YES];
+        }
+    }else if(indexPath.section == 1){
+        if(indexPath.row == 0){
+            ZZTShoppingMallViewController *shoppingMallVC = [[ZZTShoppingMallViewController alloc] init];
+            shoppingMallVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:shoppingMallVC animated:YES];
         }
     }else if (indexPath.section == 2){
         if (indexPath.row == 1) {

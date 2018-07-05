@@ -10,6 +10,9 @@
 
 @interface ZZTVIPTopView : UIView
 
+@property (nonatomic,strong) ZZTUserShoppingModel *user;
+
+
 +(instancetype)VIPTopView;
 
 @end

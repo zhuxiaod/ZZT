@@ -41,7 +41,12 @@
 {
     [super viewWillAppear:animated];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+- (IBAction)backBtn:(UIButton *)sender {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 @end

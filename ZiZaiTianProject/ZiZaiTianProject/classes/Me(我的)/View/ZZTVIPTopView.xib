@@ -90,10 +90,12 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="headButton" destination="BPr-IR-TRC" id="2UL-Sm-O3d"/>
+                <outlet property="topContent" destination="qbf-ja-tYc" id="7SQ-mF-xhx"/>
+                <outlet property="topTitle" destination="ozR-xA-O02" id="v46-8k-t5h"/>
                 <outlet property="userHead" destination="JfD-1Q-EoC" id="w4i-cr-grK"/>
                 <outlet property="userName" destination="Gik-Ey-mda" id="3zz-CV-oE8"/>
             </connections>
-            <point key="canvasLocation" x="-168" y="27"/>
+            <point key="canvasLocation" x="-215" y="18"/>
         </view>
     </objects>
 </document>
