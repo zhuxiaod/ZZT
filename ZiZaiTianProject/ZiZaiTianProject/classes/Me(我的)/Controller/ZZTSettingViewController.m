@@ -164,7 +164,6 @@ NSString *ExitCell = @"ExitCell";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         cell.textLabel.text = self.array3[indexPath.row];
-
         return cell;
     }else if(indexPath.section == 4){
         ZZTExitCell *cell = [tableView dequeueReusableCellWithIdentifier:ExitCell];

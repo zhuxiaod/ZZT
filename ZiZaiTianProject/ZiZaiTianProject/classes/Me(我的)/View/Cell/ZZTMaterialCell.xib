@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ZZTMaterialCell">
+            <rect key="frame" x="0.0" y="0.0" width="115" height="200"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="115" height="200"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chuTian" translatesAutoresizingMaskIntoConstraints="NO" id="vxK-kM-oam">
+                        <rect key="frame" x="0.0" y="0.0" width="115" height="150"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="150" id="qRn-eh-2aI"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5000分" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U0n-Vx-5ve">
+                        <rect key="frame" x="0.0" y="175" width="115" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="uH2-eI-FUD"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="女角色一套" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tUt-Ki-KoK">
+                        <rect key="frame" x="0.0" y="150" width="115" height="25"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="25" id="yhj-nk-Shy"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="vxK-kM-oam" secondAttribute="trailing" id="7V2-dA-b1R"/>
+                <constraint firstItem="vxK-kM-oam" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="AYq-ER-5fa"/>
+                <constraint firstAttribute="trailing" secondItem="U0n-Vx-5ve" secondAttribute="trailing" id="abF-bS-ivq"/>
+                <constraint firstItem="tUt-Ki-KoK" firstAttribute="top" secondItem="vxK-kM-oam" secondAttribute="bottom" id="cex-Jk-nPS"/>
+                <constraint firstItem="tUt-Ki-KoK" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="ehy-7c-vdu"/>
+                <constraint firstItem="U0n-Vx-5ve" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="hW2-XF-Ksw"/>
+                <constraint firstAttribute="trailing" secondItem="tUt-Ki-KoK" secondAttribute="trailing" id="k9j-4s-Vxg"/>
+                <constraint firstItem="vxK-kM-oam" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="lfb-AL-yKD"/>
+                <constraint firstItem="U0n-Vx-5ve" firstAttribute="top" secondItem="tUt-Ki-KoK" secondAttribute="bottom" id="qLu-Si-YjC"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
+            <connections>
+                <outlet property="materialImage" destination="vxK-kM-oam" id="hxh-9a-dvl"/>
+                <outlet property="materialPrice" destination="U0n-Vx-5ve" id="7Ws-Sr-Ext"/>
+                <outlet property="materialTitle" destination="tUt-Ki-KoK" id="aKi-zh-923"/>
+            </connections>
+            <point key="canvasLocation" x="-185" y="26"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="chuTian" width="557" height="300"/>
+    </resources>
+</document>

@@ -109,10 +109,6 @@ NSString *bannerID = @"MeCell";
     else if(button.tag == 4){
         ZZTMeEditViewController *meEditVC = [[ZZTMeEditViewController alloc]initWithNibName:@"ZZTMeEditViewController" bundle:nil];
         [self.navigationController pushViewController:meEditVC animated:YES];
-        
-//        ZZTLoginRegisterViewController *loginView = [[ZZTLoginRegisterViewController alloc]initWithNibName:@"ZZTLoginRegisterViewController" bundle:nil];
-//        [self presentViewController:loginView animated:YES completion:nil];
-
     }else{
         //确定已签到的次数
         NSInteger signCount = _userData.signCount;
@@ -124,6 +120,7 @@ NSString *bannerID = @"MeCell";
 
         //添加签到页面
         _signView = [ZZTSignInView SignView];
+        _signView.frame = CGRectMake(0, 0, Screen_Width, Screen_Height);
         [_signView isget:signCount isSign:ifsigin];
         [self.view addSubview:_signView];
         _signView.delegate = self;
@@ -216,7 +213,6 @@ NSString *bannerID = @"MeCell";
         if(indexPath.row == 0){
             ZZTVIPViewController *VIPView = [[ZZTVIPViewController alloc]init];
             VIPView.hidesBottomBarWhenPushed = YES;
-
             [self.navigationController pushViewController:VIPView animated:YES];
         }else if(indexPath.row == 1){
             ZZTMeWalletViewController *walletVC = [[ZZTMeWalletViewController alloc] init];
@@ -231,8 +227,19 @@ NSString *bannerID = @"MeCell";
         }
     }else if(indexPath.section == 1){
         if(indexPath.row == 0){
+            //自在商城
+            ZZTShoppingMallViewController *shoppingMallVC = [[ZZTShoppingMallViewController alloc] init];
+            
+            shoppingMallVC.hidesBottomBarWhenPushed = YES;
+            shoppingMallVC.isShopping = YES;
+            shoppingMallVC.viewTitle = @"自在商城";
+            [self.navigationController pushViewController:shoppingMallVC animated:YES];
+        }else if(indexPath.row == 1){
+            //积分兑换
             ZZTShoppingMallViewController *shoppingMallVC = [[ZZTShoppingMallViewController alloc] init];
             shoppingMallVC.hidesBottomBarWhenPushed = YES;
+            shoppingMallVC.viewTitle = @"积分兑换";
+            shoppingMallVC.isShopping = NO;
             [self.navigationController pushViewController:shoppingMallVC animated:YES];
         }
     }else if (indexPath.section == 2){

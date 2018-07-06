@@ -22,11 +22,15 @@
 #import "BAPickView_OC.h"
 #import "BAKit_DatePicker.h"
 #import "ZZTUserShoppingModel.h"
+#import "DCNewWelfareLayout.h"
+
 #define MyLog(...) NSLog(__VA_ARGS__);
 /** 屏幕尺寸 */
 #define SCREEN_BOUNDS [UIScreen mainScreen].bounds
 #define Screen_Width [UIScreen mainScreen].bounds.size.width
 #define Screen_Height [UIScreen mainScreen].bounds.size.height
+//全局背景色
+#define ZZTBGColor [UIColor colorWithHexString:@"#F5F5F5"]
 #define keyStr @"ZIZAITIAN@666666"
 #define IV @"A-16-Byte-String" 
 

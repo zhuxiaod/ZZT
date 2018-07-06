@@ -8,7 +8,6 @@
 
 #import "ZZTVIPTopView.h"
 @interface ZZTVIPTopView ()
-@property (weak, nonatomic) IBOutlet UIImageView *userHead;
 
 @property (weak, nonatomic) IBOutlet UILabel *userName;
 @property (weak, nonatomic) IBOutlet UIButton *headButton;
@@ -25,11 +24,11 @@
 
 - (void)awakeFromNib
 {
-    self.userHead.image = [UIImage imageNamed:@"peien"];
-    self.userHead.layer.cornerRadius = self.userHead.frame.size.width/2;
-    self.userHead.layer.masksToBounds=YES;//隐藏裁剪掉的部分
-    self.userHead.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.userHead.layer.borderWidth = 1.0f;
+    [self.headButton setImage:[UIImage imageNamed:@"peien"] forState:UIControlStateNormal];
+    self.headButton.layer.cornerRadius = self.headButton.frame.size.width/2;
+    self.headButton.layer.masksToBounds=YES;//隐藏裁剪掉的部分
+    self.headButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.headButton.layer.borderWidth = 1.0f;
     self.userName.text = @"佩恩";
 }
 -(void)setUser:(ZZTUserShoppingModel *)user{

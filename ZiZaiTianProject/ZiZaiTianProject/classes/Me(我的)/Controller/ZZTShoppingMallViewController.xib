@@ -12,8 +12,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ZZTShoppingMallViewController">
             <connections>
-                <outlet property="collectionView" destination="eZH-vU-fgO" id="4Wt-AW-Rkc"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="viewControllerTitle" destination="Pqu-iS-pOF" id="nKw-Py-GuG"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -31,6 +31,9 @@
                                 <constraint firstAttribute="height" constant="30" id="f4K-w0-Sze"/>
                             </constraints>
                             <state key="normal" title="Button" image="navigationButtonReturn"/>
+                            <connections>
+                                <action selector="backBtn:" destination="-1" eventType="touchUpInside" id="Sfq-5q-mDE"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yYm-BC-8EL">
                             <rect key="frame" x="321" y="7" width="46" height="30"/>
@@ -40,11 +43,8 @@
                             </constraints>
                             <state key="normal" title="Button"/>
                         </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pqu-iS-pOF">
-                            <rect key="frame" x="166" y="12" width="42" height="21"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="21" id="mgX-Tl-05f"/>
-                            </constraints>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="积分兑换" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pqu-iS-pOF">
+                            <rect key="frame" x="153" y="11.5" width="69.5" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -52,16 +52,17 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstItem="Pqu-iS-pOF" firstAttribute="centerY" secondItem="6za-tM-rWz" secondAttribute="centerY" id="3oQ-rb-wTi"/>
                         <constraint firstAttribute="bottom" secondItem="GG7-kO-d6G" secondAttribute="bottom" constant="7" id="QtW-hV-weE"/>
-                        <constraint firstItem="Pqu-iS-pOF" firstAttribute="centerY" secondItem="6za-tM-rWz" secondAttribute="centerY" id="S0d-6R-H7i"/>
                         <constraint firstItem="GG7-kO-d6G" firstAttribute="leading" secondItem="6za-tM-rWz" secondAttribute="leading" constant="10" id="Sbf-kH-T45"/>
                         <constraint firstAttribute="height" constant="44" id="XrP-rE-ICS"/>
                         <constraint firstItem="GG7-kO-d6G" firstAttribute="centerY" secondItem="6za-tM-rWz" secondAttribute="centerY" id="ZM6-B4-0Ub"/>
                         <constraint firstAttribute="trailing" secondItem="yYm-BC-8EL" secondAttribute="trailing" constant="8" id="ckq-W1-K2Y"/>
-                        <constraint firstItem="yYm-BC-8EL" firstAttribute="leading" secondItem="Pqu-iS-pOF" secondAttribute="trailing" constant="113" id="d6c-q6-p4h"/>
+                        <constraint firstItem="Pqu-iS-pOF" firstAttribute="centerX" secondItem="6za-tM-rWz" secondAttribute="centerX" id="dL3-8U-XpT"/>
                         <constraint firstItem="GG7-kO-d6G" firstAttribute="top" secondItem="6za-tM-rWz" secondAttribute="top" constant="7" id="fA7-pd-h8o"/>
-                        <constraint firstItem="Pqu-iS-pOF" firstAttribute="leading" secondItem="GG7-kO-d6G" secondAttribute="trailing" constant="126" id="mMW-IT-eb0"/>
+                        <constraint firstItem="GG7-kO-d6G" firstAttribute="centerY" secondItem="6za-tM-rWz" secondAttribute="centerY" id="hTv-PD-Lig"/>
                         <constraint firstItem="yYm-BC-8EL" firstAttribute="centerY" secondItem="6za-tM-rWz" secondAttribute="centerY" id="p04-2N-Rha"/>
+                        <constraint firstItem="yYm-BC-8EL" firstAttribute="centerY" secondItem="6za-tM-rWz" secondAttribute="centerY" id="u4A-eS-cBw"/>
                     </constraints>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="eZH-vU-fgO">
@@ -87,7 +88,7 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
-            <point key="canvasLocation" x="-45.5" y="-172.5"/>
+            <point key="canvasLocation" x="-307.5" y="-178.5"/>
         </view>
     </objects>
     <resources>
