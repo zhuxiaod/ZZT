@@ -25,12 +25,17 @@
 - (void)awakeFromNib
 {
     [self.headButton setImage:[UIImage imageNamed:@"peien"] forState:UIControlStateNormal];
-    self.headButton.layer.cornerRadius = self.headButton.frame.size.width/2;
-    self.headButton.layer.masksToBounds=YES;//隐藏裁剪掉的部分
+    self.headButton.layer.masksToBounds = YES;//隐藏裁剪掉的部分
     self.headButton.layer.borderColor = [UIColor whiteColor].CGColor;
     self.headButton.layer.borderWidth = 1.0f;
     self.userName.text = @"佩恩";
 }
+
+-(void)layoutSubviews
+{
+    self.headButton.layer.cornerRadius = self.headButton.bounds.size.width/2;
+}
+
 -(void)setUser:(ZZTUserShoppingModel *)user{
     _user = user;
     _topTitle.text = user.topTitle;

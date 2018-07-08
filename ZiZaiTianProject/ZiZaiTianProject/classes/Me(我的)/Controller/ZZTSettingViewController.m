@@ -71,7 +71,7 @@ NSString *ExitCell = @"ExitCell";
     _tableView.delegate = self;
     _tableView.sectionHeaderHeight = 0;
     _tableView.sectionFooterHeight = 10;
-    
+    _tableView.contentInset = UIEdgeInsetsMake(-30, 0, 0, 0);
     //隐藏滚动条
     _tableView.showsVerticalScrollIndicator = NO;
 }
@@ -98,7 +98,7 @@ NSString *ExitCell = @"ExitCell";
 #pragma mark - tableView
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 5;
+    return 4;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -108,10 +108,8 @@ NSString *ExitCell = @"ExitCell";
         return 1;
     }else if(section == 2){
         return self.array2.count;
-    }else if (section == 3){
-        return self.array3.count;
     }else{
-        return 1;
+        return self.array3.count + 1;
     }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,26 +151,37 @@ NSString *ExitCell = @"ExitCell";
         }
         cell.textLabel.text = self.array2[indexPath.row];
         return cell;
-    }else if(indexPath.section == 3){
+    }else{
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ZZTcellq];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if (indexPath.row == 0) {
             ZZTNoTypeCell *cell = [tableView dequeueReusableCellWithIdentifier:NoTypeCell];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.cellLab.text = self.array3[indexPath.row];
             cell.cache.text = @"39.6";
+            return cell;
+//            cell.textLabel.text = self.array3[indexPath.row];
+        }else if (indexPath.row == 4) {
+            ZZTExitCell *cell = [tableView dequeueReusableCellWithIdentifier:ExitCell];
+            return cell;
         }else{
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.textLabel.text = self.array3[indexPath.row];
+            
         }
-        cell.textLabel.text = self.array3[indexPath.row];
-        return cell;
-    }else if(indexPath.section == 4){
-        ZZTExitCell *cell = [tableView dequeueReusableCellWithIdentifier:ExitCell];
-        return cell;
-    }else{
-        UITableViewCell *cell = [[UITableViewCell alloc] init];
+//        cell.textLabel.text = self.array3[indexPath.row];
+        
         return cell;
     }
 }
+
+//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    if (section == 4) {
+//        return 0;
+//    }
+//    return 10;
+//}
 
 
 @end

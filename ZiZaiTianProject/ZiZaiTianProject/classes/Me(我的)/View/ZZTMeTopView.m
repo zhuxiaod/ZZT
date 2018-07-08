@@ -12,7 +12,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *zBiButton;
 @property (weak, nonatomic) IBOutlet UIButton *integralButton;
 @property (weak, nonatomic) IBOutlet UIButton *readTicket;
-@property (weak, nonatomic) IBOutlet UIImageView *userHead;
 @property (weak, nonatomic) IBOutlet UILabel *userName;
 @property (weak, nonatomic) IBOutlet UIButton *messageButton;
 @property (weak, nonatomic) IBOutlet UIButton *signInButton;
@@ -34,11 +33,11 @@
     self.zBiButton.titleLabel.lineBreakMode = 0;
     [self.readTicket setTitle:@"500 \n阅读卷" forState:UIControlStateNormal];
     self.zBiButton.titleLabel.lineBreakMode = 0;
-    self.userHead.image = [UIImage imageNamed:@"peien"];
-    self.userHead.layer.cornerRadius = self.userHead.frame.size.width/2;
-    self.userHead.layer.masksToBounds=YES;//隐藏裁剪掉的部分
-    self.userHead.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.userHead.layer.borderWidth = 1.0f;
+    [self.headButton setImage:[UIImage imageNamed:@"peien"] forState:UIControlStateNormal];
+    self.headButton.layer.cornerRadius = self.headButton.frame.size.width/2;
+    self.headButton.layer.masksToBounds=YES;//隐藏裁剪掉的部分
+    self.headButton.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.headButton.layer.borderWidth = 1.0f;
     self.userName.text = @"佩恩";
     //添加点击事件
     [_zBiButton addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];

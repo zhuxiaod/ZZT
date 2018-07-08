@@ -40,9 +40,10 @@ NSString *zzTShoppingButtomCell = @"ZZTShoppingButtomCell";
     
     ZZTVIPTopView *vipView = [ZZTVIPTopView VIPTopView];
     ZZTUserShoppingModel *userShopping = [ZZTUserShoppingModel initWith:@"自在币" content:@"1百万"];
+//    vipView.frame = CGRectMake(0, 0, Screen_Width, 300);
     vipView.user = userShopping;
     _tableView.tableHeaderView = vipView;
-    
+
     ZZTShoppingButtomCell *shoppingButtom = [ZZTShoppingButtomCell ZZTShoppingButtom];
     _tableView.tableFooterView = shoppingButtom;
     
