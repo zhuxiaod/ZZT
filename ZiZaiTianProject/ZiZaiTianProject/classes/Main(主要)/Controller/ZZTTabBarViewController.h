@@ -10,4 +10,6 @@
 
 @interface ZZTTabBarViewController : UITabBarController
 
+- (void)setHidesBottomBar:(BOOL)hidesBottomBar;
+
 @end

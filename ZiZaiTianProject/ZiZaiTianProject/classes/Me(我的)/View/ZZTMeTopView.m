@@ -27,6 +27,8 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+    [super awakeFromNib];
     [self.zBiButton setTitle:@"5000 \nZ币" forState:UIControlStateNormal];
     self.zBiButton.titleLabel.lineBreakMode = 0;
     [self.integralButton setTitle:@"500 \n积分" forState:UIControlStateNormal];

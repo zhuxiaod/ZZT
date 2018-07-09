@@ -8,7 +8,7 @@
 
 #ifndef ZiZaiTianProject_pch
 #define ZiZaiTianProject_pch
-
+#import <MJRefresh.h>
 #import "UIColor+Hex.h"
 #import "AFNetworking.h"
 #import "UIBarButtonItem+Item.h"
@@ -23,7 +23,10 @@
 #import "BAKit_DatePicker.h"
 #import "ZZTUserShoppingModel.h"
 #import "DCNewWelfareLayout.h"
-
+#import "UIView+Extension.h"
+#import "CommonMacro.h"
+#import "BaseViewController.h"
+#import <AFNetworking.h>
 #define MyLog(...) NSLog(__VA_ARGS__);
 /** 屏幕尺寸 */
 #define SCREEN_BOUNDS [UIScreen mainScreen].bounds

@@ -45,6 +45,7 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     //获得当前button的图片
     UIImage *image = _loginRegisterButton.currentBackgroundImage;
     

@@ -24,6 +24,7 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
     [self.headButton setImage:[UIImage imageNamed:@"peien"] forState:UIControlStateNormal];
     self.headButton.layer.masksToBounds = YES;//隐藏裁剪掉的部分
     self.headButton.layer.borderColor = [UIColor whiteColor].CGColor;

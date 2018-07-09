@@ -37,6 +37,7 @@
 }
 
 -(void)awakeFromNib{
+    [super awakeFromNib];
     //设置背景页面的点击事件
     self.backgroundView.userInteractionEnabled = YES;
 

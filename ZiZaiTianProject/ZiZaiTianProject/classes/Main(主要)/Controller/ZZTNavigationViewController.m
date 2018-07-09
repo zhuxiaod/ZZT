@@ -28,7 +28,7 @@
     //设置导航条的背景图片
 //    nab.backgroundColor = [UIColor redColor];
     [nab setBackgroundImage:[UIImage createImageWithColor:[UIColor colorWithHexString:@"#58006E"]] forBarMetrics:UIBarMetricsDefault];
-    [nab setShadowImage:[UIImage new]];
+//    [nab setShadowImage:[UIImage new]];
 }
 
 

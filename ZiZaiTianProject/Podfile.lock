@@ -16,33 +16,53 @@ PODS:
     - AFNetworking/NSURLSession
   - BAPickView (1.1.4)
   - CDDPagerController (1.1.5)
+  - JGProgressHUD (2.0.3)
+  - Masonry (1.1.0)
   - MJExtension (3.0.15.1)
+  - MJRefresh (3.1.15.3)
   - SDWebImage (4.4.1):
     - SDWebImage/Core (= 4.4.1)
   - SDWebImage/Core (4.4.1)
+  - "UITableView+FDTemplateLayoutCell (1.6)"
+  - UMengAnalytics (4.2.4)
 
 DEPENDENCIES:
   - AFNetworking
   - BAPickView
   - CDDPagerController
+  - JGProgressHUD
+  - Masonry
   - MJExtension
+  - MJRefresh
   - SDWebImage (~> 4.0)
+  - "UITableView+FDTemplateLayoutCell"
+  - UMengAnalytics
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AFNetworking
     - BAPickView
     - CDDPagerController
+    - JGProgressHUD
+    - Masonry
     - MJExtension
+    - MJRefresh
     - SDWebImage
+    - "UITableView+FDTemplateLayoutCell"
+    - UMengAnalytics
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   BAPickView: dbabd31468df83df1b1e5f218e28a8a41908e000
   CDDPagerController: ed05951429a860c56cfdffbeba1a8af5132a28ae
+  JGProgressHUD: 12b20a8f4ffe05258f8635c1ab92816e451f904d
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 19bc33ce2eee2d319760f5622562cf581a6ff756
+  MJRefresh: b48380ae2b927b46c4ef000de9adb8dc748e1df7
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
+  "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
+  UMengAnalytics: ef8d45f94c0e5771dc364cf6a5731d9d3b101da2
 
-PODFILE CHECKSUM: 8fe2d6925f098a43ffe6bf6366997cfaad626d83
+PODFILE CHECKSUM: aa2c99b67d587b42e7ba4de87fd05f40bc6b043b
 
 COCOAPODS: 1.5.3

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseViewController.h"
 
-@interface ZZTHomeViewController : UITableViewController
+@interface ZZTHomeViewController : BaseViewController
 
 @end

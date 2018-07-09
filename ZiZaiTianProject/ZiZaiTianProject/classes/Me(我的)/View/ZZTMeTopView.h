@@ -14,7 +14,7 @@ typedef void(^ButtonClick)(UIButton * sender);
 
 @property (nonatomic,copy) ButtonClick buttonAction;
 
--(void)addTapBlock:(void(^)(UIButton *btn))block;
+//-(void)addTapBlock:(void(^)(UIButton *btn))block;
 
 +(instancetype)meTopView;
 
