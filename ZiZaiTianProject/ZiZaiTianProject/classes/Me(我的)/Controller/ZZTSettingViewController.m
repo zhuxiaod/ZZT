@@ -160,7 +160,6 @@ NSString *ExitCell = @"ExitCell";
             cell.cellLab.text = self.array3[indexPath.row];
             cell.cache.text = @"39.6";
             return cell;
-//            cell.textLabel.text = self.array3[indexPath.row];
         }else if (indexPath.row == 4) {
             ZZTExitCell *cell = [tableView dequeueReusableCellWithIdentifier:ExitCell];
             return cell;
@@ -169,19 +168,11 @@ NSString *ExitCell = @"ExitCell";
             cell.textLabel.text = self.array3[indexPath.row];
             
         }
-//        cell.textLabel.text = self.array3[indexPath.row];
         
         return cell;
     }
 }
 
-//-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//    if (section == 4) {
-//        return 0;
-//    }
-//    return 10;
-//}
 
 
 @end
