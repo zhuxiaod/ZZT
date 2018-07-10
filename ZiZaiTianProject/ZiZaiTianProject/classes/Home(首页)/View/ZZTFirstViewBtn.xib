@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ZZTFirstViewBtn">
+            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n95-NG-A6Y" customClass="ZXDCartoonFlexoBtn">
+                        <rect key="frame" x="0.0" y="10" width="80" height="60"/>
+                        <state key="normal" title="Button">
+                            <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="n95-NG-A6Y" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="JNN-1M-lME"/>
+                <constraint firstItem="n95-NG-A6Y" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="QUu-DI-qsX"/>
+                <constraint firstItem="n95-NG-A6Y" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="Ukn-Zu-s5b"/>
+                <constraint firstItem="n95-NG-A6Y" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="dek-GJ-H8M"/>
+                <constraint firstAttribute="trailing" secondItem="n95-NG-A6Y" secondAttribute="trailing" id="fT9-SS-U2s"/>
+                <constraint firstAttribute="bottom" secondItem="n95-NG-A6Y" secondAttribute="bottom" constant="10" id="mxA-ok-iI7"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
+            <connections>
+                <outlet property="button" destination="n95-NG-A6Y" id="Smf-bg-BwE"/>
+            </connections>
+        </collectionViewCell>
+    </objects>
+</document>

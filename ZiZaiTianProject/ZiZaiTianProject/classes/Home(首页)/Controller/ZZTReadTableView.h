@@ -12,6 +12,5 @@
 
 @property (nonatomic,assign) CGFloat viewHeight;
 @property (nonatomic,assign) CGFloat viewWidth;
-
-
+@property (nonatomic,strong) NSString *btnTpye;
 @end

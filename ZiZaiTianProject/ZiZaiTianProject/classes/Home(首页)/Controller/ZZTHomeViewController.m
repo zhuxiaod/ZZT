@@ -11,6 +11,7 @@
 #import "ListView.h"
 #import "ZZTReadTableView.h"
 #import "ZZTCycleCell.h"
+#import "ZZTEasyBtnModel.h"
 
 @interface ZZTHomeViewController ()<UIScrollViewDelegate>
 
@@ -22,7 +23,6 @@
 @property (nonatomic,weak) ZZTReadTableView *ReadView;
 @property (nonatomic,weak) ZZTReadTableView *CreationView;
 @property (nonatomic,weak) ZZTCycleCell * cycleCell;
-
 @property (nonatomic,weak) UIScrollView *mainView;
 
 @end
@@ -102,18 +102,22 @@
 
 #pragma mark - 设置添加滚动子页
 -(void)setupChildView{
-    //收藏页
+    //btn 的数据模型
+   
+    //阅读页
     ZZTReadTableView *collectVC = [[ZZTReadTableView alloc] init];
     collectVC.backgroundColor = [UIColor whiteColor];
     self.collectView = collectVC;
+    collectVC.btnTpye = @"1";
     collectVC.viewWidth = self.mainView.width;
     collectVC.viewHeight = self.mainView.height;
     [self.mainView addSubview:collectVC];
     
-    //阅读页
+    //创作页
     ZZTReadTableView *readVC = [[ZZTReadTableView alloc] init];
     readVC.backgroundColor = [UIColor whiteColor];
     self.ReadView = readVC;
+//    readVC.btnArray = btnArray;
     readVC.viewWidth = self.mainView.width;
     readVC.viewHeight = self.mainView.height;
     [self.mainView addSubview:readVC];
@@ -148,10 +152,18 @@
 //计时器开始
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    //反正是一个页面一起跑页没什么不好吧
+    //cell 还没有创建故不能在这里搞
+    [_ReadView reloadData];
+    [_collectView reloadData];
+    [_CreationView reloadData];
 }
 //计时器结束
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
+    //可以控制定时关闭
+    NSNotification *notification =[NSNotification notificationWithName:@"tongzhi" object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
 #pragma mark - 设置导航条
@@ -166,6 +178,9 @@
 
 -(void)history{
     NSLog(@"你是傻逼？");
+}
+-(void)dealloc{
+    NSLog(@"我走了");
 }
 
 @end

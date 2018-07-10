@@ -27,6 +27,7 @@
 #import "CommonMacro.h"
 #import "BaseViewController.h"
 #import <AFNetworking.h>
+#import <Masonry/Masonry.h>
 #define MyLog(...) NSLog(__VA_ARGS__);
 /** 屏幕尺寸 */
 #define SCREEN_BOUNDS [UIScreen mainScreen].bounds

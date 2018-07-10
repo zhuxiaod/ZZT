@@ -9,6 +9,8 @@
 #import "ZZTCycleCell.h"
 #import "DCPicScrollViewConfiguration.h"
 #import "DCPicScrollView.h"
+#import "ZZTCartoonBtnCell.h"
+
 @interface ZZTCycleCell()<DCPicScrollViewDelegate,DCPicScrollViewDataSource>
 
 @end
@@ -21,8 +23,6 @@
     _isTime = isTime;
     if(isTime == YES){
         [self.ps.timer begin];
-    }else{
-        [self.ps.timer pause];
     }
 }
 -(void)setDataArray:(NSArray *)dataArray{
@@ -43,8 +43,12 @@
     _ps.delegate = self;
     _ps.dataSource = self;
     [self addSubview:_ps];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tongzhi:)name:@"tongzhi" object:nil];
 }
 
+-(void)tongzhi:(NSNotification *)dic{
+    [self.ps.timer pause];
+}
 #pragma mark 无线轮播器代理方法
 - (void)picScrollView:(DCPicScrollView *)picScrollView needUpdateItem:(DCPicItem *)item atIndex:(NSInteger)index {
     //数据

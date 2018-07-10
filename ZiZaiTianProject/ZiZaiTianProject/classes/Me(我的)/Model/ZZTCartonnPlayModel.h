@@ -26,4 +26,5 @@
 //书的类型
 @property (nonatomic,strong)NSString *bookType;
 
++(instancetype)initPlayWithImage:(NSString *)image labelName:(NSString *)labelName title:(NSString *)title;
 @end

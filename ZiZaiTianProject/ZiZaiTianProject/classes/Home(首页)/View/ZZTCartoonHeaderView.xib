@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ZZTCartoonHeaderView">
+            <connections>
+                <outlet property="more" destination="HzB-gD-VWG" id="jcX-Ex-vTT"/>
+                <outlet property="titleView" destination="Szd-hR-wer" id="bXi-TP-FBc"/>
+                <outlet property="yellowView" destination="Gf2-hW-w5g" id="4S4-Ka-XZ7"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ZZTCartoonHeaderView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gf2-hW-w5g">
+                    <rect key="frame" x="10" y="5" width="5" height="40"/>
+                    <color key="backgroundColor" red="0.43137254899999999" green="0.0" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="5" id="eQ6-8E-OO2"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Szd-hR-wer">
+                    <rect key="frame" x="20" y="14.5" width="42" height="22"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="22" id="MSu-mC-R45"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HzB-gD-VWG">
+                    <rect key="frame" x="328" y="14" width="37" height="22"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="22" id="dV8-kl-1ae"/>
+                    </constraints>
+                    <state key="normal" title="更多">
+                        <color key="titleColor" red="0.7843137255" green="0.80784313730000001" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Szd-hR-wer" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="7fT-9A-ht8"/>
+                <constraint firstItem="Gf2-hW-w5g" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="TPW-hZ-rNP"/>
+                <constraint firstItem="Gf2-hW-w5g" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="5" id="V6D-pv-mpp"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Gf2-hW-w5g" secondAttribute="bottom" constant="5" id="YL7-Fr-o8i"/>
+                <constraint firstItem="Szd-hR-wer" firstAttribute="leading" secondItem="Gf2-hW-w5g" secondAttribute="trailing" constant="5" id="adw-yz-1Bl"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="HzB-gD-VWG" secondAttribute="trailing" constant="10" id="ee6-yz-rs8"/>
+                <constraint firstItem="HzB-gD-VWG" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="fhn-Gs-hfE"/>
+                <constraint firstItem="Szd-hR-wer" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="gTq-bq-H2A"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Gf2-hW-w5g" secondAttribute="bottom" constant="5" id="hqA-FN-cKz"/>
+                <constraint firstItem="Gf2-hW-w5g" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="mm8-oc-1v8"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+        </view>
+    </objects>
+</document>

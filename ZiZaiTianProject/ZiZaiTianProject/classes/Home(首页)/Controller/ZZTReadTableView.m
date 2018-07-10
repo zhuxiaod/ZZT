@@ -10,16 +10,45 @@
 #import "DCPicScrollViewConfiguration.h"
 #import "DCPicScrollView.h"
 #import "ZZTCycleCell.h"
-
+#import "ZZTCartoonBtnCell.h"
+#import "ZZTEasyBtnModel.h"
+#import "CaiNiXiHuanCell.h"
+#import "ZZTCartoonHeaderView.h"
 @interface ZZTReadTableView()<UITableViewDataSource,UITableViewDelegate,DCPicScrollViewDelegate,DCPicScrollViewDataSource>
 @property (nonatomic,weak) DCPicScrollView *bannerView;
 
 @property (nonatomic,copy) NSArray *bannerModelArray;
 
+@property (nonatomic,strong) NSArray *btnArray;
+@property (nonatomic,strong) NSArray *caiNiXiHuan;
 @end
 static NSString *zzTCycleCell = @"zzTCycleCell";
+static NSString *zCartoonBtnCell = @"zCartoonBtnCell";
+static NSString *caiNiXiHuan = @"caiNiXiHuan";
 
 @implementation ZZTReadTableView
+//靠传的数字来确定是什么数据源？
+//猜你喜欢数据源
+-(NSArray *)caiNiXiHuan{
+    if (!_caiNiXiHuan) {
+        _caiNiXiHuan = @[[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"]];
+    }
+    return _caiNiXiHuan;
+}
+-(void)setBtnTpye:(NSString *)btnTpye{
+    _btnTpye = btnTpye;
+    if ([btnTpye isEqualToString:@"1"]) {
+        self.btnArray =@[[ZZTEasyBtnModel initWithTitle:@"众创" btnImage:@"Calculator"],[ZZTEasyBtnModel initWithTitle:@"接龙" btnImage:@"Camera"],[ZZTEasyBtnModel initWithTitle:@"排行" btnImage:@"Clock"],[ZZTEasyBtnModel initWithTitle:@"分类" btnImage:@"Cloud"]];
+    }else{
+        self.btnArray = @[@"创建漫画",@"创建剧本",@"更新"];
+    }
+}
+-(NSArray *)btnArray{
+    if(!_btnArray){
+        _btnArray = [NSArray array];
+    }
+    return _btnArray;
+}
 
 -(NSArray *)bannerModelArray{
     if(!_bannerModelArray){
@@ -36,6 +65,9 @@ static NSString *zzTCycleCell = @"zzTCycleCell";
         self.estimatedRowHeight = 200;
         //注册cell
         [self registerClass:[ZZTCycleCell class]  forCellReuseIdentifier:zzTCycleCell];
+        [self registerClass:[ZZTCartoonBtnCell class]  forCellReuseIdentifier:zCartoonBtnCell];
+        [self registerClass:[CaiNiXiHuanCell class]  forCellReuseIdentifier:caiNiXiHuan];
+         self.showsVerticalScrollIndicator = NO;
         //上拉
         //下拉
         //加载头
@@ -54,30 +86,63 @@ static NSString *zzTCycleCell = @"zzTCycleCell";
     }else if (section == 1){
         return 1;
     }else{
-        return 6;
+        return 1;
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [[UITableViewCell alloc] init];
-    cell.textLabel.text = @"朱晓俊";
+   
     if (indexPath.section == 0) {
         
         ZZTCycleCell *cell = [tableView dequeueReusableCellWithIdentifier:zzTCycleCell];
         cell.dataArray = self.bannerModelArray;
         cell.height = self.viewHeight;
+        cell.isTime = YES;
+        return cell;
+    }if(indexPath.section == 1){
+        ZZTCartoonBtnCell *cell = [tableView dequeueReusableCellWithIdentifier:zCartoonBtnCell];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.str = @"朱晓俊";
+        cell.array = self.btnArray;
+        return cell;
+    }if(indexPath.section == 2){
+        //猜你喜欢
+        //搞一个数据
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:caiNiXiHuan];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        [cell performSelector:@selector(setTopics:) withObject:self.caiNiXiHuan];
+        return cell;
+    }else{
+        UITableViewCell *cell = [[UITableViewCell alloc] init];
+        cell.textLabel.text = @"朱晓俊";
         return cell;
     }
-    return cell;
 }
 
 //返回每一行cell的高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        return (SCREEN_HEIGHT - navHeight + 20)*0.4;
-    }else{
+        return (SCREEN_HEIGHT - navHeight + 20) * 0.4;
+    }else if (indexPath.section == 1){
         return 100;
+    }else{
+        return 400;
+    }
+}
+//添加headerView
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    NSString *title = @"猜你喜欢";
+    ZZTCartoonHeaderView *head = [[ZZTCartoonHeaderView alloc] init];
+    head.title = title;
+    return head;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (section == 2) {
+        return self.height * 0.05;
+    }else{
+        return 0;
     }
 }
 @end

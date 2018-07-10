@@ -9,5 +9,12 @@
 #import "ZZTCartonnPlayModel.h"
 
 @implementation ZZTCartonnPlayModel
++(instancetype)initPlayWithImage:(NSString *)image labelName:(NSString *)labelName title:(NSString *)title{
+    ZZTCartonnPlayModel *model = [[ZZTCartonnPlayModel alloc] init];
+    model.chapterName = image;
+    model.bookName = labelName;
+    model.bookType = title;
+    return model;
+}
 
 @end
