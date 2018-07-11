@@ -14,5 +14,10 @@
 
 @property (nonatomic,strong) NSString *btnImage;
 
+@property (nonatomic,strong) NSString *btnColor;
+
 +(instancetype)initWithTitle:(NSString *)btnTitle btnImage:(NSString *)btnImage;
+
++(instancetype)initWithTitle:(NSString *)btnTitle btnColor:(NSString *)btnColor;
+
 @end

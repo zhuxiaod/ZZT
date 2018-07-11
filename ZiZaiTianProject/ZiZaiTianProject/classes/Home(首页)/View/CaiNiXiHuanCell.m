@@ -9,7 +9,7 @@
 #import "CaiNiXiHuanCell.h"
 #import "ZZTJiuGongGeView.h"
 #import "ZZTCartonnPlayModel.h"
-
+#import "ZZTWordsDetailViewController.h"
 static NSUInteger itemCount = 6;
 
 @interface CaiNiXiHuanCell ()
@@ -49,6 +49,9 @@ static NSUInteger itemCount = 6;
     
     NSInteger index = [[tap view] tag];
     NSLog(@"我感受到了你%ld",index);
+    ZZTWordsDetailViewController *detailVC = [[ZZTWordsDetailViewController alloc]init];
+    detailVC.hidesBottomBarWhenPushed = YES;
+    [[self findResponderWithClass:[UINavigationController class]] pushViewController:detailVC animated:YES];
 //    ZZTCartonnPlayModel *md = [self.topics objectAtIndex:index];
     
    //设置跳转页面

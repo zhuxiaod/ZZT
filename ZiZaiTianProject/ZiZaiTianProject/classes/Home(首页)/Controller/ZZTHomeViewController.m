@@ -12,6 +12,7 @@
 #import "ZZTReadTableView.h"
 #import "ZZTCycleCell.h"
 #import "ZZTEasyBtnModel.h"
+#import "ZZTCreationTableView.h"
 
 @interface ZZTHomeViewController ()<UIScrollViewDelegate>
 
@@ -21,7 +22,7 @@
 
 @property (nonatomic,weak) ZZTReadTableView *collectView;
 @property (nonatomic,weak) ZZTReadTableView *ReadView;
-@property (nonatomic,weak) ZZTReadTableView *CreationView;
+@property (nonatomic,weak) ZZTCreationTableView *CreationView;
 @property (nonatomic,weak) ZZTCycleCell * cycleCell;
 @property (nonatomic,weak) UIScrollView *mainView;
 
@@ -105,31 +106,26 @@
     //btn 的数据模型
    
     //阅读页
-    ZZTReadTableView *collectVC = [[ZZTReadTableView alloc] init];
-    collectVC.backgroundColor = [UIColor whiteColor];
-    self.collectView = collectVC;
-    collectVC.btnTpye = @"1";
-    collectVC.viewWidth = self.mainView.width;
-    collectVC.viewHeight = self.mainView.height;
-    [self.mainView addSubview:collectVC];
-    
-    //创作页
     ZZTReadTableView *readVC = [[ZZTReadTableView alloc] init];
     readVC.backgroundColor = [UIColor whiteColor];
     self.ReadView = readVC;
-//    readVC.btnArray = btnArray;
-    readVC.viewWidth = self.mainView.width;
-    readVC.viewHeight = self.mainView.height;
     [self.mainView addSubview:readVC];
     
-    //收藏页
-    ZZTReadTableView *creationVC = [[ZZTReadTableView alloc] init];
-    creationVC.backgroundColor = [UIColor whiteColor];
+    //创作页
+    ZZTCreationTableView *creationVC = [[ZZTCreationTableView alloc] init];
     self.CreationView = creationVC;
-    creationVC.viewWidth = self.mainView.width;
-    creationVC.viewHeight = self.mainView.height;
+    creationVC.backgroundColor = [UIColor whiteColor];
     [self.mainView addSubview:creationVC];
+    
+    //收藏页
+//    ZZTCreationTableView *collectVC = [[ZZTCreationTableView alloc] init];
+//    collectVC.backgroundColor = [UIColor whiteColor];
+//    self.CreationView = collectVC;
+////    collectVC.viewWidth = self.mainView.width;
+////    collectVC.viewHeight = self.mainView.height;
+//    [self.mainView addSubview:collectVC];
 }
+
 #pragma mark - 设置滚动视图
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
@@ -142,9 +138,9 @@
     self.mainView.contentSize  = CGSizeMake(width * 3, 0);
     
     //提前加载
-    [_ReadView setFrame:CGRectMake(0, 0, width, height)];
-    [_collectView setFrame:CGRectMake(width, 0, width, height)];
-    [_CreationView setFrame:CGRectMake(width * 2, 0, width, height)];
+    [_CreationView setFrame:CGRectMake(0, 0, width, height)];
+    [_ReadView setFrame:CGRectMake(width, 0, width, height)];
+    [_collectView setFrame:CGRectMake(width * 2, 0, width, height)];
     [self.mainView setContentOffset:CGPointMake(width, 0)];
 }
 

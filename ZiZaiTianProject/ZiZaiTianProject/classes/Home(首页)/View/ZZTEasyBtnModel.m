@@ -16,4 +16,12 @@
     model.btnTitile = btnTitle;
     return model;
 }
+
++(instancetype)initWithTitle:(NSString *)btnTitle btnColor:(NSString *)btnColor
+{
+    ZZTEasyBtnModel *model = [[ZZTEasyBtnModel alloc] init];
+    model.btnTitile = btnTitle;
+    model.btnColor = btnColor;
+    return model;
+}
 @end
