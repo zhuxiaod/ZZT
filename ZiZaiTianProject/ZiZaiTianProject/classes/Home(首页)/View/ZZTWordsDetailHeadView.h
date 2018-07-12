@@ -13,17 +13,13 @@
 @interface ZZTWordsDetailHeadView : UIView
 
 @property (nonatomic,strong) ZZTCarttonDetailModel *detailModel;
-@property (weak, nonatomic) IBOutlet UIButton *backBtn;
-@property (weak, nonatomic) IBOutlet UIImageView *backgroundView;
-@property (weak, nonatomic) IBOutlet UIImageView *ctImage;
-@property (weak, nonatomic) IBOutlet UILabel *ctName;
-@property (weak, nonatomic) IBOutlet UILabel *ctTitle;
-@property (weak, nonatomic) IBOutlet UILabel *clkNum;
-@property (weak, nonatomic) IBOutlet UILabel *collect;
-@property (weak, nonatomic) IBOutlet UILabel *participation;
-@property (weak, nonatomic) IBOutlet UILabel *ctNum;
-@property (weak, nonatomic) IBOutlet UIButton *shareBtn;
-+ (instancetype)wordsDetailHeadViewWithFrame:(CGRect)frame scorllView:(UIScrollView *)sc;
-+ (instancetype)initWithFrame:(CGRect)frame scrollView:(UIScrollView *)sc;
+
+
+- (void)setctName:(NSString *)setCtname;
+
+//+ (instancetype)creatHeadView;
+
+//+ (instancetype)wordsDetailHeadViewWithFrame:(CGRect)frame scorllView:(UIScrollView *)sc;
+//+ (instancetype)initWithFrame:(CGRect)frame scrollView:(UIScrollView *)sc;
 
 @end

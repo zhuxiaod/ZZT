@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="65H-ur-TUJ" customClass="ZZTWordCell">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="udB-eN-jrn">
+                    <rect key="frame" x="10" y="10" width="150" height="80"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="80" id="RLo-Zs-0mE"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ThM-cB-XXr">
+                    <rect key="frame" x="170" y="10" width="195" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZLG-KJ-VM3">
+                    <rect key="frame" x="170" y="69" width="42" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M5I-Dc-aLd">
+                    <rect key="frame" x="279" y="69" width="80" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="r2o-n5-Mkk"/>
+                        <constraint firstAttribute="width" constant="80" id="zd3-Rf-Pdp"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="udB-eN-jrn" firstAttribute="top" secondItem="1mt-ad-hMJ" secondAttribute="top" constant="10" id="0vP-gv-cZw"/>
+                <constraint firstItem="M5I-Dc-aLd" firstAttribute="bottom" secondItem="ZLG-KJ-VM3" secondAttribute="bottom" id="1nO-mF-R8M"/>
+                <constraint firstItem="ThM-cB-XXr" firstAttribute="top" secondItem="udB-eN-jrn" secondAttribute="top" id="3T3-ZU-B3g"/>
+                <constraint firstItem="1mt-ad-hMJ" firstAttribute="bottom" secondItem="udB-eN-jrn" secondAttribute="bottom" constant="10" id="9Qt-By-nPA"/>
+                <constraint firstItem="udB-eN-jrn" firstAttribute="width" secondItem="65H-ur-TUJ" secondAttribute="width" multiplier="0.4" id="COC-MO-yGm"/>
+                <constraint firstItem="1mt-ad-hMJ" firstAttribute="trailing" secondItem="M5I-Dc-aLd" secondAttribute="trailing" constant="16" id="MUh-lH-YKL"/>
+                <constraint firstItem="udB-eN-jrn" firstAttribute="leading" secondItem="1mt-ad-hMJ" secondAttribute="leading" constant="10" id="ax4-x9-uFK"/>
+                <constraint firstItem="ZLG-KJ-VM3" firstAttribute="leading" secondItem="udB-eN-jrn" secondAttribute="trailing" constant="10" id="gHm-7D-oX2"/>
+                <constraint firstItem="ThM-cB-XXr" firstAttribute="leading" secondItem="udB-eN-jrn" secondAttribute="trailing" constant="10" id="qaS-gI-3Zh"/>
+                <constraint firstItem="ZLG-KJ-VM3" firstAttribute="bottom" secondItem="udB-eN-jrn" secondAttribute="bottom" id="r3E-oV-8LM"/>
+                <constraint firstItem="1mt-ad-hMJ" firstAttribute="trailing" secondItem="ThM-cB-XXr" secondAttribute="trailing" constant="10" id="xtM-Bs-QxR"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="1mt-ad-hMJ"/>
+            <connections>
+                <outlet property="ctImage" destination="udB-eN-jrn" id="iVH-YY-JIJ"/>
+                <outlet property="ctName" destination="ThM-cB-XXr" id="Wc8-7L-Wek"/>
+                <outlet property="ctTime" destination="ZLG-KJ-VM3" id="ZjK-HH-zma"/>
+                <outlet property="praise" destination="M5I-Dc-aLd" id="Jnq-5Q-2HW"/>
+            </connections>
+        </view>
+    </objects>
+</document>

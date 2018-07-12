@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 #define wordsDetailHeadViewHeight  300
+#define wordAuthorCellHeight 50
+#define wordTableViewCellHeight 100
 
-@interface ZZTWordsDetailViewController : UIViewController
+@interface ZZTWordsDetailViewController : BaseViewController
 
 @end

@@ -35,7 +35,6 @@ static NSUInteger itemCount = 6;
         //没有数据  所以先空
         obj.model = topics[idx];
     }];
-
 }
 
 - (void)layoutSubviews {

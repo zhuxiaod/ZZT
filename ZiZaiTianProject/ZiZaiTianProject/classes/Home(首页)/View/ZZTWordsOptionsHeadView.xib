@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ZZTWordsOptionsHeadView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rtr-oX-XsL" userLabel="3">
+                    <rect key="frame" x="250" y="0.0" width="125" height="40"/>
+                    <state key="normal" title="Button"/>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9V7-aq-1JF">
+                    <rect key="frame" x="247" y="10" width="2" height="20"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="2" id="tiJ-lq-zN0"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htT-v7-rob">
+                    <rect key="frame" x="0.0" y="38" width="375" height="2"/>
+                    <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="2" id="8ZB-Uf-esw"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="yxL-W5-uHC"/>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dbv-Wn-t0l" userLabel="1">
+                    <rect key="frame" x="0.0" y="0.0" width="125" height="40"/>
+                    <state key="normal" title="Button"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wIt-dY-sLy" userLabel="2">
+                    <rect key="frame" x="125" y="0.0" width="125" height="40"/>
+                    <state key="normal" title="Button"/>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z2u-9B-zF1">
+                    <rect key="frame" x="123" y="10" width="2" height="20"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="2" id="Q7p-l0-ggl"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YMJ-B6-DEc" userLabel="line">
+                    <rect key="frame" x="0.0" y="38" width="125" height="2"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="2" id="agg-1w-4Pf"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="YMJ-B6-DEc" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="0cC-o9-0Zb"/>
+                <constraint firstItem="dbv-Wn-t0l" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="23G-fL-PwP"/>
+                <constraint firstItem="9V7-aq-1JF" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="2Dx-Dy-iJh"/>
+                <constraint firstItem="wIt-dY-sLy" firstAttribute="leading" secondItem="dbv-Wn-t0l" secondAttribute="trailing" id="2Wp-GK-nN7"/>
+                <constraint firstItem="dbv-Wn-t0l" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="4CZ-hM-Vf7"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="dbv-Wn-t0l" secondAttribute="bottom" id="4kn-1n-35Z"/>
+                <constraint firstItem="htT-v7-rob" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="BfT-8L-Cc9"/>
+                <constraint firstItem="Rtr-oX-XsL" firstAttribute="height" secondItem="dbv-Wn-t0l" secondAttribute="height" id="Hes-h5-wYc"/>
+                <constraint firstItem="YMJ-B6-DEc" firstAttribute="width" secondItem="dbv-Wn-t0l" secondAttribute="width" id="RzM-gN-3jg"/>
+                <constraint firstAttribute="bottom" secondItem="z2u-9B-zF1" secondAttribute="bottom" constant="10" id="Sp2-Mf-AIp"/>
+                <constraint firstItem="Rtr-oX-XsL" firstAttribute="leading" secondItem="9V7-aq-1JF" secondAttribute="trailing" constant="1" id="Vgx-b0-lZW"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Rtr-oX-XsL" secondAttribute="trailing" id="WWv-GP-ftJ"/>
+                <constraint firstItem="htT-v7-rob" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Wsf-Bi-aRq"/>
+                <constraint firstItem="htT-v7-rob" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="XMO-Hc-4Xx"/>
+                <constraint firstItem="Rtr-oX-XsL" firstAttribute="centerY" secondItem="dbv-Wn-t0l" secondAttribute="centerY" id="YNV-nZ-d2q"/>
+                <constraint firstAttribute="bottom" secondItem="YMJ-B6-DEc" secondAttribute="bottom" id="ZHq-im-KJa"/>
+                <constraint firstAttribute="bottom" secondItem="9V7-aq-1JF" secondAttribute="bottom" constant="10" id="ZPJ-YB-ni5"/>
+                <constraint firstItem="wIt-dY-sLy" firstAttribute="centerY" secondItem="dbv-Wn-t0l" secondAttribute="centerY" id="bHa-Mm-vNr"/>
+                <constraint firstItem="z2u-9B-zF1" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="dAQ-HR-CZ4"/>
+                <constraint firstItem="htT-v7-rob" firstAttribute="width" secondItem="vUN-kp-3ea" secondAttribute="width" id="fdg-Zc-cNq"/>
+                <constraint firstItem="wIt-dY-sLy" firstAttribute="width" secondItem="dbv-Wn-t0l" secondAttribute="width" id="kJV-UF-fgJ"/>
+                <constraint firstItem="wIt-dY-sLy" firstAttribute="leading" secondItem="z2u-9B-zF1" secondAttribute="trailing" id="l4M-O2-RuA"/>
+                <constraint firstItem="Rtr-oX-XsL" firstAttribute="width" secondItem="dbv-Wn-t0l" secondAttribute="width" id="pXy-dK-QMK"/>
+                <constraint firstItem="Rtr-oX-XsL" firstAttribute="leading" secondItem="wIt-dY-sLy" secondAttribute="trailing" id="y5x-Om-yQh"/>
+                <constraint firstItem="wIt-dY-sLy" firstAttribute="height" secondItem="dbv-Wn-t0l" secondAttribute="height" id="yrs-ii-0eF"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="leftBtn" destination="dbv-Wn-t0l" id="Nor-kd-iE8"/>
+                <outlet property="line" destination="YMJ-B6-DEc" id="YOg-2o-79a"/>
+                <outlet property="midBtn" destination="wIt-dY-sLy" id="YPF-hf-8GH"/>
+                <outlet property="rightBtn" destination="Rtr-oX-XsL" id="PjF-Nx-ahN"/>
+            </connections>
+            <point key="canvasLocation" x="59" y="26"/>
+        </view>
+    </objects>
+</document>
