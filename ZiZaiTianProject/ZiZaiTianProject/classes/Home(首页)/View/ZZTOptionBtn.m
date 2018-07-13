@@ -12,7 +12,7 @@
 
 -(void)setSelected:(BOOL)selected{
     [super setSelected:selected];
-    if (selected == YES) {
+    if (selected == YES ) {
         self.backgroundColor = [UIColor colorWithHexString:@"#E4C1D9"];
     }else{
         self.backgroundColor = [UIColor colorWithHexString:@"#5D4256"];

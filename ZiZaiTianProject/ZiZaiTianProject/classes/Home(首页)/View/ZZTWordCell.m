@@ -21,6 +21,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.backgroundColor = [UIColor clearColor];
 }
 
 -(void)setModel:(ZZTChapterlistModel *)model{

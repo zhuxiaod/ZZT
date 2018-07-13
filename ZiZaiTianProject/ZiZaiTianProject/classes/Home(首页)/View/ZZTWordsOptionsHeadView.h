@@ -15,7 +15,8 @@
 @property (weak, nonatomic) ZZTOptionBtn *leftBtn;
 @property (weak, nonatomic) ZZTOptionBtn *midBtn;
 @property (weak, nonatomic) ZZTOptionBtn *rightBtn;
-
+@property (strong, nonatomic) NSArray *titleArray;
+@property (nonatomic, assign) BOOL isSelectStatus;
 
 @property (nonatomic,copy) void (^leftBtnClick)(ZZTOptionBtn *btn);
 

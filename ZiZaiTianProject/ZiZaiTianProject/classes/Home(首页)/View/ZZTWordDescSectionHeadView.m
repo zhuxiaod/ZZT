@@ -51,7 +51,7 @@ static CGFloat const tbSpaceing = 12;
     
     descLabel.numberOfLines = 2;
     descLabel.font = [UIFont systemFontOfSize:12];
-    descLabel.textColor = [UIColor lightGrayColor];
+    descLabel.textColor = [UIColor whiteColor];
     descLabel.preferredMaxLayoutWidth = SCREEN_WIDTH - spaceing * 2;
     
     [self addSubview:descLabel];

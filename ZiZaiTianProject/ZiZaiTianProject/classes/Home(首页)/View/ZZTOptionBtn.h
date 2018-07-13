@@ -10,4 +10,5 @@
 
 @interface ZZTOptionBtn : UIButton
 
+@property (nonatomic,strong) NSString *optionSelect;
 @end

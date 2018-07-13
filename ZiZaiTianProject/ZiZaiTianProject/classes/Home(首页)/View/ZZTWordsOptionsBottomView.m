@@ -1,22 +1,14 @@
 //
-//  ZZTWordsOptionsHeadView.m
+//  ZZTWordsOptionsBottomView.m
 //  ZiZaiTianProject
 //
-//  Created by mac on 2018/7/12.
+//  Created by mac on 2018/7/13.
 //  Copyright © 2018年 zxd. All rights reserved.
 //
 
-#import "ZZTWordsOptionsHeadView.h"
-#import "ZZTOptionBtn.h"
+#import "ZZTWordsOptionsBottomView.h"
 
-@interface ZZTWordsOptionsHeadView()
-
-@property (weak, nonatomic) UIView *line;
-
-@end
-
-@implementation ZZTWordsOptionsHeadView
-
+@implementation ZZTWordsOptionsBottomView
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -30,30 +22,20 @@
     self.backgroundColor = [UIColor whiteColor];
     
     _leftBtn = [self creatBtn];
-//    [self.leftBtn setTitle:@"详情" forState:UIControlStateNormal];
-    _leftBtn.backgroundColor = [UIColor colorWithHexString:@"#E4C1D9"];
-    
+    _leftBtn.backgroundColor = [UIColor colorWithHexString:@"#FFFFFF"];
     _midBtn = [self creatBtn];
-//    [self.midBtn setTitle:@"目录" forState:UIControlStateNormal];
-    _midBtn.backgroundColor = [UIColor colorWithHexString:@"#5D4256"];
+    _midBtn.backgroundColor = [UIColor colorWithHexString:@"#FFFFFF"];
     _rightBtn = [self creatBtn];
-//    [self.rightBtn setTitle:@"评论" forState:UIControlStateNormal];
-    _rightBtn.backgroundColor = [UIColor colorWithHexString:@"#5D4256"];
+    _rightBtn.backgroundColor = [UIColor colorWithHexString:@"#38D9B1"];
 }
+
 -(void)setTitleArray:(NSArray *)titleArray{
     _titleArray = titleArray;
     [self.leftBtn setTitle:titleArray[0] forState:UIControlStateNormal];
     [self.midBtn setTitle:titleArray[1] forState:UIControlStateNormal];
     [self.rightBtn setTitle:titleArray[2] forState:UIControlStateNormal];
 }
--(void)setIsSelectStatus:(BOOL)isSelectStatus{
-    _isSelectStatus = isSelectStatus;
-    if(_isSelectStatus == YES){
-        _leftBtn.selected = YES;
-        _midBtn.selected = NO;
-        _rightBtn.selected = NO;
-    }
-}
+
 -(void)layoutSubviews
 {
     [super layoutSubviews];
@@ -62,10 +44,10 @@
     bottomLine.backgroundColor = [UIColor grayColor];
     //中线
     UIView *centerLine1 = [self creatSpaceLine];
-    centerLine1.backgroundColor = [UIColor grayColor];
+    centerLine1.backgroundColor = [UIColor colorWithHexString:@"#38D9B1"];
     UIView *centerLine2 = [self creatSpaceLine];
-    centerLine2.backgroundColor = [UIColor grayColor];
-
+    centerLine2.backgroundColor = [UIColor colorWithHexString:@"#38D9B1"];
+    
     weakself(self);
     CGFloat line_h = wordsOptionsHeadViewHeight * 0.6;
     [_leftBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -102,47 +84,10 @@
         make.centerY.mas_equalTo(weakSelf.rightBtn.mas_centerY);
     }];
     [centerLine2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(weakSelf.midBtn.mas_right);
+        make.left.mas_equalTo(weakSelf.midBtn.mas_left);
         make.height.mas_equalTo(line_h);
         make.width.mas_equalTo(1);
         make.centerY.mas_equalTo(weakSelf.rightBtn.mas_centerY);
-    }];
-}
-//点击判断
-- (void)btnClick:(ZZTOptionBtn *)btn {
-
-    if (btn.selected == YES) return;
-
-    btn.selected = YES;
-    //如果是左
-    if(btn == self.leftBtn && _isSelectStatus == YES){
-        if(self.leftBtnClick && _isSelectStatus == YES){
-            self.rightBtn.selected = NO;
-            self.midBtn.selected = NO;
-            self.leftBtnClick(self.leftBtn);
-        }else{
-            self.leftBtnClick(self.leftBtn);
-        }
-    }else if(btn == self.midBtn && _isSelectStatus == YES){
-        if(self.midBtnClick && _isSelectStatus == YES){
-            self.rightBtn.selected = NO;
-            self.leftBtn.selected = NO;
-            self.midBtnClick(self.midBtn);
-        }else{
-            self.midBtnClick(self.midBtn);
-        }
-    }else{
-        if(self.rightBtnClick && _isSelectStatus == YES){
-            self.leftBtn.selected = NO;
-            self.midBtn.selected = NO;
-            self.rightBtnClick(self.rightBtn);
-        }else{
-            self.rightBtnClick(self.rightBtn);
-        }
-    }
-    
-    [UIView animateWithDuration:0.1 animations:^{
-        [self layoutIfNeeded];
     }];
 }
 //线和按钮的创建方法
@@ -154,14 +99,29 @@
     
     return spaceLine;
 }
-
-- (ZZTOptionBtn *)creatBtn {
+//点击判断
+- (void)btnClick:(UIButton *)btn {
+    if(btn == self.leftBtn){
+        if(self.leftBtnClick){
+            self.leftBtnClick(self.leftBtn);
+        }
+    }else if(btn == self.midBtn){
+        if(self.midBtnClick){
+            self.midBtnClick(self.midBtn);
+        }
+    }else{
+        if(self.rightBtnClick){
+            self.rightBtnClick(self.rightBtn);
+        }
+    }
+}
+- (UIButton *)creatBtn {
     
-    ZZTOptionBtn *btn = [[ZZTOptionBtn alloc] init];
+    UIButton *btn = [[UIButton alloc] init];
     
     [btn.titleLabel setFont:[UIFont systemFontOfSize:15]];
-    [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor colorWithHexString:@"#582547"] forState:UIControlStateSelected];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    [btn setTitleColor:[UIColor colorWithHexString:@"#582547"] forState:UIControlStateSelected];
     [btn setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
     
     [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];

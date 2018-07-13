@@ -8,6 +8,7 @@
 
 #ifndef ZiZaiTianProject_pch
 #define ZiZaiTianProject_pch
+#import "NSString+Extension.h"
 #import <MJRefresh.h>
 #import "UIColor+Hex.h"
 #import "AFNetworking.h"

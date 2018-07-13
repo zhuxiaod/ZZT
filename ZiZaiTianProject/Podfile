@@ -9,6 +9,6 @@ pod ‘JGProgressHUD’
 pod ‘UITableView+FDTemplateLayoutCell’
 pod ‘MJRefresh’
 pod ‘Masonry’
-
+pod 'UITableView+FDTemplateLayoutCell'
 end
 

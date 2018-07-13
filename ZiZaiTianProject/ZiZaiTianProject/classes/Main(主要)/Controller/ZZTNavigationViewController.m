@@ -26,12 +26,10 @@
     nab.translucent = NO;
     
     //设置导航条的背景图片
-//    nab.backgroundColor = [UIColor redColor];
     [nab setBackgroundImage:[UIImage createImageWithColor:[UIColor colorWithHexString:@"#58006E"]] forBarMetrics:UIBarMetricsDefault];
 //    [nab setShadowImage:[UIImage new]];
 }
-
-
+ 
 - (void)viewDidLoad {
     [super viewDidLoad];
     //全屏滑动
@@ -56,12 +54,12 @@
         viewController.navigationItem.leftBarButtonItem = [UIBarButtonItem backItemWithImage:[UIImage imageNamed:@"navigationButtonReturn"] highImage:[UIImage imageNamed:@"navigationButtonReturnClick"] target:self action:@selector(back) title:@"返回"];
     }
     [super pushViewController:viewController animated:YES];
-
 }
 
 -(void)back
 {
     [self popViewControllerAnimated:YES];
-    
 }
+
+
 @end

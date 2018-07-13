@@ -15,8 +15,13 @@
 #import "ZZTWordDescSectionHeadView.h"
 #import "AFNHttpTool.h"
 #import "ZZTChapterlistModel.h"
+#import "ZZTCommentCell.h"
+#import "ZZTCircleModel.h"
+#import "UITableView+FDTemplateLayoutCell.h"
+#import "ZZTWordsOptionsBottomView.h"
+#import "ZZTReaderViewController.h"
 
-@interface ZZTWordsDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface ZZTWordsDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UINavigationControllerDelegate>
 @property (nonatomic,strong) AFHTTPSessionManager *manager;
 @property (nonatomic,strong) EncryptionTools *encryptionManager;
 @property (nonatomic,strong) NSString *getData;
@@ -27,10 +32,13 @@
 @property (nonatomic,strong) ZZTWordDescSectionHeadView *descHeadView;
 @property (nonatomic,strong) NSArray *ctList;
 @property (nonatomic,assign) BOOL isDataCome;
+@property (nonatomic,strong) NSArray *ctComment;
+
 
 @end
 NSString *zztWordCell = @"WordCell";
 NSString *NoCell = @"NoCell";
+NSString *zztComment = @"zztComment";
 
 @implementation ZZTWordsDetailViewController
 //目录
@@ -39,6 +47,12 @@ NSString *NoCell = @"NoCell";
         _ctList = [NSArray array];
     }
     return _ctList;
+}
+-(NSArray *)ctComment{
+    if (!_ctComment) {
+        _ctComment = [NSArray array];
+    }
+    return _ctComment;
 }
 - (EncryptionTools *)encryptionManager{
     if(!_encryptionManager){
@@ -55,7 +69,8 @@ NSString *NoCell = @"NoCell";
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.navigationController.delegate = self;
+
     [self setup];
 
     //详情页上面的数据
@@ -63,8 +78,32 @@ NSString *NoCell = @"NoCell";
     
     //目录数据
     [self loadListData];
+    
+    [self loadCommentData];
+
     //设置页面
     [self setupWordsDetailContentView];
+    
+    //设置底部View
+    [self setupBottomView];
+}
+
+-(void)setupBottomView{
+    ZZTWordsOptionsBottomView *headView = [[ZZTWordsOptionsBottomView alloc] init];
+    [headView setFrame:CGRectMake(0, SCREEN_HEIGHT-wordsOptionsHeadViewHeight, SCREEN_WIDTH, wordsOptionsHeadViewHeight)];
+    headView.titleArray = @[@"收藏",@"包月",@"开始阅读"];
+    //收藏
+    [headView setLeftBtnClick:^(UIButton *btn) {
+    }];
+    //包月
+    [headView setMidBtnClick:^(UIButton *btn) {
+    }];
+    //开始阅读
+    [headView setRightBtnClick:^(UIButton *btn) {
+        ZZTReaderViewController *readerVC = [[ZZTReaderViewController alloc] init];
+        [self.navigationController pushViewController:readerVC animated:YES];
+    }];
+    [self.view addSubview:headView];
 }
 
 //初始化
@@ -86,6 +125,25 @@ NSString *NoCell = @"NoCell";
         //这里有问题 应该是转成数组 然后把对象取出
         NSArray *array = [ZZTChapterlistModel mj_objectArrayWithKeyValuesArray:dic];
         weakSelf.ctList = array;
+        weakSelf.isDataCome = YES;
+    } failure:^(NSError *error) {
+        
+    }];
+    [self.contentView reloadData];
+}
+//加载评论数据
+-(void)loadCommentData{
+    weakself(self);
+    NSDictionary *paramDict = @{
+                                @"itemId":@"1"
+                                };
+    [AFNHttpTool POST:@"http://192.168.0.165:8888/circle/comment" parameters:paramDict success:^(id responseObject) {
+        NSString *data = responseObject[@"result"];
+        NSDictionary *dic = [self decry:data];
+        //这里有问题 应该是转成数组 然后把对象取出
+        NSArray *array1 = [ZZTCircleModel mj_objectArrayWithKeyValuesArray:dic];
+
+        weakSelf.ctComment = array1;
         weakSelf.isDataCome = YES;
     } failure:^(NSError *error) {
         
@@ -122,19 +180,22 @@ NSString *NoCell = @"NoCell";
 - (void)setupWordsDetailContentView {
     //滚动还是要加的  - -
     UITableView *contenView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
-    contenView.backgroundColor = [UIColor redColor];
+    contenView.backgroundColor = [UIColor colorWithHexString:@"#2B2B34"];
     contenView.contentInset = UIEdgeInsetsMake(wordsDetailHeadViewHeight,0,0,0);
     contenView.delegate = self;
     contenView.dataSource = self;
     contenView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [contenView registerClass:[UITableViewCell class] forCellReuseIdentifier:NoCell];
-    
+    [contenView  setSeparatorColor:[UIColor blueColor]];
     //拿接口 上数据
-    _head = [[ZZTWordsDetailHeadView alloc] init];
-    _head.frame = CGRectMake(0, 0, SCREEN_WIDTH, wordsDetailHeadViewHeight);
+    _head = [ZZTWordsDetailHeadView wordsDetailHeadViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, wordsDetailHeadViewHeight) scorllView:contenView];
+//    _head = [[ZZTWordsDetailHeadView alloc] init];
+//    _head.frame = CGRectMake(0, 0, SCREEN_WIDTH, wordsDetailHeadViewHeight);
     
     //选择头
     ZZTWordsOptionsHeadView *headView = [[ZZTWordsOptionsHeadView alloc] init];
+    headView.titleArray = @[@"详情",@"目录",@"评价"];
+    headView.isSelectStatus = YES;
     [headView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, wordsOptionsHeadViewHeight)];
     
     weakself(self);
@@ -143,21 +204,24 @@ NSString *NoCell = @"NoCell";
         weakSelf.btnIndex = 1;
         [weakSelf.contentView layoutIfNeeded];
         [weakSelf.contentView setContentOffset:CGPointMake(0, -wordsDetailHeadViewHeight)];
-        [self.contentView reloadData];
+        [weakSelf.contentView reloadData];
     }];
     //中间事件
     [headView setMidBtnClick:^(ZZTOptionBtn *btn) {
         weakSelf.btnIndex = 2;
-        [self.contentView reloadData];
+        [weakSelf.contentView reloadData];
     }];
     //右边事件
     [headView setRightBtnClick:^(ZZTOptionBtn *btn) {
         weakSelf.btnIndex = 3;
-        [self.contentView reloadData];
+        [weakSelf.contentView reloadData];
     }];
     //点击响应Ok  中间也搞好了  两边上数据
     //注册
     [contenView registerNib:[UINib nibWithNibName:@"ZZTWordCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:zztWordCell];
+    [contenView registerNib:[UINib nibWithNibName:@"ZZTCommentCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:zztComment];
+
+    
     contenView.tableHeaderView = headView;
     [self.view addSubview:contenView];
     [self.view addSubview:_head];
@@ -172,7 +236,12 @@ NSString *NoCell = @"NoCell";
     }else if(self.btnIndex == 2){
         return wordTableViewCellHeight;
     }else if(self.btnIndex == 3){
-        return 200;
+        return [self.contentView fd_heightForCellWithIdentifier:zztComment cacheByIndexPath:indexPath configuration:^(id cell) {
+            ZZTCommentCell *CommentCell = (ZZTCommentCell *)cell;
+            
+            CommentCell.model = self.ctComment[indexPath.row];
+            
+        }];
     }else{
         return 0;
     }
@@ -197,13 +266,25 @@ NSString *NoCell = @"NoCell";
     if(self.btnIndex == 1){
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NoCell];
         return cell;
+    }else if(self.btnIndex == 2){
+        ZZTWordCell *cell = [tableView dequeueReusableCellWithIdentifier:zztWordCell];
+        if(self.ctList.count > 0){
+            ZZTChapterlistModel *model = self.ctList[indexPath.row];
+            cell.model = model;
+        }
+        return cell;
     }
-    ZZTWordCell *cell = [tableView dequeueReusableCellWithIdentifier:zztWordCell];
-    if(self.ctList.count > 0){
-        ZZTChapterlistModel *model = self.ctList[indexPath.row];
-        cell.model = model;
+    else if (self.btnIndex == 3){
+        ZZTCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:zztComment];
+        if (self.ctComment.count > 0) {
+            ZZTCircleModel *model = self.ctComment[indexPath.row];
+            cell.model = model;
+        }
+        return cell;
+    }else{
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NoCell];
+        return cell;
     }
-    return cell;
 }
 //设置头
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -219,11 +300,13 @@ NSString *NoCell = @"NoCell";
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if(self.btnIndex == 1){
         return 1;
-    }if(self.btnIndex == 2){
+    }else if(self.btnIndex == 2){
         //数组
         return self.ctList.count;
+    }else if(self.btnIndex == 3){
+        return self.ctComment.count;
     }else{
-        return 2;
+        return 1;
     }
 }
 
@@ -231,6 +314,7 @@ NSString *NoCell = @"NoCell";
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
+
 #pragma mark - 解密
 -(NSDictionary *)decry:(NSString *)getData{
     //解密
@@ -244,7 +328,7 @@ NSString *NoCell = @"NoCell";
     if (!_descHeadView) {
         
         _descHeadView = [[ZZTWordDescSectionHeadView alloc] initWithFrame:self.view.bounds];
-        _descHeadView.backgroundColor = [UIColor yellowColor];
+        _descHeadView.backgroundColor = [UIColor clearColor];
         weakself(self);
         
         [_descHeadView setNeedReloadHeight:^{
@@ -255,5 +339,10 @@ NSString *NoCell = @"NoCell";
         
     }
     return _descHeadView;
+}
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 @end
