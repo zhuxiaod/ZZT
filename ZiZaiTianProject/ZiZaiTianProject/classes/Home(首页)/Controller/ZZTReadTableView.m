@@ -63,9 +63,6 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         [self registerClass:[ZZTCartoonBtnCell class]  forCellReuseIdentifier:zCartoonBtnCell];
         [self registerClass:[CaiNiXiHuanCell class]  forCellReuseIdentifier:caiNiXiHuan];
          self.showsVerticalScrollIndicator = NO;
-        //上拉
-        //下拉
-        //加载头
     }
     return self;
 }
@@ -138,6 +135,14 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         return self.height * 0.05;
     }else{
         return 0;
+    }
+}
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat sectionHeaderHeight = self.height * 0.05;  // headerView的高度  向上偏移50   达到隐藏的效果
+    if(scrollView.contentOffset.y<=sectionHeaderHeight&&scrollView.contentOffset.y>=0) {
+        scrollView.contentInset = UIEdgeInsetsMake(-scrollView.contentOffset.y, 0, 0, 0);
+    } else if (scrollView.contentOffset.y>=sectionHeaderHeight) {
+        scrollView.contentInset = UIEdgeInsetsMake(-sectionHeaderHeight, 0, 0, 0);
     }
 }
 @end

@@ -68,4 +68,6 @@
  */
 - (NSString *)decryptString:(NSString *)string keyString:(NSString *)keyString iv:(NSData *)iv;
 
+-(NSDictionary *)decry:(NSString *)getData;
+
 @end

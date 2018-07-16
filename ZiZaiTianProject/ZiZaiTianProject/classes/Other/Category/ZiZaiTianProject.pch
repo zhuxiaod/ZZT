@@ -31,6 +31,7 @@
 #import <Masonry/Masonry.h>
 #import "UIView+Extension.h"
 #import "AFNetworking.h"
+#import "AFNHttpTool.h"
 
 #define MyLog(...) NSLog(__VA_ARGS__);
 /** 屏幕尺寸 */

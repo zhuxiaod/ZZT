@@ -67,6 +67,7 @@ NSString *zztComment = @"zztComment";
     }
     return _ctDetail;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.delegate = self;
@@ -101,6 +102,7 @@ NSString *zztComment = @"zztComment";
     //开始阅读
     [headView setRightBtnClick:^(UIButton *btn) {
         ZZTReaderViewController *readerVC = [[ZZTReaderViewController alloc] init];
+        readerVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:readerVC animated:YES];
     }];
     [self.view addSubview:headView];
@@ -113,6 +115,7 @@ NSString *zztComment = @"zztComment";
     self.isDataCome = NO;
     self.view.backgroundColor = [UIColor redColor];
 }
+
 #pragma mark - 请求数据
 -(void)loadListData{
     weakself(self);
@@ -131,6 +134,7 @@ NSString *zztComment = @"zztComment";
     }];
     [self.contentView reloadData];
 }
+
 //加载评论数据
 -(void)loadCommentData{
     weakself(self);
