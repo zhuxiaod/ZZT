@@ -11,6 +11,7 @@
 #import "ZZTCartoonModel.h"
 #import "ZZTCartoonDetailHead.h"
 #import "ZZTCartoonDetailFoot.h"
+#import "ZZTStoryDetailView.h"
 
 @interface ZZTCartoonDetailView()<UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic,strong) NSArray *cartoonDetailArray;
@@ -32,6 +33,7 @@ static NSString * const CartoonContentCellIdentifier = @"CartoonContentCell";
     self.cartoonDetailArray = cartoonDetail;
     [self reloadData];
 }
+
 -(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
@@ -46,16 +48,6 @@ static NSString * const CartoonContentCellIdentifier = @"CartoonContentCell";
         //刷新数据
     }
     return self;
-}
-
-#pragma mark UITableViewDataSource 头高
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    //第一节的头  作者介绍
-    //第二节的头  热门评论
-//    if (section == 0) return authorInfoHeadViewHeight;
-//    if (section == 1) return CommentSectionHeadViewHeight;
-    
-    return 60;
 }
 
 //有节头 ==>  第几段(UIlabel) 多少赞(UIButton)
@@ -79,7 +71,10 @@ static NSString * const CartoonContentCellIdentifier = @"CartoonContentCell";
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return self.height;
 }
-
+#pragma mark UITableViewDataSource 头高
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return detailViewHeaderHeight;
+}
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 60;
 }
@@ -92,4 +87,5 @@ static NSString * const CartoonContentCellIdentifier = @"CartoonContentCell";
     ZZTCartoonDetailFoot *foot = [[ZZTCartoonDetailFoot alloc] initWithFrame:self.bounds];
     return foot;
 }
+
 @end

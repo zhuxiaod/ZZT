@@ -15,6 +15,7 @@
 #import "CaiNiXiHuanCell.h"
 #import "ZZTCartoonHeaderView.h"
 #import "ZZTWordsDetailViewController.h"
+#import "ZZTCarttonDetailModel.h"
 @interface ZZTReadTableView()<UITableViewDataSource,UITableViewDelegate,DCPicScrollViewDelegate,DCPicScrollViewDataSource>
 @property (nonatomic,weak) DCPicScrollView *bannerView;
 
@@ -46,7 +47,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 
 -(NSArray *)bannerModelArray{
     if(!_bannerModelArray){
-        _bannerModelArray = @[@"u=346672913,3176690417&fm=27&gp=0.jpg",@"u=2092279950,3036263238&fm=27&gp=0.jpg",@"u=3542609435,1624381455&fm=27&gp=0.jpg"];
+        _bannerModelArray = [NSArray array];
     }
     return _bannerModelArray;
 }
@@ -63,10 +64,23 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         [self registerClass:[ZZTCartoonBtnCell class]  forCellReuseIdentifier:zCartoonBtnCell];
         [self registerClass:[CaiNiXiHuanCell class]  forCellReuseIdentifier:caiNiXiHuan];
          self.showsVerticalScrollIndicator = NO;
+        //bannerData
+        [self loadBannerData];
     }
     return self;
 }
 
+-(void)loadBannerData{
+    weakself(self);
+    [AFNHttpTool POST:@"http://192.168.0.165:8888/homepage/banner" parameters:nil success:^(id responseObject) {
+        NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+        NSArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
+        weakSelf.bannerModelArray = array;
+        [self reloadData];
+    } failure:^(NSError *error) {
+        
+    }];
+}
 #pragma mark - tableView代理
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 3;
@@ -85,7 +99,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
    
     if (indexPath.section == 0) {
-        
+        //轮播
         ZZTCycleCell *cell = [tableView dequeueReusableCellWithIdentifier:zzTCycleCell];
         cell.dataArray = self.bannerModelArray;
         cell.isTime = YES;
@@ -98,7 +112,6 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         return cell;
     }if(indexPath.section == 2){
         //猜你喜欢
-        //搞一个数据
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:caiNiXiHuan];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell performSelector:@selector(setTopics:) withObject:self.caiNiXiHuan];
@@ -126,6 +139,11 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     NSString *title = @"猜你喜欢";
     ZZTCartoonHeaderView *head = [[ZZTCartoonHeaderView alloc] init];
+    head.moreOnClick = ^{
+        ZZTMoreViewController *moreVC = [[ZZTMoreViewController alloc] init];
+        moreVC.hidesBottomBarWhenPushed = YES;
+        [[self myViewController].navigationController pushViewController:moreVC animated:YES];
+    };
     head.title = title;
     return head;
 }

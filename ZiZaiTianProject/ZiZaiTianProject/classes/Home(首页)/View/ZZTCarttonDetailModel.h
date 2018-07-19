@@ -10,6 +10,8 @@
 
 @interface ZZTCarttonDetailModel : NSObject
 
+@property (nonatomic,strong) NSString *id;
+
 @property (nonatomic,strong) NSString *userId;
 @property (nonatomic,strong) NSString *author;
 @property (nonatomic,strong) NSString *bookName;

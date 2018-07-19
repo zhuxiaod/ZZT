@@ -59,19 +59,6 @@
     return self;
 }
 
--(void)layoutSubviews{
-    [super layoutSubviews];
-    
-    CGFloat labelH = 12;
-    CGFloat titleH = 12;
-
-    CGFloat spaceing1 = 5;
-    CGFloat spaceing2 = 2;
-
-    self.imageView.frame = CGRectMake(0, 0, self.width, self.height-labelH-titleH-spaceing2-spaceing2);
-    self.titleLabel.frame = CGRectMake(spaceing1, self.height-labelH-titleH , self.width - 10, labelH);
-    self.CartoonTitle.frame = CGRectMake(spaceing1, self.height - titleH + spaceing2, self.width - 10, titleH);
-}
 -(void)setupUI{
     UIImageView *imageView = [UIImageView new];
     
@@ -97,4 +84,19 @@
     
     self.CartoonTitle = title;
 }
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    
+    CGFloat labelH = 12;
+    CGFloat titleH = 12;
+
+    CGFloat spaceing1 = 5;
+    CGFloat spaceing2 = 2;
+
+    self.imageView.frame = CGRectMake(0, 0, self.width, self.height-labelH-titleH-spaceing2-spaceing2);
+    self.titleLabel.frame = CGRectMake(spaceing1, self.height-labelH-titleH , self.width - 10, labelH);
+    self.CartoonTitle.frame = CGRectMake(spaceing1, self.height - titleH + spaceing2, self.width - 10, titleH);
+}
+
 @end

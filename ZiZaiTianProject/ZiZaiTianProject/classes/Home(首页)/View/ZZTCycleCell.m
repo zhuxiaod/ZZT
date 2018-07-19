@@ -43,31 +43,28 @@
     _ps.delegate = self;
     _ps.dataSource = self;
     [self addSubview:_ps];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tongzhi:)name:@"tongzhi" object:nil];
+    //暂停
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause:)name:@"tongzhi" object:nil];
 }
 
--(void)tongzhi:(NSNotification *)dic{
+-(void)pause:(NSNotification *)dic{
     [self.ps.timer pause];
 }
+
 #pragma mark 无线轮播器代理方法
 - (void)picScrollView:(DCPicScrollView *)picScrollView needUpdateItem:(DCPicItem *)item atIndex:(NSInteger)index {
     //数据
-    NSString *md = [self.dataArray objectAtIndex:index];
+    ZZTCarttonDetailModel *md = [self.dataArray objectAtIndex:index];
     
-    [item.imageView setImage:[UIImage imageNamed:md]];
-    
-//    [item.imageView sd_setImageWithURL:[NSURL URLWithString:md.pic] placeholderImage:[UIImage imageNamed:@"ic_new_comic_placeholder_s_355x149_"]];
+    [item.imageView sd_setImageWithURL:[NSURL URLWithString:md.cover] placeholderImage:[UIImage imageNamed:@"peien"]];
 }
 //轮播点击事件
 - (void)picScrollView:(DCPicScrollView *)picScrollView selectItem:(DCPicItem *)item atIndex:(NSInteger)index {
-    
-//    bannerModel *md = [self.bannerModelArray objectAtIndex:index];
-//
-//    CartoonDetailViewController *cdv = [[CartoonDetailViewController alloc] init];
-//
-//    cdv.cartoonId = [NSNumber numberWithInteger:md.value.integerValue];
-//
-//    [self.navigationController pushViewController:cdv animated:YES];
+    ZZTCarttonDetailModel *md = [self.dataArray objectAtIndex:index];
+    ZZTWordsDetailViewController *wdVC = [[ZZTWordsDetailViewController alloc] init];
+    wdVC.cartoonDetail = md;
+    wdVC.hidesBottomBarWhenPushed = YES;
+    [[self myViewController].navigationController pushViewController:wdVC animated:YES];
 }
 //显示多少轮播图
 - (NSUInteger)numberOfItemsInPicScrollView:(DCPicScrollView *)picScrollView {

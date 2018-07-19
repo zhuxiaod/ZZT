@@ -61,5 +61,7 @@
     [self popViewControllerAnimated:YES];
 }
 
-
+-(void)turnColor{
+     [self.navigationBar setBackgroundImage:[UIImage createImageWithColor:[UIColor colorWithHexString:@"#58006E"]] forBarMetrics:(UIBarMetricsDefault)];
+}
 @end

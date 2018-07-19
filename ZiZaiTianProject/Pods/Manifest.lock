@@ -16,10 +16,15 @@ PODS:
     - AFNetworking/NSURLSession
   - BAPickView (1.1.4)
   - CDDPagerController (1.1.5)
+  - FDFullscreenPopGesture (1.1)
   - JGProgressHUD (2.0.3)
   - Masonry (1.1.0)
   - MJExtension (3.0.15.1)
   - MJRefresh (3.1.15.3)
+  - PYSearch (0.9.0)
+  - RTRootNavigationController (0.6.7):
+    - RTRootNavigationController/Core (= 0.6.7)
+  - RTRootNavigationController/Core (0.6.7)
   - SDWebImage (4.4.1):
     - SDWebImage/Core (= 4.4.1)
   - SDWebImage/Core (4.4.1)
@@ -30,10 +35,13 @@ DEPENDENCIES:
   - AFNetworking
   - BAPickView
   - CDDPagerController
+  - FDFullscreenPopGesture
   - JGProgressHUD
   - Masonry
   - MJExtension
   - MJRefresh
+  - PYSearch
+  - RTRootNavigationController
   - SDWebImage (~> 4.0)
   - "UITableView+FDTemplateLayoutCell"
   - UMengAnalytics
@@ -43,10 +51,13 @@ SPEC REPOS:
     - AFNetworking
     - BAPickView
     - CDDPagerController
+    - FDFullscreenPopGesture
     - JGProgressHUD
     - Masonry
     - MJExtension
     - MJRefresh
+    - PYSearch
+    - RTRootNavigationController
     - SDWebImage
     - "UITableView+FDTemplateLayoutCell"
     - UMengAnalytics
@@ -55,14 +66,17 @@ SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   BAPickView: dbabd31468df83df1b1e5f218e28a8a41908e000
   CDDPagerController: ed05951429a860c56cfdffbeba1a8af5132a28ae
+  FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   JGProgressHUD: 12b20a8f4ffe05258f8635c1ab92816e451f904d
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJExtension: 19bc33ce2eee2d319760f5622562cf581a6ff756
   MJRefresh: b48380ae2b927b46c4ef000de9adb8dc748e1df7
+  PYSearch: 55175e6046e2e1b5236a90c780351988e914a015
+  RTRootNavigationController: d6aa6cbb78a3eaecea4f6e4df63f15dd887836b8
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
   UMengAnalytics: ef8d45f94c0e5771dc364cf6a5731d9d3b101da2
 
-PODFILE CHECKSUM: 243a7c047af915949af574563c7fec89617012be
+PODFILE CHECKSUM: 50a099334863d6ef133c41676d942b97ce31e0e0
 
 COCOAPODS: 1.5.3

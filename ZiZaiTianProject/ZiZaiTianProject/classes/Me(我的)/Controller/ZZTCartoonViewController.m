@@ -22,6 +22,7 @@
 @property (nonatomic,strong) NSArray *cartoons;
 
 @property (nonatomic,strong) NSArray *books;
+
 @end
 
 
@@ -190,8 +191,9 @@ static NSString *circleCell = @"circleCell";
     return cell;
 }
 //加载数据
-- (void)viewWillAppear:(BOOL)animated
-{
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     [self loadData];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 @end

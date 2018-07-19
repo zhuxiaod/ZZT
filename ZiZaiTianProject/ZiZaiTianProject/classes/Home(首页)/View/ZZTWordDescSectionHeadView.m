@@ -34,7 +34,6 @@ static CGFloat const tbSpaceing = 12;
         //设置打开按钮
         [self openUpBtn];
     }
-    
 }
 
 - (instancetype)initWithFrame:(CGRect)frame

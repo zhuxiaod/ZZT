@@ -14,4 +14,6 @@
 
 @interface ZZTWordsDetailViewController : BaseViewController
 
+@property (nonatomic,strong) ZZTCarttonDetailModel *cartoonDetail;
+
 @end

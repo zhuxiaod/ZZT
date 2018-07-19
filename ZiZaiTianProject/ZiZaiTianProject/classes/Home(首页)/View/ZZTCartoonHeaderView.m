@@ -68,7 +68,7 @@ static const CGFloat contentHeight = 22.0f;
     more.layer.borderWidth = 1.0f;
     more.layer.borderColor = [UIColor lightGrayColor].CGColor;
     [more setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [more addTarget:self action:@selector(more) forControlEvents:UIControlEventTouchUpInside];
+    [more addTarget:self action:@selector(moreEvent:) forControlEvents:UIControlEventTouchUpInside];
     
     [self addSubview:more];
     
@@ -88,9 +88,9 @@ static const CGFloat contentHeight = 22.0f;
     _title = title;
     [self.titleView setText:title];
 }
--(void)moreEvent{
+-(void)moreEvent:(UIButton *)btn{
     if(self.moreOnClick){
-        self.moreOnClick();
+        self.moreOnClick(btn);
     }
 }
 

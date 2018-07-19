@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ZZTNavigationViewController : UINavigationController<UIGestureRecognizerDelegate>
-
+-(void)turnColor;
 @end

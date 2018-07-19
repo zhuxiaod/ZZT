@@ -13,23 +13,32 @@
 #import "ZZTCycleCell.h"
 #import "ZZTEasyBtnModel.h"
 #import "ZZTCreationTableView.h"
+#import "PYSearchSuggestionViewController.h"
+#import "ZZTCarttonDetailModel.h"
+#import "ZZTUpdateViewController.h"
 
-@interface ZZTHomeViewController ()<UIScrollViewDelegate>
+@interface ZZTHomeViewController ()<UIScrollViewDelegate,PYSearchViewControllerDelegate,PYSearchViewControllerDataSource,UITableViewDataSource>
 
 @property (nonatomic,weak) UIView *customNavBar;
-
 @property (nonatomic,weak) ListView *listView;
-
 @property (nonatomic,weak) ZZTReadTableView *collectView;
 @property (nonatomic,weak) ZZTReadTableView *ReadView;
 @property (nonatomic,weak) ZZTCreationTableView *CreationView;
 @property (nonatomic,weak) ZZTCycleCell * cycleCell;
 @property (nonatomic,weak) UIScrollView *mainView;
-
+@property (nonatomic,strong) NSMutableArray *searchSuggestionArray;
+@property (nonatomic,weak) UITableView *suggestionView;
+@property (nonatomic,weak) PYSearchViewController *searchVC;
 @end
-
+NSString *SuggestionView = @"SuggestionView";
 @implementation ZZTHomeViewController
 
+-(NSMutableArray *)searchSuggestionArray{
+    if(!_searchSuggestionArray){
+        _searchSuggestionArray = [NSMutableArray array];
+    }
+    return _searchSuggestionArray;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithHexString:@"#58006E"];
@@ -45,10 +54,6 @@
     
     //设置子页
     [self setupChildView];
-    //listView的第三个控件颜色加载有问题
-    //接下来可以开始设置tableView了
-    //轮播定时
-    //代理定时
 }
 
 #pragma mark - 设置主视图
@@ -88,7 +93,6 @@
     //选择时的颜色
     lc.labelSelectTextColor = [UIColor whiteColor];
     lc.labelTextColor = [UIColor grayColor];
-//    lc.lineColor  = subjectColor;
     lc.font       = [UIFont systemFontOfSize:14];
     lc.spaceing   = SPACEING;
     lc.labelWidth = listViewItemSize;
@@ -103,8 +107,7 @@
 
 #pragma mark - 设置添加滚动子页
 -(void)setupChildView{
-    //btn 的数据模型
-   
+
     //阅读页
     ZZTReadTableView *readVC = [[ZZTReadTableView alloc] init];
     readVC.backgroundColor = [UIColor whiteColor];
@@ -153,6 +156,8 @@
     [_ReadView reloadData];
     [_collectView reloadData];
     [_CreationView reloadData];
+    ZZTNavigationViewController *nav = (ZZTNavigationViewController *)self.navigationController;
+    [nav turnColor];
 }
 //计时器结束
 - (void)viewDidDisappear:(BOOL)animated {
@@ -166,16 +171,82 @@
 -(void)setupNavBar
 {
     //右边导航条
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"search"] highImage:[UIImage imageNamed:@"search"] target:self action:@selector(history)];
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"search"] highImage:[UIImage imageNamed:@"search"] target:self action:@selector(search)];
     //左边导航条
     self.navigationItem.leftBarButtonItem = [UIBarButtonItem itemWithImage:[UIImage imageNamed:@"time"] highImage:[UIImage imageNamed:@"time"] target:self action:@selector(history)];
 }
-
+//更新
 -(void)history{
-    NSLog(@"你是傻逼？");
+    ZZTUpdateViewController *updateVC = [[ZZTUpdateViewController alloc] init];
+    updateVC.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:updateVC animated:YES];
 }
+
 -(void)dealloc{
     NSLog(@"我走了");
+}
+
+-(void)search{
+
+    //设置热词
+    NSArray *hotSeaches = @[@"妖神记", @"大霹雳", @"镖人", @"偷星九月天"];
+
+    PYSearchViewController *searchVC = [PYSearchViewController searchViewControllerWithHotSearches:hotSeaches searchBarPlaceholder:@"搜索作品名、作者名、社区内容" didSearchBlock:^(PYSearchViewController *searchViewController, UISearchBar *searchBar, NSString *searchText) {
+        
+    }];
+    searchVC.hotSearchTitle = @"热门搜索";
+    searchVC.delegate = self;
+    searchVC.dataSource = self;
+
+    //set cancelButton
+    [searchVC.cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+    [searchVC.cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:searchVC];
+    [self presentViewController:nav animated:YES completion:nil];
+    _searchVC = searchVC;
+}
+
+//搜索文字已经改变
+#pragma mark - PYSearchViewControllerDelegate
+- (void)searchViewController:(PYSearchViewController *)searchViewController searchTextDidChange:(UISearchBar *)seachBar searchText:(NSString *)searchText
+{
+    if (searchText.length) {
+        weakself(self);
+        NSDictionary *dic = @{
+                              @"fuzzy":searchText
+                              };
+        //添加数据
+        [AFNHttpTool POST:@"http://192.168.0.165:8888/cartoon/queryFuzzy" parameters:dic success:^(id responseObject) {
+            NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+            NSMutableArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
+            weakSelf.searchSuggestionArray = array;
+            [searchViewController.searchSuggestionView reloadData];
+        } failure:^(NSError *error) {
+            
+        }];
+    }
+}
+-(NSInteger)numberOfSectionsInSearchSuggestionView:(UITableView *)searchSuggestionView{
+    return 1;
+}
+-(NSInteger)searchSuggestionView:(UITableView *)searchSuggestionView numberOfRowsInSection:(NSInteger)section{
+    return self.searchSuggestionArray.count;
+}
+-(UITableViewCell *)searchSuggestionView:(UITableView *)searchSuggestionView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    UITableViewCell *cell = [searchSuggestionView dequeueReusableCellWithIdentifier:SuggestionView];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SuggestionView];
+    }
+    if(self.searchSuggestionArray.count > 0){
+        ZZTCarttonDetailModel *str = self.searchSuggestionArray[indexPath.row];
+        cell.textLabel.text = str.bookName;
+    }
+    return cell;
+}
+- (CGFloat)searchSuggestionView:(UITableView *)searchSuggestionView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 40.f;
 }
 
 @end

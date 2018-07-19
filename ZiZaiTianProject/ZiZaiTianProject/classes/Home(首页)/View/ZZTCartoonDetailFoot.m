@@ -29,24 +29,16 @@
  -(void)layoutSubviews
 {
     [super layoutSubviews];
+    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0 , self.height - 1, SCREEN_WIDTH, 1)];
+    bottomView.backgroundColor = [UIColor grayColor];
+    [self addSubview:bottomView];
+
     self.backgroundColor = [UIColor whiteColor];
     //点赞
     CGFloat btnWidth = 80;
-    [_likeUp setFrame:CGRectMake(SCREEN_WIDTH - btnWidth - 10, 10, btnWidth, 20)];
-    [_likeUp mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(self.mas_top).offset(10);
-//        make.right.mas_equalTo(self.mas_right).offset(10);
-//        make.width.mas_equalTo(50);
-//        make.height.mas_equalTo(20);
-    }];
-    [_userWrite setFrame:CGRectMake(SCREEN_WIDTH - btnWidth * 2 - 30, 10, btnWidth, 20)];
+    [_likeUp setFrame:CGRectMake(SCREEN_WIDTH - btnWidth - 10, self.height/2 - 10, btnWidth, 20)];
 
-    [_userWrite mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(self.mas_top).offset(10);
-//        make.right.mas_equalTo(self.likeUp.mas_right).offset(10);
-//        make.width.mas_equalTo(50);
-//        make.height.mas_equalTo(20);
-    }];
+    [_userWrite setFrame:CGRectMake(SCREEN_WIDTH - btnWidth * 2 - 30, self.height/2 - 10, btnWidth, 20)];
 }
 - (UIButton *)creatBtn {
     
@@ -54,7 +46,7 @@
     
     [btn.titleLabel setFont:[UIFont systemFontOfSize:15]];
     [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    //    [btn setTitleColor:[UIColor colorWithHexString:@"#582547"] forState:UIControlStateSelected];
+
     [btn setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
     
     [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];

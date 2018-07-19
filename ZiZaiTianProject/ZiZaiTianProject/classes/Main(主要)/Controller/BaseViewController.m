@@ -31,10 +31,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self setAutomaticallyAdjustsScrollViewInsets:NO];
-
 }
 
 - (void)setBackItemWithImage:(NSString *)image pressImage:(NSString *)pressImage {

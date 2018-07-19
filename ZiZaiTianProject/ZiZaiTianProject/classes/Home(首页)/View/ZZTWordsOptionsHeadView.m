@@ -46,8 +46,10 @@
     [self.midBtn setTitle:titleArray[1] forState:UIControlStateNormal];
     [self.rightBtn setTitle:titleArray[2] forState:UIControlStateNormal];
 }
+
 -(void)setIsSelectStatus:(BOOL)isSelectStatus{
     _isSelectStatus = isSelectStatus;
+    //初始化默认简介内容
     if(_isSelectStatus == YES){
         _leftBtn.selected = YES;
         _midBtn.selected = NO;

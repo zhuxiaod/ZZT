@@ -9,16 +9,18 @@
 #import "ZZTReaderViewController.h"
 #import "ZZTCartoonDetailView.h"
 #import "ZZTCartoonModel.h"
+#import "UIView+Extension.h"
+#import "ZZTStoryDetailView.h"
 
 @interface ZZTReaderViewController ()<UINavigationControllerDelegate,UIScrollViewDelegate>
 
 @property (nonatomic,weak) UIScrollView *mainView;
 
-@property (nonatomic,strong) ZZTCartoonDetailView *mainCartoonDetail;
+@property (nonatomic,strong) ZZTStoryDetailView *mainCartoonDetail;
 @property (nonatomic,strong) ZZTCartoonDetailView *secondCartoonDetail;
 @property (nonatomic,strong) ZZTCartoonDetailView *playDetail;
-@property (nonatomic,strong)NSArray *cartoonDetail;
-
+@property (nonatomic,strong) NSArray *cartoonDetail;
+@property (nonatomic,strong) UIButton *button;
 @end
 
 @implementation ZZTReaderViewController
@@ -66,25 +68,35 @@
 -(void)setupChildView{
     //btn 的数据模型
       
-    //动漫详情页
-    ZZTCartoonDetailView *cartoonDetailView = [[ZZTCartoonDetailView alloc] init];
-    cartoonDetailView.backgroundColor = [UIColor greenColor];
-    self.secondCartoonDetail = cartoonDetailView;
+    //故事详情页
+    ZZTStoryDetailView *cartoonDetailView = [[ZZTStoryDetailView alloc] init];
+    cartoonDetailView.backgroundColor = [UIColor whiteColor];
+    self.mainCartoonDetail = cartoonDetailView;
     [self.mainView addSubview:cartoonDetailView];
     
-    //创作页
+    //漫画页
     ZZTCartoonDetailView *secondCartoonDetail = [[ZZTCartoonDetailView alloc] init];
-    secondCartoonDetail.backgroundColor = [UIColor redColor];
-    self.mainCartoonDetail = secondCartoonDetail;
+    secondCartoonDetail.backgroundColor = [UIColor whiteColor];
+    self.secondCartoonDetail = secondCartoonDetail;
     [self.mainView addSubview:secondCartoonDetail];
     
     //收藏页
     ZZTCartoonDetailView *collectVC = [[ZZTCartoonDetailView alloc] init];
-    collectVC.backgroundColor = [UIColor blueColor];
+    collectVC.backgroundColor = [UIColor whiteColor];
     self.playDetail = collectVC;
     [self.mainView addSubview:collectVC];
+    
+    //添加返回按钮
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.button = button;
+    [self.button setImage:[UIImage imageNamed:@"navigationButtonReturn"] forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
 }
 
+-(void)back:(UIButton *)btn{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 #pragma mark - 设置滚动视图
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
@@ -101,17 +113,13 @@
     [_secondCartoonDetail setFrame:CGRectMake(width, 0, width, height)];
     [_playDetail setFrame:CGRectMake(width * 2, 0, width, height)];
     [self.mainView setContentOffset:CGPointMake(width, 0)];
+    //添加返回按钮
+    [self.button setFrame:CGRectMake(10, 30, 30, 30)];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    self.navigationController.navigationBar.hidden = YES;
 }
 
 -(void)loadData{
@@ -124,10 +132,11 @@
         NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:data];
         NSArray *array = [ZZTCartoonModel mj_objectArrayWithKeyValuesArray:dic];
         weakSelf.cartoonDetail = array;
-        weakSelf.mainCartoonDetail.cartoonDetail = array;
-        [weakSelf.mainCartoonDetail reloadData];
+        weakSelf.secondCartoonDetail.cartoonDetail = array;
+        [weakSelf.secondCartoonDetail reloadData];
     } failure:^(NSError *error) {
         
     }];
 }
+
 @end

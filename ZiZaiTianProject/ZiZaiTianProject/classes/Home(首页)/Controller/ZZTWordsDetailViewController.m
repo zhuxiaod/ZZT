@@ -31,6 +31,7 @@
 @property (nonatomic,strong) ZZTWordsDetailHeadView *head;
 @property (nonatomic,strong) ZZTWordDescSectionHeadView *descHeadView;
 @property (nonatomic,strong) NSArray *ctList;
+
 @property (nonatomic,assign) BOOL isDataCome;
 @property (nonatomic,strong) NSArray *ctComment;
 
@@ -74,19 +75,50 @@ NSString *zztComment = @"zztComment";
 
     [self setup];
 
-    //详情页上面的数据
-    [self loadtopData];
-    
-    //目录数据
-    [self loadListData];
-    
-    [self loadCommentData];
-
     //设置页面
     [self setupWordsDetailContentView];
     
     //设置底部View
     [self setupBottomView];
+}
+
+//初始化
+-(void)setup{
+    //默认是1
+    self.btnIndex = 1;
+    self.isDataCome = NO;
+    self.view.backgroundColor = [UIColor redColor];
+}
+//获取漫画ID
+-(void)setCartoonDetail:(ZZTCarttonDetailModel *)cartoonDetail{
+    _cartoonDetail = cartoonDetail;
+    if(cartoonDetail.id){
+        //上部分View
+        [self loadtopData:cartoonDetail.id];
+        //目录
+        [self loadListData:cartoonDetail.id];
+        //评论
+        [self loadCommentData:cartoonDetail.id];
+    }
+}
+//请求该漫画的资料
+-(void)loadtopData:(NSString *)ID{
+    //加载用户信息
+    weakself(self);
+    NSDictionary *paramDict = @{
+                                @"id":ID
+                                };
+    [AFNHttpTool POST:@"http://192.168.0.165:8888/cartoon/particulars" parameters:paramDict success:^(id responseObject) {
+        NSDictionary *dic = [self decry:responseObject[@"result"]];
+        //这里有问题 应该是转成数组 然后把对象取出
+        ZZTCarttonDetailModel *mode = [ZZTCarttonDetailModel mj_objectWithKeyValues:dic];
+        weakSelf.ctDetail = mode;
+        weakSelf.head.detailModel = mode;
+        weakSelf.isDataCome = YES;
+    } failure:^(NSError *error) {
+        
+    }];
+    [self.contentView reloadData];
 }
 
 -(void)setupBottomView{
@@ -108,19 +140,13 @@ NSString *zztComment = @"zztComment";
     [self.view addSubview:headView];
 }
 
-//初始化
--(void)setup{
-    //默认是1
-    self.btnIndex = 1;
-    self.isDataCome = NO;
-    self.view.backgroundColor = [UIColor redColor];
-}
 
 #pragma mark - 请求数据
--(void)loadListData{
+//目录
+-(void)loadListData:(NSString *)ID{
     weakself(self);
     NSDictionary *paramDict = @{
-                                @"cartoonId":@"1"
+                                @"cartoonId":ID
                                 };
     [AFNHttpTool POST:@"http://192.168.0.165:8888/cartoon/getChapterlist" parameters:paramDict success:^(id responseObject) {
         NSString *data = responseObject[@"result"];
@@ -136,10 +162,10 @@ NSString *zztComment = @"zztComment";
 }
 
 //加载评论数据
--(void)loadCommentData{
+-(void)loadCommentData:(NSString *)ID{
     weakself(self);
     NSDictionary *paramDict = @{
-                                @"itemId":@"1"
+                                @"itemId":ID
                                 };
     [AFNHttpTool POST:@"http://192.168.0.165:8888/circle/comment" parameters:paramDict success:^(id responseObject) {
         NSString *data = responseObject[@"result"];
@@ -161,28 +187,9 @@ NSString *zztComment = @"zztComment";
         self.isDataCome = NO;
     }
 }
--(void)loadtopData{
-    //加载用户信息
-    weakself(self);
-    NSDictionary *paramDict = @{
-                                @"id":@"1"
-                                };
-    [AFNHttpTool POST:@"http://192.168.0.165:8888/cartoon/particulars" parameters:paramDict success:^(id responseObject) {
-        NSString *data = responseObject[@"result"];
-        NSDictionary *dic = [self decry:data];
-        //这里有问题 应该是转成数组 然后把对象取出
-        ZZTCarttonDetailModel *mode = [ZZTCarttonDetailModel mj_objectWithKeyValues:dic];
-        weakSelf.ctDetail = mode;
-        weakSelf.head.detailModel = mode;
-        weakSelf.isDataCome = YES;
-    } failure:^(NSError *error) {
-        
-    }];
-    [self.contentView reloadData];
-}
+
 #pragma mark - 设置内容页面
 - (void)setupWordsDetailContentView {
-    //滚动还是要加的  - -
     UITableView *contenView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     contenView.backgroundColor = [UIColor colorWithHexString:@"#2B2B34"];
     contenView.contentInset = UIEdgeInsetsMake(wordsDetailHeadViewHeight,0,0,0);
@@ -193,12 +200,11 @@ NSString *zztComment = @"zztComment";
     [contenView  setSeparatorColor:[UIColor blueColor]];
     //拿接口 上数据
     _head = [ZZTWordsDetailHeadView wordsDetailHeadViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, wordsDetailHeadViewHeight) scorllView:contenView];
-//    _head = [[ZZTWordsDetailHeadView alloc] init];
-//    _head.frame = CGRectMake(0, 0, SCREEN_WIDTH, wordsDetailHeadViewHeight);
     
     //选择头
     ZZTWordsOptionsHeadView *headView = [[ZZTWordsOptionsHeadView alloc] init];
     headView.titleArray = @[@"详情",@"目录",@"评价"];
+    //初始化选择状态
     headView.isSelectStatus = YES;
     [headView setFrame:CGRectMake(0, 0, SCREEN_WIDTH, wordsOptionsHeadViewHeight)];
     
@@ -242,7 +248,6 @@ NSString *zztComment = @"zztComment";
     }else if(self.btnIndex == 3){
         return [self.contentView fd_heightForCellWithIdentifier:zztComment cacheByIndexPath:indexPath configuration:^(id cell) {
             ZZTCommentCell *CommentCell = (ZZTCommentCell *)cell;
-            
             CommentCell.model = self.ctComment[indexPath.row];
             
         }];
@@ -260,7 +265,9 @@ NSString *zztComment = @"zztComment";
         return self.descHeadView.myHeight;
         
     }else {
+        
         return 0;
+    
     }
 }
 
@@ -292,10 +299,11 @@ NSString *zztComment = @"zztComment";
 }
 //设置头
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    //如果是介绍
+    //介绍
     self.descHeadView.desc = self.ctDetail.intro;
     return self.descHeadView;
 }
+
 #pragma mark - 设置组数
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -344,9 +352,10 @@ NSString *zztComment = @"zztComment";
     }
     return _descHeadView;
 }
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 @end

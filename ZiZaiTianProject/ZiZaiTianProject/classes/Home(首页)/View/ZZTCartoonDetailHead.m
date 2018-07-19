@@ -63,6 +63,8 @@ static CGFloat spacing = 10;
         make.width.mas_equalTo(50);
         make.height.mas_equalTo(50);
     }];
+    
+
 }
 
 //点赞逻辑

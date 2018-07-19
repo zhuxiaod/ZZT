@@ -24,6 +24,8 @@
     
     //2.设置窗口根控制器
     ZZTTabBarViewController *tabBarVC = [[ZZTTabBarViewController alloc]init];
+//    RTRootNavigationController *tabBarVC = [[RTRootNavigationController alloc]init];
+
     self.window.rootViewController = tabBarVC;
     
     //3.显示窗口

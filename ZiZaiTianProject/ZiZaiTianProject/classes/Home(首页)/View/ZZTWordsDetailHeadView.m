@@ -28,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *leading;
 @property (nonatomic,weak) ZZTWordsDetailViewController *myVc;
 @property (nonatomic,assign) BOOL  show;
+@property (nonatomic,strong) NSMutableArray *array;
 
 @end
 
@@ -79,6 +80,9 @@ static CGFloat const spaceing   = 8.0f;
         self.canyu.alpha = 1 - alpha;
         self.colt.alpha = 1 - alpha;
         self.shareBtn.alpha = 1 - alpha;
+        for (UILabel *lab in _array) {
+            lab.alpha = 1 - alpha;
+        }
         self.show = YES;
     }else {
         self.show = NO;
@@ -97,7 +101,6 @@ static CGFloat const spaceing   = 8.0f;
         self.canyu.alpha = 0;
         self.colt.alpha = 0;
         self.shareBtn.alpha = 0;
-
     }
 }
 - (void)setShow:(BOOL)show {
@@ -105,14 +108,6 @@ static CGFloat const spaceing   = 8.0f;
         
         CGFloat leftConstant = spaceing;
         CGFloat rightContstant = 128;
-        
-//        if (!show) {
-//            rightContstant =  70;
-//            leftConstant   = (self.width - [self.ctName.text getTextWidthWithFont:self.ctName.font]) * 0.5;
-//            self.myVc.statusBarStyle = UIStatusBarStyleLightContent;
-//        }else {
-//            self.myVc.statusBarStyle = UIStatusBarStyleDefault;
-//        }
         
         self.leading.constant  = leftConstant;
         self.trailing.constant = rightContstant;
@@ -122,10 +117,8 @@ static CGFloat const spaceing   = 8.0f;
             [self layoutIfNeeded];
 //            self.replyCount.alpha = show;
 //            self.likeCount.alpha = show;
-            
         }];
         self.backBtn.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:show ? 0.1:0];
-        
     }
     _show = show;
 }
@@ -139,22 +132,34 @@ static CGFloat const spaceing   = 8.0f;
     self.collect.text = [NSString stringWithFormat:@"%ld",_detailModel.collectNum];
     [self.ctImage sd_setImageWithURL:[NSURL URLWithString:_detailModel.cover] placeholderImage:[UIImage imageNamed:@"peien"]];
     self.participation.text = [NSString stringWithFormat:@"%ld",_detailModel.praiseNum];
-}
+    //标签
+    //位置
+    //处理得到的数据
+    NSString *bookType = detailModel.bookType;
+    //得到了类型
+    NSArray *array = [bookType componentsSeparatedByString:@","]; //字符串按照【分隔成数组
+    //创建相应的label
+    //数据对应模型
+    int margin = 10;//间隙
+    int width = 50;//格子的宽
+    int height = 20;//格子的高
+    CGFloat x = self.canyu.frame.origin.x;
+    CGFloat y = self.canyu.frame.origin.y + self.canyu.frame.size.height + 20;
 
--(void)layoutSubviews{
-    [super layoutSubviews];
-    
+    for (int i = 0; i <array.count; i++) {
+        int row = i/3;
+        int col = i%3;
+        UILabel * label = [[UILabel alloc]init];
+        label.frame = CGRectMake(x+col*(width+margin), y+row*(height+margin), width, height);
+        label.text = array[i];
+        [label setTextColor:[UIColor whiteColor]];
+        label.layer.borderWidth = 1.0f;
+        label.layer.borderColor = [UIColor whiteColor].CGColor;
+        label.textAlignment = NSTextAlignmentCenter;
+        [self.array addObject:label];
+        [self addSubview:label];
+    }
 }
-
-//点击穿透
-//-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
-//    UIView *result = [super hitTest:point withEvent:event];
-//    if (result == self) {
-//        return nil;
-//    }else{
-//        return result;
-//    }
-//}
 
 - (IBAction)back:(UIButton *)sender {
     [[self findResponderWithClass:[UINavigationController class]] popViewControllerAnimated:YES];
@@ -172,4 +177,12 @@ static CGFloat const spaceing   = 8.0f;
     }
     return _myVc;
 }
+
+-(NSMutableArray *)array{
+    if (!_array) {
+        _array = [NSMutableArray array];
+    }
+    return _array;
+}
+
 @end

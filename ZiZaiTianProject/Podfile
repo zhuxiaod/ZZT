@@ -10,5 +10,8 @@ pod ‘UITableView+FDTemplateLayoutCell’
 pod ‘MJRefresh’
 pod ‘Masonry’
 pod 'UITableView+FDTemplateLayoutCell'
+pod "PYSearch"
+pod "RTRootNavigationController"
+pod 'FDFullscreenPopGesture'
 end
 

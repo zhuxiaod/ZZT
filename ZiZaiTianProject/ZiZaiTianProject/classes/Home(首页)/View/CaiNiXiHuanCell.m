@@ -10,6 +10,7 @@
 #import "ZZTJiuGongGeView.h"
 #import "ZZTCartonnPlayModel.h"
 #import "ZZTWordsDetailViewController.h"
+
 static NSUInteger itemCount = 6;
 
 @interface CaiNiXiHuanCell ()
@@ -30,34 +31,21 @@ static NSUInteger itemCount = 6;
 //设置数据
 - (void)setTopics:(NSArray *)topics {
     _topics = topics;
-    //数组数据给单个数据
+    //数据对应模型
     [self.items enumerateObjectsUsingBlock:^(ZZTJiuGongGeView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        //没有数据  所以先空
+        //赋值
         obj.model = topics[idx];
     }];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    //调实例方法  确定宽度 数量 行数
+    //与父View大小相同
     self.contentView.frame = self.bounds;
+    //最大创建的宽度   行数
     [ZZTJiuGongGeView jiuGongGeLayout:self.items WithMaxSize:self.contentView.bounds.size WithRow:2];
 }
-//触摸事件
-- (void)tap:(UITapGestureRecognizer *)tap {
-    
-    NSInteger index = [[tap view] tag];
-    NSLog(@"我感受到了你%ld",index);
-    ZZTWordsDetailViewController *detailVC = [[ZZTWordsDetailViewController alloc]init];
-    detailVC.hidesBottomBarWhenPushed = YES;
-    [[self findResponderWithClass:[UINavigationController class]] pushViewController:detailVC animated:YES];
-//    ZZTCartonnPlayModel *md = [self.topics objectAtIndex:index];
-    
-   //设置跳转页面
-    
-//    [[self findResponderWithClass:[UINavigationController class]] pushViewController:wdvc animated:YES];
-    
-}
+
 //懒加载
 - (NSArray *)items {
     if (!_items) {
@@ -76,5 +64,14 @@ static NSUInteger itemCount = 6;
         _items = arr;
     }
     return _items;
+}
+//触摸事件
+- (void)tap:(UITapGestureRecognizer *)tap {
+    
+    NSInteger index = [[tap view] tag];
+    NSLog(@"我感受到了你%ld",index);
+    ZZTWordsDetailViewController *detailVC = [[ZZTWordsDetailViewController alloc]init];
+    detailVC.hidesBottomBarWhenPushed = YES;
+    [[self findResponderWithClass:[UINavigationController class]] pushViewController:detailVC animated:YES];
 }
 @end

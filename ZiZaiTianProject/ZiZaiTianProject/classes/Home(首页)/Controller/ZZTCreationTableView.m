@@ -36,7 +36,9 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 
 -(NSArray *)bannerModelArray{
     if(!_bannerModelArray){
-        _bannerModelArray = @[@"u=3328170055,3037785353&fm=27&gp=0.jpg",@"u=4070996148,1781906905&fm=27&gp=0.jpg",@"u=4213799443,3151115557&fm=27&gp=0.jpg"];
+//        _bannerModelArray = @[@"u=3328170055,3037785353&fm=27&gp=0.jpg",@"u=4070996148,1781906905&fm=27&gp=0.jpg",@"u=4213799443,3151115557&fm=27&gp=0.jpg"];
+        
+        _bannerModelArray = [NSArray array];
     }
     return _bannerModelArray;
 }
