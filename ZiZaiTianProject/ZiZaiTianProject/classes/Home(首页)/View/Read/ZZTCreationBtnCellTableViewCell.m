@@ -10,6 +10,11 @@
 #import "ZZTSecondBtn.h"
 #import "ZZTSecondCell.h"
 #import "ZZTEasyBtnModel.h"
+#import "ZZTCreationEntranceView.h"
+#import "ZZTCreatCartoonViewController.h"
+#import "ZZTCreationEntranceModel.h"
+#import "ZZTCreatPlayViewController.h"
+#import "ZZTHomeViewController.h"
 
 @interface ZZTCreationBtnCellTableViewCell ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -79,12 +84,48 @@ static NSString *const zztCreationCell = @"zztCreationCell";
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return self.btnArray.count;
 }
-
+//判断点的是哪一个cell
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ZZTSecondCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:zztCreationCell forIndexPath:indexPath];
     ZZTEasyBtnModel *model = self.btnArray[indexPath.row];
     cell.btnMoedel = model;
     return cell;
+}
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    if(indexPath.row == 0){
+        
+        ZZTCreationEntranceView *ceView = [ZZTCreationEntranceView CreationEntranceViewWithFrame:CGRectMake(0, 0, [self myViewController].view.width, [self myViewController].view.height - 44)];
+        
+        //设置样式
+        ceView.viewTitel.text = @"创建漫画";
+        ceView.nameText.placeholder = @"请输入漫画名称";
+        ceView.titleText.placeholder = @"请输入漫画名称";
+
+        ceView.TureBtnBlock = ^(ZZTCreationEntranceModel *model) {
+            ZZTCreatCartoonViewController *ccvc = [[ZZTCreatCartoonViewController alloc] init];
+                ccvc.hidesBottomBarWhenPushed = YES;
+            ccvc.model = model;
+            [[self myViewController].navigationController pushViewController:ccvc animated:YES];
+        };
+        
+        [[self myViewController].view addSubview:ceView];
+        
+    }else if(indexPath.row == 1){
+        
+//        ZZTCreationEntranceView *ceView = [ZZTCreationEntranceView ZZTCreationEntranceView];
+//        ceView.viewTitel.text = @"创建剧本";
+//        ceView.nameText.placeholder = @"请输入剧本名称";
+//        ceView.titleText.placeholder = @"请输入剧本名称";
+//        ceView.TureBtnBlock = ^(ZZTCreationEntranceModel *model) {
+//            ZZTCreatPlayViewController *ccvc = [[ZZTCreatPlayViewController alloc] init];
+//            ccvc.hidesBottomBarWhenPushed = YES;
+//            ccvc.model = model;
+//            [[self myViewController].navigationController pushViewController:ccvc animated:YES];
+//        };
+//        [[self myViewController].view addSubview:ceView];
+    }else if(indexPath.row == 2){
+        
+    }
 }
 #pragma mark - item宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {

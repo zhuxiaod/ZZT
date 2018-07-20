@@ -23,8 +23,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-                                                            
+    self.rr_navHidden = YES;
+    self.rr_backActionDisAble = YES;
+//    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    
     ZZTVIPTopView *topView = [ZZTVIPTopView VIPTopView];
 
     [_top addSubview:topView];
@@ -36,12 +38,9 @@
     [_buttom addSubview:btView];
 
 }
-
--(void)viewWillAppear:(BOOL)animated
-{
+-(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 - (IBAction)backBtn:(UIButton *)sender {
     

@@ -53,8 +53,10 @@ static const CGFloat textCellHeight = 250.0f;
     return 1;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     NSInteger index = indexPath.section + indexPath.row;
     ZZTStoryDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:storyDetail];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.str = self.storyDetailArray[index];
     return cell;
 }
@@ -86,6 +88,11 @@ static const CGFloat textCellHeight = 250.0f;
         NSLog(@"%ld",btn.tag);
         ZZTWritePlayViewController *followFeedsTableView = [[ZZTWritePlayViewController alloc] init];
         [[self myViewController] presentViewController:followFeedsTableView animated:YES completion:nil];
+    };
+    foot.likeUpBtnClick = ^(UIButton *btn) {
+        NSLog(@"1111");
+//        //先测试下  后期后台联合 重新写需求
+     
     };
     return foot;
 }

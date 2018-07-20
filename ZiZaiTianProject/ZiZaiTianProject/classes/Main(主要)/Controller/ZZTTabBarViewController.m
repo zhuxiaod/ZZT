@@ -12,8 +12,12 @@
 #import "ZZTMeViewController.h"
 #import "ZZTNavigationViewController.h"
 #import "UIImage+ZZTimage.h"
+#import "BaseModel.h"
+#import "MainTabbar.h"
 
 @interface ZZTTabBarViewController ()
+
+@property (nonatomic,weak) MainTabbar *mainTabbar;
 
 @end
 
@@ -85,5 +89,24 @@
     nav2.tabBarItem.image = [UIImage imageOriginalWithName:@"tabBar_me_icon"];
     nav2.tabBarItem.selectedImage = [UIImage imageOriginalWithName:@"tabBar_me_click_icon"];
 }
-
+- (void)setHidesBottomBar:(BOOL)hidesBottomBar {
+    
+    if (hidesBottomBar) {
+        
+        [UIView animateWithDuration:0.25 animations:^{
+            [self.mainTabbar setY:SCREEN_HEIGHT];
+        }];
+        
+    }else {
+        
+        [UIView animateWithDuration:0.25 delay:0.5 usingSpringWithDamping:0.8f initialSpringVelocity:15.0f options:UIViewAnimationOptionTransitionNone animations:^{
+            
+            [self.mainTabbar setY:SCREEN_HEIGHT - 44];
+            
+        } completion:^(BOOL finished) {
+            
+        }];
+        
+    }
+}
 @end

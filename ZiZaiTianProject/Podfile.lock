@@ -19,6 +19,7 @@ PODS:
   - FDFullscreenPopGesture (1.1)
   - JGProgressHUD (2.0.3)
   - Masonry (1.1.0)
+  - MBProgressHUD (1.1.0)
   - MJExtension (3.0.15.1)
   - MJRefresh (3.1.15.3)
   - PYSearch (0.9.0)
@@ -38,6 +39,7 @@ DEPENDENCIES:
   - FDFullscreenPopGesture
   - JGProgressHUD
   - Masonry
+  - MBProgressHUD (~> 1.1.0)
   - MJExtension
   - MJRefresh
   - PYSearch
@@ -54,6 +56,7 @@ SPEC REPOS:
     - FDFullscreenPopGesture
     - JGProgressHUD
     - Masonry
+    - MBProgressHUD
     - MJExtension
     - MJRefresh
     - PYSearch
@@ -69,6 +72,7 @@ SPEC CHECKSUMS:
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   JGProgressHUD: 12b20a8f4ffe05258f8635c1ab92816e451f904d
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   MJExtension: 19bc33ce2eee2d319760f5622562cf581a6ff756
   MJRefresh: b48380ae2b927b46c4ef000de9adb8dc748e1df7
   PYSearch: 55175e6046e2e1b5236a90c780351988e914a015
@@ -77,6 +81,6 @@ SPEC CHECKSUMS:
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
   UMengAnalytics: ef8d45f94c0e5771dc364cf6a5731d9d3b101da2
 
-PODFILE CHECKSUM: 50a099334863d6ef133c41676d942b97ce31e0e0
+PODFILE CHECKSUM: 8fea6c59f7fbc6a4ca894a6d58f09481044841f8
 
 COCOAPODS: 1.5.3

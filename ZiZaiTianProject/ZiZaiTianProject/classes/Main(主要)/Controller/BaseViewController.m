@@ -89,7 +89,7 @@
 
     ZZTTabBarViewController *main = (ZZTTabBarViewController *)self.tabBarController;
     //隐藏TabBar
-    //    [main setHidesBottomBar:self.navigationController.viewControllers.count > 1];
+    [main setHidesBottomBar:self.navigationController.viewControllers.count > 1];
     [MobClick beginLogPageView:NSStringFromClass([self class])];
 }
 

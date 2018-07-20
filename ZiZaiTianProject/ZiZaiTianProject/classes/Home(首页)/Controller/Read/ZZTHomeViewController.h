@@ -10,5 +10,6 @@
 #import "BaseViewController.h"
 
 @interface ZZTHomeViewController : BaseViewController
+@property (nonatomic,weak) UIScrollView *mainView;
 
 @end

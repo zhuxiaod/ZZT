@@ -13,5 +13,6 @@ pod 'UITableView+FDTemplateLayoutCell'
 pod "PYSearch"
 pod "RTRootNavigationController"
 pod 'FDFullscreenPopGesture'
+pod 'MBProgressHUD', '~> 1.1.0'
 end
 

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZZTMeViewController : UIViewController
+@interface ZZTMeViewController : BaseViewController
 
 @end

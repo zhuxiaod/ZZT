@@ -55,6 +55,7 @@
     
     return btn;
 }
+
 //点击判断
 - (void)btnClick:(UIButton *)btn {
     if(btn == self.userWrite){

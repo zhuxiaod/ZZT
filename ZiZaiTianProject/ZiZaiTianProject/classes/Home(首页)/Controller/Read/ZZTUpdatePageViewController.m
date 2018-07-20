@@ -9,14 +9,17 @@
 #import "ZZTUpdatePageViewController.h"
 
 @interface ZZTUpdatePageViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
+
 @property (nonatomic,strong) UICollectionView *collectionView;
 
 @property (nonatomic,strong) NSArray *cartoons;
 
 @end
+
 NSString *collection = @"collection";
 
 @implementation ZZTUpdatePageViewController
+
 //差一个接数据
 - (NSArray *)cartoons{
     if (!_cartoons) {
@@ -24,6 +27,7 @@ NSString *collection = @"collection";
     }
     return _cartoons;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     //流水布局
@@ -31,6 +35,7 @@ NSString *collection = @"collection";
     
     //创建UICollectionView：黑色
     [self setupCollectionView:layout];
+    
 }
 
 #pragma mark - 创建流水布局
@@ -76,4 +81,5 @@ NSString *collection = @"collection";
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
+
 @end

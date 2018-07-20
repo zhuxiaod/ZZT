@@ -34,6 +34,7 @@
     //设置滑动栏的样式
     [self setupStyle];
     
+    
 }
 
 -(void)setupTitle{
@@ -63,7 +64,7 @@
 {
     ZZTUpdatePageViewController *ctVC = [[ZZTUpdatePageViewController alloc] init];
     ctVC.view.backgroundColor = [UIColor redColor];
-    ctVC.title = @"卡通";
+    ctVC.title = @"漫画";
     [self addChildViewController:ctVC];
     
     ZZTUpdatePageViewController *playVC = [[ZZTUpdatePageViewController alloc] init];
@@ -76,4 +77,8 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
+- (IBAction)back:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 @end

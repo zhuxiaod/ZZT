@@ -16,16 +16,17 @@
 #import "PYSearchSuggestionViewController.h"
 #import "ZZTCarttonDetailModel.h"
 #import "ZZTUpdateViewController.h"
-
+#import "ZZTCollectView.h"
 @interface ZZTHomeViewController ()<UIScrollViewDelegate,PYSearchViewControllerDelegate,PYSearchViewControllerDataSource,UITableViewDataSource>
 
 @property (nonatomic,weak) UIView *customNavBar;
 @property (nonatomic,weak) ListView *listView;
-@property (nonatomic,weak) ZZTReadTableView *collectView;
 @property (nonatomic,weak) ZZTReadTableView *ReadView;
 @property (nonatomic,weak) ZZTCreationTableView *CreationView;
+@property (nonatomic,weak) ZZTCollectView *collectView;
+
 @property (nonatomic,weak) ZZTCycleCell * cycleCell;
-@property (nonatomic,weak) UIScrollView *mainView;
+//@property (nonatomic,weak) UIScrollView *mainView;
 @property (nonatomic,strong) NSMutableArray *searchSuggestionArray;
 @property (nonatomic,weak) UITableView *suggestionView;
 @property (nonatomic,weak) PYSearchViewController *searchVC;
@@ -121,11 +122,10 @@ NSString *SuggestionView = @"SuggestionView";
     [self.mainView addSubview:creationVC];
     
     //收藏页
-//    ZZTCreationTableView *collectVC = [[ZZTCreationTableView alloc] init];
+    //直接在该页面创建一个collectionView
+    //    ZZTCollectView *collectVC = [[ZZTCollectView alloc] init];
 //    collectVC.backgroundColor = [UIColor whiteColor];
-//    self.CreationView = collectVC;
-////    collectVC.viewWidth = self.mainView.width;
-////    collectVC.viewHeight = self.mainView.height;
+//    self.collectView = collectVC;
 //    [self.mainView addSubview:collectVC];
 }
 
@@ -156,8 +156,6 @@ NSString *SuggestionView = @"SuggestionView";
     [_ReadView reloadData];
     [_collectView reloadData];
     [_CreationView reloadData];
-    ZZTNavigationViewController *nav = (ZZTNavigationViewController *)self.navigationController;
-    [nav turnColor];
 }
 //计时器结束
 - (void)viewDidDisappear:(BOOL)animated {

@@ -66,6 +66,7 @@ NSString *bannerID = @"MeCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.rr_navHidden = YES;
     //请求数据
     [self getData];
     //设置table
@@ -292,7 +293,7 @@ NSString *bannerID = @"MeCell";
 {
     [super viewWillAppear:animated];
     //隐藏Bar
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+//    [self.navigationController setNavigationBarHidden:YES animated:YES];
     //加载用户信息
     [self loadUserData];
 }

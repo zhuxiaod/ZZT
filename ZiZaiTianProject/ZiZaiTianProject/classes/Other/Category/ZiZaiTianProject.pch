@@ -41,7 +41,10 @@
 #import "UIBarButtonItem+Item.h"
 #import "UIImage+ColorWithImage.h"
 #import "ZZTNavigationViewController.h"
+#import "UINavigationController+FDFullscreenPopGesture.h"
+#import "UIBarButtonItem+EXtension.h"
 #import "ZZTCartoonCell.h"
+#import "MBProgressHUD.h"
 #define detailViewHeaderHeight 60
 #define MyLog(...) NSLog(__VA_ARGS__);
 /** 屏幕尺寸 */

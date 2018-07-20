@@ -41,10 +41,10 @@
 }
 
 //如果非根子控制器则可以滑动
--(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    return self.childViewControllers.count > 1;
-}
+//-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+//{
+//    return self.childViewControllers.count > 1;
+//}
 
 //重写push方法 => push后如果是非控制器便添加一个返回按钮
 -(void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
@@ -64,4 +64,23 @@
 -(void)turnColor{
      [self.navigationBar setBackgroundImage:[UIImage createImageWithColor:[UIColor colorWithHexString:@"#58006E"]] forBarMetrics:(UIBarMetricsDefault)];
 }
+
+//- (UIViewController *)childViewControllerForStatusBarStyle {
+//    return self.visibleViewController;
+//}
+//- (UIStatusBarStyle)preferredStatusBarStyle {
+//    return UIStatusBarStyleLightContent;
+//}
+//-(void)navigationController:(UINavigationController *)navigationController willShowViewController:(BaseViewController *)viewController animated:(BOOL)animated
+//{
+//    if ([UIDevice currentDevice].systemVersion.floatValue < 10.0 && [viewController isKindOfClass:[BaseViewController class]]) {
+//        if (!viewController.pushed) {
+//            [self.navigationBar setHidden:[viewController getNaviHidden]];
+//            viewController.pushed = YES;
+//        }else
+//        {
+//            [self setNavigationBarHidden:[viewController getNaviHidden] animated:animated];
+//        }
+//    }
+//}
 @end

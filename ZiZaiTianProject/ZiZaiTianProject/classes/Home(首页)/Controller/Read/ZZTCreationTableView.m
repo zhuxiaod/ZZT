@@ -36,12 +36,11 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 
 -(NSArray *)bannerModelArray{
     if(!_bannerModelArray){
-//        _bannerModelArray = @[@"u=3328170055,3037785353&fm=27&gp=0.jpg",@"u=4070996148,1781906905&fm=27&gp=0.jpg",@"u=4213799443,3151115557&fm=27&gp=0.jpg"];
-        
         _bannerModelArray = [NSArray array];
     }
     return _bannerModelArray;
 }
+
 -(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if(self){
@@ -54,6 +53,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         [self registerClass:[ZZTCycleCell class]  forCellReuseIdentifier:zzTCycleCell];
         [self registerClass:[ZZTCreationBtnCellTableViewCell class]  forCellReuseIdentifier:zztCreationCell];
         [self registerClass:[CaiNiXiHuanCell class]  forCellReuseIdentifier:caiNiXiHuan];
+        [self loadBannerData];
     }
     return self;
 }
@@ -120,5 +120,16 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
     }else{
         return 0;
     }
+}
+-(void)loadBannerData{
+    weakself(self);
+    [AFNHttpTool POST:@"http://192.168.0.165:8888/homepage/banner" parameters:nil success:^(id responseObject) {
+        NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+        NSArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
+        weakSelf.bannerModelArray = array;
+        [self reloadData];
+    } failure:^(NSError *error) {
+        
+    }];
 }
 @end

@@ -71,8 +71,8 @@ NSString *zztComment = @"zztComment";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationController.delegate = self;
-
+    self.rr_navHidden = YES;
+    
     [self setup];
 
     //设置页面
@@ -105,6 +105,7 @@ NSString *zztComment = @"zztComment";
 -(void)loadtopData:(NSString *)ID{
     //加载用户信息
     weakself(self);
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSDictionary *paramDict = @{
                                 @"id":ID
                                 };
@@ -115,8 +116,12 @@ NSString *zztComment = @"zztComment";
         weakSelf.ctDetail = mode;
         weakSelf.head.detailModel = mode;
         weakSelf.isDataCome = YES;
+        [hud hideAnimated:YES];
+
     } failure:^(NSError *error) {
-        
+        //网络请求不会失败
+        hud.label.text = NSLocalizedString(@"链接失败", @"HUD message title");
+
     }];
     [self.contentView reloadData];
 }
@@ -322,11 +327,6 @@ NSString *zztComment = @"zztComment";
     }
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
 #pragma mark - 解密
 -(NSDictionary *)decry:(NSString *)getData{
     //解密
@@ -348,14 +348,8 @@ NSString *zztComment = @"zztComment";
             [weakSelf.contentView reloadData];
             
         }];
-        
     }
     return _descHeadView;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
 @end

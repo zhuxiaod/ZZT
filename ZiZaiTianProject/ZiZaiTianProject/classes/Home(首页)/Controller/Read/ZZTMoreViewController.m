@@ -48,5 +48,4 @@ NSString *WordCell = @"WordCell";
     cell.textLabel.text = @"朱晓俊";
     return cell;
 }
-
 @end
