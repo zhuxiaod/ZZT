@@ -95,6 +95,7 @@ static NSString *const zztCreationCell = @"zztCreationCell";
     if(indexPath.row == 0){
         
         ZZTCreationEntranceView *ceView = [ZZTCreationEntranceView CreationEntranceViewWithFrame:CGRectMake(0, 0, [self myViewController].view.width, [self myViewController].view.height - 44)];
+      
         
         //设置样式
         ceView.viewTitel.text = @"创建漫画";
@@ -112,17 +113,17 @@ static NSString *const zztCreationCell = @"zztCreationCell";
         
     }else if(indexPath.row == 1){
         
-//        ZZTCreationEntranceView *ceView = [ZZTCreationEntranceView ZZTCreationEntranceView];
-//        ceView.viewTitel.text = @"创建剧本";
-//        ceView.nameText.placeholder = @"请输入剧本名称";
-//        ceView.titleText.placeholder = @"请输入剧本名称";
-//        ceView.TureBtnBlock = ^(ZZTCreationEntranceModel *model) {
-//            ZZTCreatPlayViewController *ccvc = [[ZZTCreatPlayViewController alloc] init];
-//            ccvc.hidesBottomBarWhenPushed = YES;
-//            ccvc.model = model;
-//            [[self myViewController].navigationController pushViewController:ccvc animated:YES];
-//        };
-//        [[self myViewController].view addSubview:ceView];
+        ZZTCreationEntranceView *ceView = [ZZTCreationEntranceView CreationEntranceViewWithFrame:CGRectMake(0, 0, [self myViewController].view.width, [self myViewController].view.height - 44)];
+        ceView.viewTitel.text = @"创建剧本";
+        ceView.nameText.placeholder = @"请输入剧本名称";
+        ceView.titleText.placeholder = @"请输入剧本名称";
+        ceView.TureBtnBlock = ^(ZZTCreationEntranceModel *model) {
+            ZZTCreatPlayViewController *ccvc = [[ZZTCreatPlayViewController alloc] init];
+            ccvc.hidesBottomBarWhenPushed = YES;
+            ccvc.model = model;
+            [[self myViewController].navigationController pushViewController:ccvc animated:YES];
+        };
+        [[self myViewController].view addSubview:ceView];
     }else if(indexPath.row == 2){
         
     }

@@ -30,6 +30,8 @@
 @property (nonatomic,strong) NSMutableArray *searchSuggestionArray;
 @property (nonatomic,weak) UITableView *suggestionView;
 @property (nonatomic,weak) PYSearchViewController *searchVC;
+@property (nonatomic,strong) NSString *str;
+
 @end
 NSString *SuggestionView = @"SuggestionView";
 @implementation ZZTHomeViewController
@@ -55,6 +57,14 @@ NSString *SuggestionView = @"SuggestionView";
     
     //设置子页
     [self setupChildView];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotification:) name:@"infoNotification" object:nil];
+}
+
+-(void)receiveNotification:(NSNotification *)infoNotification {
+    NSDictionary *dic = [infoNotification userInfo];
+    _str = [dic objectForKey:@"info"];
+    
 }
 
 #pragma mark - 设置主视图
@@ -144,7 +154,13 @@ NSString *SuggestionView = @"SuggestionView";
     [_CreationView setFrame:CGRectMake(0, 0, width, height)];
     [_ReadView setFrame:CGRectMake(width, 0, width, height)];
     [_collectView setFrame:CGRectMake(width * 2, 0, width, height)];
-    [self.mainView setContentOffset:CGPointMake(width, 0)];
+    //添加视图的时候会刷新一次
+    if([_str isEqualToString:@"YES"]){
+        [self.mainView setContentOffset:CGPointMake(0, 0)];
+
+    }else{
+        [self.mainView setContentOffset:CGPointMake(width, 0)];
+    }
 }
 
 //Bar隐藏
@@ -215,7 +231,7 @@ NSString *SuggestionView = @"SuggestionView";
                               @"fuzzy":searchText
                               };
         //添加数据
-        [AFNHttpTool POST:@"http://192.168.0.165:8888/cartoon/queryFuzzy" parameters:dic success:^(id responseObject) {
+        [AFNHttpTool POST:@"http://120.79.178.191:8888/cartoon/queryFuzzy" parameters:dic success:^(id responseObject) {
             NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
             NSMutableArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
             weakSelf.searchSuggestionArray = array;

@@ -134,7 +134,7 @@ NSString *bannerID = @"MeCell";
     NSDictionary *paramDict = @{
                                 @"userId":@"23"
                                 };
-    [self.manager POST:@"http://192.168.0.165:8888/record/userSign" parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self.manager POST:@"http://120.79.178.191/record/userSign" parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [self loadUserData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败 -- %@",error);

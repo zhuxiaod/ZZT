@@ -121,6 +121,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         return 0;
     }
 }
+
 -(void)loadBannerData{
     weakself(self);
     [AFNHttpTool POST:@"http://192.168.0.165:8888/homepage/banner" parameters:nil success:^(id responseObject) {

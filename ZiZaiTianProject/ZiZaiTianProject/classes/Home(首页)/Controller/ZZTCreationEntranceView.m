@@ -29,6 +29,8 @@
 
 +(instancetype)CreationEntranceViewWithFrame:(CGRect)frame{
     ZZTCreationEntranceView *ceView = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass(self) owner:nil options:nil] firstObject];
+    NSDictionary *dataDic = [NSDictionary dictionaryWithObject:@"YES" forKey:@"info"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"infoNotification" object:nil userInfo:dataDic];
     //赋值位置
     [ceView setFrame:frame];
     return ceView;
@@ -58,6 +60,7 @@
         btn.layer.borderWidth = 1.0f;
         btn.backgroundColor = [UIColor grayColor];
         [btn addTarget:self action:@selector(clickBtn:) forControlEvents:UIControlEventTouchUpInside];
+        //测试
         btn.tag = i;
         i++;
     }
@@ -70,7 +73,10 @@
     self.cancel.layer.borderWidth = 1.0f;
     
     [self.titleText addTarget:self action:@selector(textFieldChange:) forControlEvents:UIControlEventEditingChanged];
+    self.titleText.text = @"1";
      [self.nameText addTarget:self action:@selector(textFieldChange:) forControlEvents:UIControlEventEditingChanged];
+    self.nameText.text = @"1";
+
 }
 
 -(void)textFieldChange:(UITextField *)TextField{
