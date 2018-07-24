@@ -9,16 +9,21 @@
 #import "ZZTCreatCartoonViewController.h"
 #import "ZZTMaterialLibraryView.h"
 #import "ZZTFodderListModel.h"
-@interface ZZTCreatCartoonViewController ()
+@interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate>
 //舞台
 @property (weak, nonatomic) IBOutlet UIView *stageView;
 
 @property (nonatomic,strong) NSArray *dataSource;
 
 @property (nonatomic,strong) ZZTMaterialLibraryView *materialLibraryView;
+
+@property (nonatomic,strong) NSString *str;
+
 @end
 
 @implementation ZZTCreatCartoonViewController
+
+
 
 -(NSArray *)dataSource{
     if(!_dataSource){
@@ -99,20 +104,45 @@
 
 //布局
 - (IBAction)Layout:(id)sender {
-    //生成一个View
-    //View分成三部分
-    //第一步部分  九宫格
-    //第二部分    九宫格
-    //第三部分    collectionView
-    //减去上下头 的三分之一
+    [self setupMaterialLibraryView:@"布局"];
+}
+
+//场景
+- (IBAction)scene:(id)sender {
+    [self setupMaterialLibraryView:@"场景"];
+}
+
+//角色
+- (IBAction)role:(id)sender {
+    [self setupMaterialLibraryView:@"角色"];
+}
+
+//效果
+- (IBAction)specialEffects:(id)sender {
+    [self setupMaterialLibraryView:@"效果"];
+}
+
+//文字
+- (IBAction)textView:(id)sender {
+    [self setupMaterialLibraryView:@"文字"];
+}
+
+-(void)setupMaterialLibraryView:(NSString *)str{
+    [_materialLibraryView removeFromSuperview];
     CGFloat viewHeight = (SCREEN_HEIGHT - 88)/3;
     CGFloat y = (SCREEN_HEIGHT - 44) - viewHeight;
     _materialLibraryView = [[ZZTMaterialLibraryView alloc] initWithFrame:CGRectMake(0, y, SCREEN_WIDTH, viewHeight)];
+    _materialLibraryView.str = str;
+    _materialLibraryView.delagate = self;
     _materialLibraryView.backgroundColor = [UIColor whiteColor];
-    [self loadMaterialData:@"1" modelType:@"1" modelSubtype:@"1"];
-    _materialLibraryView.dataSource = self.dataSource;
+//    _materialLibraryView.dataSource = self.dataSource;
     [self.view addSubview:_materialLibraryView];
-    //在VC里面把数据请求好  监听事件  切换数据 刷新就行了
+}
+
+#pragma mark ZZTMaterialLibraryViewDelegate
+-(void)sendRequestWithStr:(NSString *)fodderType modelType:(NSString *)modelType modelSubtype:(NSString *)modelSubtype
+{
+    [self loadMaterialData:fodderType modelType:modelType modelSubtype:modelSubtype];
 }
 
 -(void)loadMaterialData:(NSString *)fodderType modelType:(NSString *)modelType modelSubtype:(NSString *)modelSubtype{
@@ -121,28 +151,13 @@
                                 @"modelType":modelType,
                                 @"modelSubtype":modelSubtype
                                 };
-    weakself(self);
     [AFNHttpTool POST:@"http://192.168.0.165:8888/fodder/fodderList" parameters:parameter success:^(id responseObject) {
         NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
         NSMutableArray *array = [ZZTFodderListModel mj_objectArrayWithKeyValuesArray:dic];
-        weakSelf.dataSource = array;
-        weakSelf.materialLibraryView.dataSource = array;
+        self.dataSource = array;
+        self.materialLibraryView.dataSource = array;
     } failure:^(NSError *error) {
         
     }];
 }
-
-//场景
-- (IBAction)scene:(id)sender {
-}
-//角色
-- (IBAction)role:(id)sender {
-}
-//效果
-- (IBAction)specialEffects:(id)sender {
-}
-//文字
-- (IBAction)textView:(id)sender {
-}
-
 @end

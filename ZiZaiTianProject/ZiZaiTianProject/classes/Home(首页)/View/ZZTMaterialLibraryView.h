@@ -7,9 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+@class ZZTMaterialLibraryView;
+
+@protocol MaterialLibraryViewDelegate<NSObject>
+
+-(void)sendRequestWithStr:(NSString *)fodderType modelType:(NSString *)modelType modelSubtype:(NSString *)modelSubtype;
+
+@end
 
 @interface ZZTMaterialLibraryView : UIView
 
-@property (nonatomic,strong) NSArray *dataSource;
+@property (nonatomic,strong) NSMutableArray *dataSource;
+
+@property (nonatomic,strong) NSString *str;
+
+@property (nonatomic,strong)id<MaterialLibraryViewDelegate>delagate;
 
 @end

@@ -10,58 +10,75 @@
 #import "ZZTMaterialKindView.h"
 #import "ZZTMaterialTypeView.h"
 #import "ZZTFodderListModel.h"
+#import "ZZTKindModel.h"
+#import "ZZTTypeModel.h"
+#import "ZZTDetailModel.h"
+
 @interface ZZTMaterialLibraryView()<UICollectionViewDelegate,UICollectionViewDataSource>
 
-@property (nonatomic,strong)NSArray *kinds;
-@property (nonatomic,strong)NSArray *typs;
-@property (nonatomic,strong)NSArray *dataArray;
+@property (nonatomic,strong)NSMutableArray *kinds;
+@property (nonatomic,strong)NSMutableArray *typs;
+//@property (nonatomic,strong)NSMutableArray *dataArray;
 @property (nonatomic,strong)UICollectionView *collectionView;
+@property (nonatomic,strong)NSArray *materialLibrary;
 
+@property (nonatomic,strong)ZZTMaterialKindView *MaterialKindView;
+@property (nonatomic,strong)ZZTMaterialTypeView *materialTypeView;
 
+@property (nonatomic,strong)NSString *fodderType;
+@property (nonatomic,strong)NSString *modelType;
+@property (nonatomic,strong)NSString *modelSubtype;
 @end
 
 @implementation ZZTMaterialLibraryView
 
--(NSArray *)kinds{
+
+
+-(NSArray *)materialLibrary{
+    if(!_materialLibrary){
+        _materialLibrary = [NSArray array];
+    }
+    return _materialLibrary;
+}
+
+-(NSMutableArray *)kinds{
     if(!_kinds){
-        _kinds = @[@"背景图",@"场景",@"角色",@"当前框",@"所有框"];
+        _kinds = [NSMutableArray array];
     }
     return _kinds;
 }
 
--(NSArray *)typs{
+-(id)JsonObject:(NSString *)jsonStr{
+    NSString *jsonPath = [[NSBundle mainBundle] pathForResource:jsonStr ofType:nil];
+    NSData *jsonData = [[NSData alloc] initWithContentsOfFile:jsonPath];
+    NSError *error;
+    id JsonObject= [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+    return JsonObject;
+}
+
+-(NSMutableArray *)typs{
     if(!_typs){
-        _typs = @[@"2格",@"3格",@"4格"];
+        _typs = [NSMutableArray array];
     }
     return _typs;
 }
 
--(NSArray *)dataArray{
-    if(!_dataArray){
-        _dataArray = [NSArray array];
-    }
-    return _dataArray;
-}
-
--(void)setDataSource:(NSArray *)dataSource{
+//- (NSMutableArray *)dataSource {
+//    if(!_dataSource){
+//        _dataSource = [NSMutableArray array];
+//    }
+//    return _dataSource;
+//}
+//设置图片数据 刷新
+-(void)setDataSource:(NSMutableArray *)dataSource{
     _dataSource = dataSource;
-    self.dataArray = dataSource;
-    [_collectionView reloadData];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.collectionView reloadData];
+    });
 }
 //分三层 如何分层 我要写一个 低配版的
 - (instancetype)initWithFrame:(CGRect)frame{
     if(self = [super initWithFrame:frame]){
-        //创建kinds
-        ZZTMaterialKindView *MaterialKindView = [[ZZTMaterialKindView alloc] init:self.kinds Width:SCREEN_WIDTH];
-        MaterialKindView.frame = CGRectMake(0, 5, SCREEN_WIDTH, 20);
-        MaterialKindView.backgroundColor = [UIColor blackColor];
-        [self addSubview:MaterialKindView];
-    
-        //创建typs
-        ZZTMaterialTypeView *materialTypeView = [[ZZTMaterialTypeView alloc] init:self.typs Width:SCREEN_WIDTH];
-        materialTypeView.frame = CGRectMake(0, MaterialKindView.frame.origin.y + 20 + 10, SCREEN_WIDTH, 20) ;
-        [self addSubview:materialTypeView];
-        
         //素材库
         UICollectionViewFlowLayout *layout = [self setupCollectionViewFlowLayout];
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
@@ -72,14 +89,101 @@
         _collectionView.showsVerticalScrollIndicator = NO;
         [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
         [self addSubview:_collectionView];
+        //解析json
+        NSArray *arr = [self JsonObject:@"materialLibrary.json"];
+        self.materialLibrary = [ZZTKindModel mj_objectArrayWithKeyValuesArray:arr];
+        //注册通知
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btnData:)name:@"btnText" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btnIndex:)name:@"btnIndex" object:nil];
+        self.fodderType = @"1";
+        self.modelType = @"1";
+        self.modelSubtype = @"1";
     }
     return self;
 }
+
+//1 点击事件 获得
+//2级创建的时候 触发一次
+-(void)btnData:(NSNotification *)text{
+    //寻找这个对象
+    for (ZZTTypeModel *model in self.kinds) {
+        
+        //找到点击的btn 相对应的模型
+        if ([model.type isEqualToString:text.userInfo[@"text"]]) {
+            //记录模型的索引
+            self.modelType = model.typeCode;
+            //解析模型数据
+            _typs = [ZZTDetailModel mj_objectArrayWithKeyValuesArray:model.typeList];
+            //创建三级的视图
+            [self creatTypeView:_typs];
+        }
+    }
+}
+//3级视图创建时 触发
+-(void)btnIndex:(NSNotification *)text{
+    NSLog(@"111%@",text.userInfo[@"text"]);
+    for (ZZTDetailModel *model in self.typs) {
+        if ([model.detail isEqualToString:text.userInfo[@"text"]]){
+            self.modelSubtype = model.detailCode;
+            //代理传出去
+            [self getData:self.fodderType modelType:self.modelType modelSubtype:self.modelSubtype];
+        }
+    }
+}
+
+//代理方法
+-(void)getData:(NSString *)fodderType modelType:(NSString *)modelType modelSubtype:(NSString *)modelSubtype{
+    if (self.delagate && [self.delagate respondsToSelector:@selector(sendRequestWithStr:modelType:modelSubtype:)]) {
+        [self.delagate sendRequestWithStr:fodderType modelType:modelType modelSubtype:modelSubtype];
+    }
+}
+
+-(void)setStr:(NSString *)str{
+    //第一次创建
+    _str = str;
+    _kinds = nil;
+    _typs = nil;
+    //把数组准备好
+    for (ZZTKindModel *material in self.materialLibrary) {
+        if([str isEqualToString:material.kind]){
+            //找到索引
+            self.fodderType = material.code;
+            //2级数据
+            _kinds = [ZZTTypeModel mj_objectArrayWithKeyValuesArray:material.kindList];
+            ZZTTypeModel *type = _kinds[0];
+            //默认第一个3级数据
+            _typs = [ZZTDetailModel mj_objectArrayWithKeyValuesArray:type.typeList];
+            //暴力方法
+        }
+    }
+    //创建2级视图
+    [self creatView:_kinds];
+}
+
+//2级创建方法
+-(void)creatView:(NSMutableArray *)kinds{
+    [_MaterialKindView removeFromSuperview];
+
+    _MaterialKindView = [[ZZTMaterialKindView alloc] init:kinds Width:SCREEN_WIDTH];
+    _MaterialKindView.frame = CGRectMake(0, 5, SCREEN_WIDTH, 20);
+    _MaterialKindView.backgroundColor = [UIColor blackColor];
+    [self addSubview:_MaterialKindView];
+}
+
+//3级创建方法
+-(void)creatTypeView:(NSMutableArray *)type{
+    [_materialTypeView removeFromSuperview];
+    //创建typs
+    _materialTypeView = [[ZZTMaterialTypeView alloc] init:type Width:SCREEN_WIDTH];
+    _materialTypeView.frame = CGRectMake(0, 35, SCREEN_WIDTH, 20);
+    [self addSubview:_materialTypeView];
+}
+
 -(UICollectionViewFlowLayout *)setupCollectionViewFlowLayout{
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
     //修改尺寸(控制)
-    layout.itemSize = CGSizeMake(100,200);
+    layout.itemSize = CGSizeMake(100,self.height - 60 - 5);
     
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     //行距
@@ -88,6 +192,7 @@
     
     return layout;
 }
+
 - (void)layoutSubviews{
     [super layoutSubviews];
 }
@@ -95,22 +200,30 @@
 #pragma mark - collectionViewDelegate
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.dataArray.count;
+    return self.dataSource.count;
 }
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor clearColor];
+    for (UIView *view in cell.contentView.subviews) {
+        
+        [view removeFromSuperview];
+        
+    }
+    cell.backgroundColor = [UIColor redColor];
+    
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, cell.bounds.size.width, cell.bounds.size.height)];
-    ZZTFodderListModel *model = self.dataArray[indexPath.row];
+ 
+    ZZTFodderListModel *model = self.dataSource[indexPath.row];
     [imageView sd_setImageWithURL:[NSURL URLWithString:model.img] placeholderImage:[UIImage imageNamed:@"peien"]];
     [cell.contentView addSubview:imageView];
     
     return cell;
 }
-/*明天计划
- 三级联动
- button点击更新数据
- */
 
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"btnText" object:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"btnIndex" object:self];
+}
 @end

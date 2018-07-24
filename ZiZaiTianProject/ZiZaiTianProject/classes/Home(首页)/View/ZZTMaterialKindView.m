@@ -7,7 +7,8 @@
 //
 
 #import "ZZTMaterialKindView.h"
-
+#import "ZZTKindModel.h"
+#import "ZZTTypeModel.h"
 @interface ZZTMaterialKindView()
 {
     CGFloat Btnx;
@@ -64,8 +65,9 @@
         //Item Y轴
         NSUInteger Y = (i / rank) * (H +rowMargin);
         //Item top
+        ZZTTypeModel *model = self.buttonData[i];
         UIButton *btn = [[UIButton alloc] init];
-        [btn setTitle:_buttonData[i] forState:UIControlStateNormal];
+        [btn setTitle:model.type forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         btn.frame = CGRectMake(X, Y, W, H);
         btn.selected = NO;
@@ -85,13 +87,20 @@
             button.selected = YES;
             [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [button setBackgroundColor:[UIColor blackColor]];
+            //代理传值
+            NSDictionary *dic = @{
+                                  @"text":btn.titleLabel.text
+                                  };
+            NSNotification *notification = [NSNotification notificationWithName:@"btnText" object:nil userInfo:dic];
+            [[NSNotificationCenter defaultCenter] postNotification:notification];
+            //点击判断是索引 传出去
+
         }else{
             button.selected = NO;
             [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             [button setBackgroundColor:[UIColor whiteColor]];
         }
     }
-    
 }
 
 @end

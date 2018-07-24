@@ -7,6 +7,8 @@
 //
 
 #import "ZZTMaterialTypeView.h"
+#import "ZZTDetailModel.h"
+
 @interface ZZTMaterialTypeView ()
 
 @property (nonatomic,strong) NSArray *buttonData;
@@ -61,8 +63,9 @@
         //Item Y轴
         NSUInteger Y = (i / rank) * (H +rowMargin);
         //Item top
+        ZZTDetailModel *model = self.buttonData[i];
         UIButton *btn = [[UIButton alloc] init];
-        [btn setTitle:_buttonData[i] forState:UIControlStateNormal];
+        [btn setTitle:model.detail forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [btn setBackgroundColor:[UIColor grayColor]];
         btn.frame = CGRectMake(X, Y, W, H);
@@ -74,7 +77,7 @@
         [self addSubview:btn];
     }
 }
-
+//ok
 -(void)buttonSelected:(UIButton *)btn{
     self.recodeStr = btn.titleLabel.text;
     for (UIButton *button in self.buttons) {
@@ -82,6 +85,12 @@
             button.selected = YES;
             [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             [button setBackgroundColor:[UIColor blueColor]];
+            //代理传值
+            NSDictionary *dic = @{
+                                  @"text":btn.titleLabel.text
+                                  };
+            NSNotification *notification = [NSNotification notificationWithName:@"btnIndex" object:nil userInfo:dic];
+            [[NSNotificationCenter defaultCenter] postNotification:notification];
         }else{
             button.selected = NO;
             [button setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
