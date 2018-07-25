@@ -13,6 +13,7 @@
 #import "ZZTKindModel.h"
 #import "ZZTTypeModel.h"
 #import "ZZTDetailModel.h"
+#import "ZZTMaterialLibraryCell.h"
 
 @interface ZZTMaterialLibraryView()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -63,12 +64,6 @@
     return _typs;
 }
 
-//- (NSMutableArray *)dataSource {
-//    if(!_dataSource){
-//        _dataSource = [NSMutableArray array];
-//    }
-//    return _dataSource;
-//}
 //设置图片数据 刷新
 -(void)setDataSource:(NSMutableArray *)dataSource{
     _dataSource = dataSource;
@@ -87,7 +82,7 @@
         _collectionView.dataSource = self;
         _collectionView.frame = CGRectMake(0, 60, Screen_Width, self.height - 60 - 5);
         _collectionView.showsVerticalScrollIndicator = NO;
-        [_collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+        [_collectionView registerClass:[ZZTMaterialLibraryCell class] forCellWithReuseIdentifier:@"cell"];
         [self addSubview:_collectionView];
         //解析json
         NSArray *arr = [self JsonObject:@"materialLibrary.json"];
@@ -95,7 +90,7 @@
         //注册通知
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btnData:)name:@"btnText" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btnIndex:)name:@"btnIndex" object:nil];
-        self.fodderType = @"1";
+//        self.fodderType = @"1";
         self.modelType = @"1";
         self.modelSubtype = @"1";
     }
@@ -117,6 +112,7 @@
             //创建三级的视图
             [self creatTypeView:_typs];
         }
+        
     }
 }
 //3级视图创建时 触发
@@ -128,13 +124,6 @@
             //代理传出去
             [self getData:self.fodderType modelType:self.modelType modelSubtype:self.modelSubtype];
         }
-    }
-}
-
-//代理方法
--(void)getData:(NSString *)fodderType modelType:(NSString *)modelType modelSubtype:(NSString *)modelSubtype{
-    if (self.delagate && [self.delagate respondsToSelector:@selector(sendRequestWithStr:modelType:modelSubtype:)]) {
-        [self.delagate sendRequestWithStr:fodderType modelType:modelType modelSubtype:modelSubtype];
     }
 }
 
@@ -179,6 +168,13 @@
     [self addSubview:_materialTypeView];
 }
 
+
+//代理方法
+-(void)getData:(NSString *)fodderType modelType:(NSString *)modelType modelSubtype:(NSString *)modelSubtype{
+    if (self.delagate && [self.delagate respondsToSelector:@selector(sendRequestWithStr:modelType:modelSubtype:)]) {
+        [self.delagate sendRequestWithStr:fodderType modelType:modelType modelSubtype:modelSubtype];
+    }
+}
 -(UICollectionViewFlowLayout *)setupCollectionViewFlowLayout{
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
@@ -198,6 +194,7 @@
 }
 
 #pragma mark - collectionViewDelegate
+//还是数据源有问题  数据源先后
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return self.dataSource.count;
@@ -205,21 +202,21 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    for (UIView *view in cell.contentView.subviews) {
-        
-        [view removeFromSuperview];
-        
-    }
-    cell.backgroundColor = [UIColor redColor];
+    ZZTMaterialLibraryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, cell.bounds.size.width, cell.bounds.size.height)];
- 
     ZZTFodderListModel *model = self.dataSource[indexPath.row];
-    [imageView sd_setImageWithURL:[NSURL URLWithString:model.img] placeholderImage:[UIImage imageNamed:@"peien"]];
-    [cell.contentView addSubview:imageView];
+    
+    cell.imageURl = model.img;
     
     return cell;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    //获取View的信息
+    ZZTFodderListModel *model = self.dataSource[indexPath.row];
+    if(self.delagate && [self.delagate respondsToSelector:@selector(sendImageWithModel:)]){
+        [self.delagate sendImageWithModel:model];
+    }
 }
 
 -(void)dealloc{

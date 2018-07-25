@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-@class ZZTMaterialLibraryView;
+@class ZZTMaterialLibraryView,ZZTFodderListModel;
 
 @protocol MaterialLibraryViewDelegate<NSObject>
 
 -(void)sendRequestWithStr:(NSString *)fodderType modelType:(NSString *)modelType modelSubtype:(NSString *)modelSubtype;
+
+-(void)sendImageWithModel:(ZZTFodderListModel *)model;
 
 @end
 
