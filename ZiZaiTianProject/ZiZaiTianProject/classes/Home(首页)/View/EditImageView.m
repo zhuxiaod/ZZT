@@ -140,6 +140,8 @@
 //切换状态
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     _isMove = NO;
+    self.viewFrame = _editImgView.frame;
+    NSLog(@"end----- %@   ",NSStringFromCGRect(_editImgView.frame));
 
 }
 

@@ -43,4 +43,6 @@
 
 @property (nonatomic,assign) BOOL isHide;
 
+@property (nonatomic,assign) CGRect viewFrame;
+
 @end

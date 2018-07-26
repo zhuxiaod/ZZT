@@ -115,12 +115,51 @@
     }
 }
 
+#pragma mark 改变图片上下级功能
 //上一层
 - (IBAction)upLevel:(id)sender {
+    //得到当前选择View在数据中的索引
+    NSInteger index = [self getCurrentViewIndex];
+    //如果是最后一个对象的话 会是count-1
+    if(index == (self.editImageArray.count - 1)){
+        NSLog(@"已经到最上方了");
+    }else{
+        //改变数据的位置
+        [self exchangeViewIndex:index exchangeIndex:(index + 1)];
+    }
 }
 
 //下一层
 - (IBAction)downLevel:(id)sender {
+    //得到当前选择View在数据中的索引
+    NSInteger index = [self getCurrentViewIndex];
+    if(index == 0){
+        NSLog(@"已经到最下方了");
+    }else{
+        //改变数据的位置
+        [self exchangeViewIndex:index exchangeIndex:(index - 1)];
+    }
+}
+//查看当前View的索引
+-(NSInteger)getCurrentViewIndex{
+    NSInteger index = 0;
+    for (NSInteger i = 0; i < self.editImageArray.count; i++) {
+        if(self.editImageArray[i] == self.currentView){
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+//交换2个视图的层级位置 和 数据所在的位置
+-(void)exchangeViewIndex:(NSInteger )index exchangeIndex:(NSInteger )exchangeIndex{
+    if(self.editImageArray.count > 0){
+        EditImageView *indexView = self.editImageArray[index];
+        indexView.layer.zPosition = exchangeIndex;
+        EditImageView *indexLowView = self.editImageArray[exchangeIndex];
+        indexLowView.layer.zPosition = index;
+        [self.editImageArray exchangeObjectAtIndex:index withObjectAtIndex:exchangeIndex];
+    }
 }
 
 //前进
@@ -191,7 +230,7 @@
                                 @"modelType":modelType,
                                 @"modelSubtype":modelSubtype
                                 };
-    [AFNHttpTool POST:@"http://192.168.0.165:8888/fodder/fodderList" parameters:parameter success:^(id responseObject) {
+    [AFNHttpTool POST:@"http://192.168.0.142:8888/fodder/fodderList" parameters:parameter success:^(id responseObject) {
         NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
         NSMutableArray *array = [ZZTFodderListModel mj_objectArrayWithKeyValuesArray:dic];
         self.dataSource = array;
@@ -294,4 +333,5 @@
     UITapGestureRecognizer *recognizerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)]; [recognizerTap setNumberOfTapsRequired:1]; recognizerTap.cancelsTouchesInView = NO; [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizerTap];
     
 }
+//改变数组的位置
 @end
