@@ -14,6 +14,11 @@
 
 -(void)EditImageViewWithView:(EditImageView *)view;
 
+-(void)updateImageViewFrame:(EditImageView *)view;
+
+//观察View是否隐藏
+-(void)checkViewIsHidden:(EditImageView *)view;
+
 @end
 
 @interface EditImageView : UIImageView{

@@ -20,6 +20,9 @@
     return self;
 }
 
+-(void)setViewFrame:(CGRect)viewFrame{
+    _viewFrame = viewFrame;
+}
 - (void)addUI{
     //间距 20
     CGFloat space = 20;
@@ -64,13 +67,19 @@
 //可编辑状态
 - (void)showEditBtn{
     _isHide = NO;
+    if (self.delagate && [self.delagate respondsToSelector:@selector(checkViewIsHidden:)]) {
+        [self.delagate checkViewIsHidden:self];
+    }
     _borderView.hidden = NO;
     _editImgView.hidden = NO;
     _closeImgView.hidden = NO;
 }
 //隐藏
 - (void)hideEditBtn{
-    _isHide = YES;              
+    _isHide = YES;
+    if (self.delagate && [self.delagate respondsToSelector:@selector(checkViewIsHidden:)]) {
+        [self.delagate checkViewIsHidden:self];
+    }
     _borderView.hidden = YES;
     _editImgView.hidden = YES;
     _closeImgView.hidden = YES;
@@ -97,13 +106,11 @@
     if (CGRectContainsPoint(_editImgView.frame,p)) {
         _isMove = NO;
     }
-
 }
 
 
 //正在移动
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    NSLog(@"%ld",(long)self.tag);
     NSLog(@"touchesMoved");
     //如果是正在移动
     if (_isMove) {
@@ -139,10 +146,12 @@
 }
 //切换状态
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    if (self.delagate && [self.delagate respondsToSelector:@selector(updateImageViewFrame:)]) {
+        [self.delagate updateImageViewFrame:self];
+    }
     _isMove = NO;
     self.viewFrame = _editImgView.frame;
-    NSLog(@"end----- %@   ",NSStringFromCGRect(_editImgView.frame));
-
+    NSLog(@"end----- %f  %f   ",_editImgView.frame.origin.x,_editImgView.frame.origin.y);
 }
 
 

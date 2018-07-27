@@ -12,7 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ZZTCreatCartoonViewController">
             <connections>
-                <outlet property="imagEditView" destination="YAe-Wk-g6P" id="VtL-Nf-3lf"/>
+                <outlet property="midView" destination="udn-ai-VL3" id="aI0-cf-VNB"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -21,10 +21,6 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YAe-Wk-g6P" customClass="ZZTImageEditView">
-                    <rect key="frame" x="56" y="64" width="319" height="559"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </view>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="MZc-VQ-JZg">
                     <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -340,22 +336,26 @@
                         </barButtonItem>
                     </items>
                 </toolbar>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="udn-ai-VL3">
+                    <rect key="frame" x="56" y="64" width="319" height="559"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="udn-ai-VL3" secondAttribute="trailing" id="3HJ-J1-Ovt"/>
                 <constraint firstItem="wZy-fa-kd6" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="8VG-lC-tQ8"/>
                 <constraint firstItem="MZc-VQ-JZg" firstAttribute="trailing" secondItem="Q5M-cg-NOt" secondAttribute="trailing" id="9yY-Li-Mvp"/>
-                <constraint firstAttribute="trailing" secondItem="YAe-Wk-g6P" secondAttribute="trailing" id="Csk-oC-mnG"/>
-                <constraint firstItem="YAe-Wk-g6P" firstAttribute="top" secondItem="MZc-VQ-JZg" secondAttribute="bottom" id="DiF-TU-FPx"/>
                 <constraint firstItem="MZc-VQ-JZg" firstAttribute="top" secondItem="Q5M-cg-NOt" secondAttribute="top" id="QOZ-lC-zIy"/>
                 <constraint firstItem="wZy-fa-kd6" firstAttribute="top" secondItem="FqH-KH-kCZ" secondAttribute="bottom" id="V2m-8u-eb6"/>
+                <constraint firstItem="udn-ai-VL3" firstAttribute="top" secondItem="MZc-VQ-JZg" secondAttribute="bottom" id="a6o-Xf-obN"/>
+                <constraint firstItem="udn-ai-VL3" firstAttribute="leading" secondItem="FqH-KH-kCZ" secondAttribute="trailing" id="aPR-Dg-Dxc"/>
                 <constraint firstItem="wZy-fa-kd6" firstAttribute="bottom" secondItem="Q5M-cg-NOt" secondAttribute="bottom" id="aYx-sA-w2q"/>
+                <constraint firstItem="wZy-fa-kd6" firstAttribute="top" secondItem="udn-ai-VL3" secondAttribute="bottom" id="eKh-TL-K6a"/>
                 <constraint firstItem="FqH-KH-kCZ" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="fOb-d6-Lla"/>
                 <constraint firstItem="FqH-KH-kCZ" firstAttribute="top" secondItem="MZc-VQ-JZg" secondAttribute="bottom" id="nZV-cR-eZX"/>
                 <constraint firstItem="MZc-VQ-JZg" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="oGc-WW-nNH"/>
                 <constraint firstItem="wZy-fa-kd6" firstAttribute="trailing" secondItem="Q5M-cg-NOt" secondAttribute="trailing" id="q8n-aG-zll"/>
-                <constraint firstItem="wZy-fa-kd6" firstAttribute="top" secondItem="YAe-Wk-g6P" secondAttribute="bottom" id="rfn-dz-8fK"/>
-                <constraint firstItem="YAe-Wk-g6P" firstAttribute="leading" secondItem="FqH-KH-kCZ" secondAttribute="trailing" id="vpf-Kd-3l3"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
             <point key="canvasLocation" x="-220" y="-85"/>

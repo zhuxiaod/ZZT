@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface ZZTDetailModel : NSObject
+
 @property (nonatomic,strong) NSString *detailCode;
 
 @property (nonatomic,strong) NSString *detail;
