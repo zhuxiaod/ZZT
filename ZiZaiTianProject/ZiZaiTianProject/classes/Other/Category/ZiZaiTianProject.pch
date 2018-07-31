@@ -5,6 +5,7 @@
 //  Created by mac on 2018/6/26.
 //  Copyright © 2018年 zxd. All rights reserved.
 //
+#ifdef __OBJC__
 
 #ifndef ZiZaiTianProject_pch
 #define ZiZaiTianProject_pch
@@ -60,4 +61,10 @@
 #define ZZTAPI http://120.79.178.191:8888/
 /** RGB色 + 透明度 */
 #define RGB_alphaColor(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
+
+
 #endif /* ZiZaiTianProject_pch */
+
+
+
+#endif

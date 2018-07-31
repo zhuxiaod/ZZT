@@ -13,8 +13,6 @@
 
 @property (nonatomic,assign) CGRect imageViewFrame;
 
-@property (nonatomic,assign) NSString *frameX;
-
 @property (nonatomic,strong) NSString *imageUrl;
 
 @property (nonatomic,strong) EditImageView *imageView;

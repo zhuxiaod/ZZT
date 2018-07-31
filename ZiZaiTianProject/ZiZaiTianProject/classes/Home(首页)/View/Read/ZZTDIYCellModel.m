@@ -15,4 +15,10 @@
     model.isSelect = isSelect;
     return model;
 }
+-(NSMutableArray *)imageArray{
+    if(!_imageArray){
+        _imageArray = [NSMutableArray array];
+    }
+    return _imageArray;
+}
 @end

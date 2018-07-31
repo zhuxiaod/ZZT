@@ -14,7 +14,7 @@
 
 @property (nonatomic,assign)BOOL isSelect;
 
-@property (nonatomic,assign) NSMutableArray *imageArray;
+@property (nonatomic,strong) NSMutableArray *imageArray;
 
 +(instancetype)initCellWith:(CGFloat )height isSelect:(BOOL)isSelect;
 

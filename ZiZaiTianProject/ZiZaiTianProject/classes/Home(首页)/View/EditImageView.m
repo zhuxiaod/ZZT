@@ -90,7 +90,7 @@
         [self.delagate EditImageViewWithView:self];
     }
     //展示框
-    NSLog(@"%ld",(long)self.tag);
+//    NSLog(@"%ld",(long)self.tag);
     //把tag传出去 就知道是哪个传的了
     [self showEditBtn];
     UITouch *touch = [touches anyObject];
@@ -101,7 +101,7 @@
     _isMove = YES;
     CGPoint p = [touch locationInView:self];
     
-    NSLog(@"ttddddddddd----- %@   %@",NSStringFromCGRect(_editImgView.frame),NSStringFromCGPoint(p));
+//    NSLog(@"ttddddddddd----- %@   %@",NSStringFromCGRect(_editImgView.frame),NSStringFromCGPoint(p));
     //判断一个CGPoint 是否包含再另一个UIView的CGRect里面,常用与测试给定的对象之间是否又重叠
     if (CGRectContainsPoint(_editImgView.frame,p)) {
         _isMove = NO;
@@ -111,7 +111,7 @@
 
 //正在移动
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    NSLog(@"touchesMoved");
+//    NSLog(@"touchesMoved");
     //如果是正在移动
     if (_isMove) {
         //获得当前的位置
@@ -151,7 +151,7 @@
     }
     _isMove = NO;
     self.viewFrame = _editImgView.frame;
-    NSLog(@"end----- %f  %f   ",_editImgView.frame.origin.x,_editImgView.frame.origin.y);
+//    NSLog(@"end----- %f  %f   ",_editImgView.frame.origin.x,_editImgView.frame.origin.y);
 }
 
 

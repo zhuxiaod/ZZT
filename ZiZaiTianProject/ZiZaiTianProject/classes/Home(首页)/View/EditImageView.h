@@ -50,4 +50,6 @@
 
 @property (nonatomic,assign) CGRect viewFrame;
 
+@property (nonatomic,assign) NSInteger row;
+
 @end
