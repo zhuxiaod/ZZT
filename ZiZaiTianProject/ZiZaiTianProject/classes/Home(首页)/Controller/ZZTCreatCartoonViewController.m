@@ -16,6 +16,7 @@
 #import "ZZTDIYCellModel.h"
 #import "ZZTAddLengthFooterView.h"
 #import "ZZTPaletteView.h"
+#import "RectangleView.h"
 
 @interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate>
 //舞台
@@ -52,10 +53,14 @@
 
 @property (nonatomic,strong) ZZTPaletteView *paletteView;
 //当前被选中的Cell
-@property (nonatomic,strong) ZZTCartoonDrawView *cell;
+@property (nonatomic,weak) ZZTCartoonDrawView *currentCell;
+//执行一次
+@property (nonatomic,assign) BOOL operationOnce;
+
 @end
 
 @implementation ZZTCreatCartoonViewController
+
 //漫画页
 -(NSMutableArray *)cartoonEditArray{
     if(!_cartoonEditArray){
@@ -83,6 +88,7 @@
     [super viewDidLoad];
     //恢复只执行一次
     self.isOnce = YES;
+    self.operationOnce = YES;
     //默认当前行
     self.selectRow = 0;
     
@@ -113,7 +119,6 @@
     //UICollectionView
     [self setupCollectionView];
     
-    [self.collectionView reloadData];
 }
 #pragma mark 设置CollectionView
 -(void)setupCollectionView{
@@ -167,6 +172,10 @@
         self.isOnce = NO;
     }
     
+    if(self.operationOnce == YES){
+        self.currentCell = cell;
+        self.operationOnce = NO;
+    }
     //cell是否被选中
     cell.isSelect = model.isSelect;
 
@@ -201,12 +210,15 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     //点击cell 空白处 隐藏图层编辑框
     [self hideAllBtn];
+    [_materialLibraryView removeFromSuperview];
+
     //点击 控制cell的颜色
     ZZTDIYCellModel *model = self.cartoonEditArray[indexPath.row];
     
     //记录点击的cell (当前cell)
     self.selectRow = indexPath.row;
-    self.cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_selectRow inSection:0]];
+        [self.collectionView layoutIfNeeded];
+    self.currentCell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:indexPath];
 
     //改变选中状态
     for (ZZTDIYCellModel *mod in self.cartoonEditArray) {
@@ -359,8 +371,14 @@
     }
 }
 
-//前进
+#pragma mark - 创建方框
 - (IBAction)advance:(id)sender {
+    RectangleView *rectangView = [[RectangleView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    //获取tableView 当前View
+    rectangView.superView = self.currentCell.operationView;
+    [self.currentCell.operationView addSubview:rectangView];
+    //加入数组 方便后期的操作
+    //判断点击此View时 停止点cv进行操作
 }
 
 //后退 清空恢复
@@ -381,27 +399,21 @@
 
 #pragma mark 调色板
 -(IBAction)colourModulation:(id)sender {
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(100, 200, 150, 150)];
-    [self.view addSubview:view];
-    ZZTPaletteView *paletteView = [[ZZTPaletteView alloc] initWithFrame:CGRectMake(0, 0, 150, 150)];
+    ZZTPaletteView *paletteView = [[ZZTPaletteView alloc] initWithFrame:CGRectMake(0, 200, 150, 250)];
+    paletteView.backgroundColor = [UIColor whiteColor];
     paletteView.delegate = self;
-    weakself(self);
+
     self.paletteView = paletteView;
-    [paletteView.btn addTarget:self action:@selector(add111) forControlEvents:UIControlEventTouchUpInside];
-//    paletteView.buttonAction = ^(UIButton *sender) {
-//        [self add111];
-////    weakSelf.cell.operationView.backgroundColor = self.choiceColor;
-//    };
-    [view addSubview:paletteView];
+    [paletteView.btn addTarget:self action:@selector(changeColor) forControlEvents:UIControlEventTouchUpInside];
+    [self.midView addSubview:paletteView];
 }
 
--(void)add111{
-    NSLog(@"1112231");
-//    [self patetteView:nil choiceColor:nil colorPoint:CGPointZero];
+//改变cell的颜色
+-(void)changeColor{
+    self.currentCell.operationView.backgroundColor = self.choiceColor;
 }
 #pragma mark 取色板代理方法
 -(void)patetteView:(ZZTPaletteView *)patetteView choiceColor:(UIColor *)color colorPoint:(CGPoint)colorPoint{
-    NSLog(@"1");
     self.choiceColor = color;
 }
 
