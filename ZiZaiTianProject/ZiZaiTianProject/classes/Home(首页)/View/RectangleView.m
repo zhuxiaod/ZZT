@@ -25,6 +25,7 @@
     CGFloat selfHeight;
     CGFloat proportion;
     CGRect lastFrame;
+    
     BOOL isBig;
 }
 
@@ -41,6 +42,7 @@ int i = 0;
         [self addUI];
         currentProportion = 0;
         isBig = NO;
+        self.isClick = NO;
     }
     return self;
 }
@@ -128,18 +130,31 @@ int i = 0;
         self.frame = CGRectMake(x, y, width, height);
     }
 }
-#warning 将主view加入进去
+
 //成为主View
 -(void)beCurrentMainView{
-    
+    //把这个view传出去 然后
+    if(self.delegate && [self.delegate respondsToSelector:@selector(checkRectangleView:)]){
+        [self.delegate checkRectangleView:self];
+    }
 }
-//取消成为主view
+
+-(void)setIsClick:(BOOL)isClick{
+    _isClick = isClick;
+    if(self.delegate && [self.delegate respondsToSelector:@selector(checkRectangleView:)]){
+        [self.delegate checkRectangleView:self];
+    }
+}
+
 #pragma mark - 移动手势
 BOOL isMove;
 CGPoint legend_point;
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [super touchesBegan:touches withEvent:event];
-    [self beCurrentMainView];
+    self.isClick = YES;
+    if(self.delegate && [self.delegate respondsToSelector:@selector(checkRectangleView:)]){
+        [self.delegate checkRectangleView:self];
+    }
     //默认状态为no
     isMove = NO;
     //获取响应事件的对象
@@ -191,8 +206,14 @@ CGPoint legend_point;
         self.center = point;
     }
 }
+-(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+}
 #pragma mark - 初始化
 -(void)addUI{
+    UIView *mainView = [[UIView alloc] init];
+    mainView.backgroundColor = [UIColor grayColor];
+    self.mainView = mainView;
+    [self addSubview:mainView];
     //创建4条边
     UIView *topBorder = [[UIView alloc] init];
     topBorder.tag = 1;
@@ -213,6 +234,13 @@ CGPoint legend_point;
     bottomBorder.tag = 4;
     bottomBorder.backgroundColor = [UIColor blackColor];
     [self addSubview:bottomBorder];
+    
+    [mainView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.mas_top);
+        make.left.mas_equalTo(self.mas_left);
+        make.right.mas_equalTo(self.mas_right);
+        make.bottom.mas_equalTo(self.mas_bottom);
+    }];
     
     [topBorder mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.mas_top);

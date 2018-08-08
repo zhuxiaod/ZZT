@@ -21,6 +21,12 @@
 
 @property (nonatomic,strong) UIView *superView;
 
-@property(nonatomic,weak) id<RectangleViewDelegate>   RectangleViewDelegate;
+@property(nonatomic,weak) id<RectangleViewDelegate>   delegate;
+
+@property (nonatomic,assign) BOOL isClick;
+
+@property (nonatomic,assign) NSInteger tagNum;
+//方框存放视图的东西
+@property (nonatomic,strong) UIView *mainView;
 
 @end

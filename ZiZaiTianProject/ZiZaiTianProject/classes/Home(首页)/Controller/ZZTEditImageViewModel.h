@@ -15,7 +15,7 @@
 
 @property (nonatomic,strong) NSString *imageUrl;
 
-@property (nonatomic,strong) EditImageView *imageView;
+@property (nonatomic,assign) NSInteger tagNum;
 
-+(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl imageView:(EditImageView *)imageView;
++(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl tagNum:(NSInteger )tagNum;
 @end

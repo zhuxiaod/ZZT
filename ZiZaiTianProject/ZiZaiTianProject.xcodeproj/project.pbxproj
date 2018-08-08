@@ -37,6 +37,7 @@
 		041EE0B520EB8D0C0012FEDF /* ZZTExitCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 041EE0B320EB8D0C0012FEDF /* ZZTExitCell.xib */; };
 		041EE0BA20EB90180012FEDF /* ZZTSettingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 041EE0B920EB90180012FEDF /* ZZTSettingModel.m */; };
 		0421C02A2119CA600068AD21 /* RectangleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0421C0292119CA600068AD21 /* RectangleView.m */; };
+		0421C033211AC6910068AD21 /* ZZTFangKuangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0421C032211AC6910068AD21 /* ZZTFangKuangModel.m */; };
 		042A5BE120E7623700F5BA89 /* ZZTCartonnPlayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 042A5BE020E7623700F5BA89 /* ZZTCartonnPlayModel.m */; };
 		042BA0B720E9BF2F003E279A /* ZZTAttentionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 042BA0B520E9BF2F003E279A /* ZZTAttentionCell.m */; };
 		042BA0B820E9BF2F003E279A /* ZZTAttentionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 042BA0B620E9BF2F003E279A /* ZZTAttentionCell.xib */; };
@@ -270,6 +271,8 @@
 		041EE0B920EB90180012FEDF /* ZZTSettingModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTSettingModel.m; sourceTree = "<group>"; };
 		0421C0282119CA600068AD21 /* RectangleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RectangleView.h; sourceTree = "<group>"; };
 		0421C0292119CA600068AD21 /* RectangleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RectangleView.m; sourceTree = "<group>"; };
+		0421C031211AC6910068AD21 /* ZZTFangKuangModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ZZTFangKuangModel.h; path = "ZiZaiTianProject/classes/Home(首页)/View/ZZTFangKuangModel.h"; sourceTree = SOURCE_ROOT; };
+		0421C032211AC6910068AD21 /* ZZTFangKuangModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ZZTFangKuangModel.m; path = "ZiZaiTianProject/classes/Home(首页)/View/ZZTFangKuangModel.m"; sourceTree = SOURCE_ROOT; };
 		042A5BDF20E7623700F5BA89 /* ZZTCartonnPlayModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTCartonnPlayModel.h; sourceTree = "<group>"; };
 		042A5BE020E7623700F5BA89 /* ZZTCartonnPlayModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTCartonnPlayModel.m; sourceTree = "<group>"; };
 		042BA0B420E9BF2F003E279A /* ZZTAttentionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTAttentionCell.h; sourceTree = "<group>"; };
@@ -732,10 +735,10 @@
 		046683B020F452DA0095C6BC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				046FF6662101C35B005DED73 /* Read */,
 				0421C0282119CA600068AD21 /* RectangleView.h */,
 				0421C0292119CA600068AD21 /* RectangleView.m */,
 				047720EE2106BC6C00FC97B5 /* materialLibrary.json */,
-				046FF6662101C35B005DED73 /* Read */,
 				04CF25922105AACA0026EC8F /* ZZTMaterialLibraryView.h */,
 				04CF25932105AACA0026EC8F /* ZZTMaterialLibraryView.m */,
 				04CF25952105B0AB0026EC8F /* ZZTMaterialKindView.h */,
@@ -1128,6 +1131,8 @@
 				0484E7D5210ABBFD00C39369 /* ZZTEditImageViewModel.m */,
 				0484E7DC210AFEF900C39369 /* ZZTDIYCellModel.h */,
 				0484E7DD210AFEF900C39369 /* ZZTDIYCellModel.m */,
+				0421C031211AC6910068AD21 /* ZZTFangKuangModel.h */,
+				0421C032211AC6910068AD21 /* ZZTFangKuangModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1548,6 +1553,7 @@
 				046FF6712101EB25005DED73 /* ZZTCreatPlayViewController.m in Sources */,
 				0471A88620F8596100ABFF35 /* ZZTCircleModel.m in Sources */,
 				0471A84720F59BE600ABFF35 /* ZZTSecondCell.m in Sources */,
+				0421C033211AC6910068AD21 /* ZZTFangKuangModel.m in Sources */,
 				0466839220F314860095C6BC /* NetWorkManager.m in Sources */,
 				042BA0B720E9BF2F003E279A /* ZZTAttentionCell.m in Sources */,
 				0466837C20F3096A0095C6BC /* ProgressHUD.m in Sources */,

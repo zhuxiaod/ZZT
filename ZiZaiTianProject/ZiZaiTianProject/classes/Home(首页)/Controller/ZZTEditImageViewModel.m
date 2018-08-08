@@ -12,11 +12,11 @@
 
 
 //快速创建一个对象
-+(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl imageView:(EditImageView *)imageView{
++(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl tagNum:(NSInteger )tagNum{
     ZZTEditImageViewModel *imageModel = [[ZZTEditImageViewModel alloc] init];
     imageModel.imageViewFrame = imageViewFrame;
     imageModel.imageUrl = imageUrl;
-    imageModel.imageView = imageView;
+    imageModel.tagNum = tagNum;
     return imageModel;
 }
 

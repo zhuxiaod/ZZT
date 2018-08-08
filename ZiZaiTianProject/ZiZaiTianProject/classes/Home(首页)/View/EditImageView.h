@@ -44,7 +44,7 @@
 
 - (void)closeBtnClick:(UIButton *)btn;
 
-@property (nonatomic,strong)id<EditImageViewDelegate>delagate;
+@property (nonatomic,strong)id<EditImageViewDelegate>delegate;
 
 @property (nonatomic,assign) BOOL isHide;
 

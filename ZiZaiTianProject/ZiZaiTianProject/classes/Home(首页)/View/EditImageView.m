@@ -67,8 +67,8 @@
 //可编辑状态
 - (void)showEditBtn{
     _isHide = NO;
-    if (self.delagate && [self.delagate respondsToSelector:@selector(checkViewIsHidden:)]) {
-        [self.delagate checkViewIsHidden:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(checkViewIsHidden:)]) {
+        [self.delegate checkViewIsHidden:self];
     }
     _borderView.hidden = NO;
     _editImgView.hidden = NO;
@@ -77,8 +77,9 @@
 //隐藏
 - (void)hideEditBtn{
     _isHide = YES;
-    if (self.delagate && [self.delagate respondsToSelector:@selector(checkViewIsHidden:)]) {
-        [self.delagate checkViewIsHidden:self];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(checkViewIsHidden:)]) {
+        [self.delegate checkViewIsHidden:self];
     }
     _borderView.hidden = YES;
     _editImgView.hidden = YES;
@@ -86,8 +87,8 @@
 }
 //点击的开始
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    if (self.delagate && [self.delagate respondsToSelector:@selector(EditImageViewWithView:)]) {
-        [self.delagate EditImageViewWithView:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(EditImageViewWithView:)]) {
+        [self.delegate EditImageViewWithView:self];
     }
     //展示框
 //    NSLog(@"%ld",(long)self.tag);
@@ -146,8 +147,8 @@
 }
 //切换状态
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    if (self.delagate && [self.delagate respondsToSelector:@selector(updateImageViewFrame:)]) {
-        [self.delagate updateImageViewFrame:self];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewFrame:)]) {
+        [self.delegate updateImageViewFrame:self];
     }
     _isMove = NO;
     self.viewFrame = _editImgView.frame;

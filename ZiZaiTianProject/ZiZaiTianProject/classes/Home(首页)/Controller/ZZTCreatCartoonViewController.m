@@ -17,8 +17,9 @@
 #import "ZZTAddLengthFooterView.h"
 #import "ZZTPaletteView.h"
 #import "RectangleView.h"
+#import "ZZTFangKuangModel.h"
 
-@interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate>
+@interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate,RectangleViewDelegate>
 //舞台
 @property (weak, nonatomic) IBOutlet UIView *midView;
 @property (weak, nonatomic) UICollectionView *collectionView;
@@ -33,7 +34,7 @@
 
 @property (nonatomic,strong) UIImage *image;
 
-@property (nonatomic,strong) EditImageView *currentView;
+@property (nonatomic,strong) UIView *currentView;
 
 @property (nonatomic,assign) NSInteger tagID;
 
@@ -56,6 +57,11 @@
 @property (nonatomic,weak) ZZTCartoonDrawView *currentCell;
 //执行一次
 @property (nonatomic,assign) BOOL operationOnce;
+//全局tag值
+@property (nonatomic,assign) NSInteger tagNum;
+
+//框
+@property (nonatomic,strong) UIView *mainView;
 
 @end
 
@@ -91,7 +97,7 @@
     self.operationOnce = YES;
     //默认当前行
     self.selectRow = 0;
-    
+    self.tagNum = 1;
    //测试数据
     ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:600 isSelect:YES];
 //    EditImageView *imageView1 = [self speedInitImageView:@"peien"];
@@ -107,14 +113,15 @@
     self.rr_backActionDisAble = YES;
     //隐藏nav
     self.rr_navHidden = YES;
+    
+    //当前cell之中是否有方框
+    
+    
     //注册移除image的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeEdit:) name:@"remove" object:NULL];
     
     self.view.userInteractionEnabled = YES;
     self.midView.userInteractionEnabled = YES;
-    
-    //设置隐藏View
-    [self setupTapView];
     
     //UICollectionView
     [self setupCollectionView];
@@ -154,17 +161,17 @@
     //每个cell的数据
     ZZTDIYCellModel *model = self.cartoonEditArray[indexPath.row];
     
-    //恢复操作 并用 isOnce 控制
-    if(self.isOnce == YES){
-        for (int i = 0; i < model.imageArray.count; i++) {
-            //不能用View 存数据
-            ZZTEditImageViewModel *view = model.imageArray[i];
-            EditImageView *review = [[EditImageView alloc] initWithFrame:view.imageViewFrame];
-            view.imageView = review;
-            review.image = [UIImage imageNamed:view.imageUrl];
-            [cell.operationView addSubview:review];
-        }
-    }
+//    //恢复操作 并用 isOnce 控制
+//    if(self.isOnce == YES){
+//        for (int i = 0; i < model.imageArray.count; i++) {
+//            //不能用View 存数据
+//            ZZTEditImageViewModel *view = model.imageArray[i];
+//            EditImageView *review = [[EditImageView alloc] initWithFrame:view.imageViewFrame];
+//            view.imageView = review;
+//            review.image = [UIImage imageNamed:view.imageUrl];
+//            [cell.operationView addSubview:review];
+//        }
+//    }
     
     //恢复只执行一次（展示最后一个之后 结束遍历）
     if(indexPath.row == (self.cartoonEditArray.count - 1))
@@ -210,16 +217,20 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     //点击cell 空白处 隐藏图层编辑框
     [self hideAllBtn];
+    //材料选择栏关闭
     [_materialLibraryView removeFromSuperview];
-
-    //点击 控制cell的颜色
+    //调色板关闭
+    [_paletteView removeFromSuperview];
+    
+    //获取cell
     ZZTDIYCellModel *model = self.cartoonEditArray[indexPath.row];
     
-    //记录点击的cell (当前cell)
+    //记录当前行号 和 内容
     self.selectRow = indexPath.row;
         [self.collectionView layoutIfNeeded];
     self.currentCell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-
+    self.mainView = self.currentCell.operationView;
+    
     //改变选中状态
     for (ZZTDIYCellModel *mod in self.cartoonEditArray) {
         if(mod == model){
@@ -291,10 +302,15 @@
     self.recoverArray = cellModel.imageArray;
 
     //清空所有图层
-    for (ZZTEditImageViewModel *model in cellModel.imageArray) {
-        model.imageView.hidden = YES;
+    for (int i = 0; i < cellModel.imageArray.count; i++) {
+        EditImageView *imageView = self.currentCell.operationView.subviews[i];
+        imageView.hidden = YES;
     }
-   
+    
+    for (UIView *view in self.currentCell.operationView.subviews) {
+        view.hidden = YES;
+    }
+    
     [cellModel.imageArray removeAllObjects];
 }
 
@@ -305,8 +321,9 @@
 //翻转
 - (IBAction)spin:(id)sender {
     //是当前对象才能被翻转
-    if(self.currentView && self.currentView.isHide == NO){
-        self.currentView.image = [self.currentView.image flipHorizontal];
+    EditImageView *currentView = (EditImageView *)self.currentView;
+    if(currentView && currentView.isHide == NO){
+        currentView.image = [currentView.image flipHorizontal];
     }
 }
 
@@ -319,7 +336,7 @@
     //得到当前选择View在数据中的索引
     NSInteger index = [self getCurrentViewIndex:cellModel];
     //如果是最后一个对象的话 会是count-1
-    if(index == (cellModel.imageArray.count - 1)){
+    if(index == (self.currentCell.operationView.subviews.count - 1)){
         NSLog(@"已经到最上方了");
     }else{
         //改变数据的位置
@@ -346,9 +363,9 @@
     //不仅要知道当前选中的index
     //还要知道前一个的索引
     NSInteger index = 0;
-    for (NSInteger i = 0; i < cellModel.imageArray.count; i++) {
-        ZZTEditImageViewModel *model = cellModel.imageArray[i];
-        if(model.imageView == self.currentView){
+    for (int i = 0; i < self.currentCell.operationView.subviews.count; i++) {
+        EditImageView *imageView = self.currentCell.operationView.subviews[i];
+        if(imageView.tag == self.currentView.tag){
             index = i;
             break;
         }
@@ -373,12 +390,45 @@
 
 #pragma mark - 创建方框
 - (IBAction)advance:(id)sender {
+    //方框对象
     RectangleView *rectangView = [[RectangleView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
     //获取tableView 当前View
     rectangView.superView = self.currentCell.operationView;
+    rectangView.delegate = self;
+    rectangView.isClick = YES;
+    rectangView.tagNum = self.tagNum;
+    self.tagNum = self.tagNum + 1;
+    self.mainView = rectangView.mainView;
     [self.currentCell.operationView addSubview:rectangView];
-    //加入数组 方便后期的操作
-    //判断点击此View时 停止点cv进行操作
+    
+    //cell
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
+    
+    //位置数据
+    CGRect startRect = [rectangView convertRect:rectangView.bounds toView:self.currentCell.operationView];
+    //方框模型 此方框的数据  方便寻找 恢复
+    ZZTFangKuangModel *FKModel = [ZZTFangKuangModel initWithViewFrame:startRect tagNum:rectangView.tagNum];
+    [cellModel.imageArray addObject:FKModel];
+}
+
+//设置方框为当前View
+-(void)checkRectangleView:(RectangleView *)rectangleView{
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+    
+    self.currentView = rectangleView;
+    self.collectionView.scrollEnabled = NO;
+
+    for(int i = 0;i < cellModel.imageArray.count;i++){
+        if([NSStringFromClass([cellModel.imageArray[i] class]) isEqualToString:@"ZZTFangKuangModel"]){
+            ZZTFangKuangModel *model = cellModel.imageArray[i];
+            RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
+            if(model.tagNum == rectangleView.tagNum){
+                self.mainView = rectangleView;
+                self.currentView = rectangleView;
+                self.collectionView.scrollEnabled = NO;
+            }
+        }
+    }
 }
 
 //后退 清空恢复
@@ -389,7 +439,7 @@
             //不能用View 存数据
             ZZTEditImageViewModel *view = self.editImageArray[i];
             EditImageView *review = [[EditImageView alloc] initWithFrame:view.imageViewFrame];
-            view.imageView = review;
+            view.tagNum = review.tag;
             [review sd_setImageWithURL:[NSURL URLWithString:view.imageUrl]];
             [self.midView addSubview:review];
         }
@@ -412,6 +462,7 @@
 -(void)changeColor{
     self.currentCell.operationView.backgroundColor = self.choiceColor;
 }
+
 #pragma mark 取色板代理方法
 -(void)patetteView:(ZZTPaletteView *)patetteView choiceColor:(UIColor *)color colorPoint:(CGPoint)colorPoint{
     self.choiceColor = color;
@@ -436,30 +487,35 @@
 
 #pragma mark 添加一个图层并备份
 -(void)sendImageWithModel:(ZZTFodderListModel *)model{
-    /*
-        添加图层的时候是正常的 新加的图层在最上层
-     
-     
-        数组第一位 图层第一位
-     
-        图层要和数据关联
-     
-        当我加一个图的时候 要在数组中记录  要在加一个
-     */
-    
-    
-    //得到当前行
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_selectRow inSection:0];
-    ZZTCartoonDrawView *cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:indexPath];
     //获取当前行的数据
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
-    //添加新的图层
+    
+    //新图层
     EditImageView *imageView = [self speedInitImageView:model.img];
-    [cell.operationView addSubview:imageView];
+    imageView.tag = self.tagNum;
+    self.tagNum = self.tagNum + 1;
+    //这里改一下
+    /*
+        当有方框的时候 并当前view为方框的时候
+        方框还要放大
+        把素材添加到方框之类
+     
+        方框
+        cell是如何添加素材的
+        默认设置第一个cell为当前view
+        然后每点一个cell确认 设置为当前页
+        方框
+        已经将cell设置成为当前页 1   方框 0 1 2 3 4
+        点击cell上的方框的时候  进行判断  如果这个view是框的话
+        将设置 图层设置为框
+     
+        已将方框添加视图 明天进一步稳定这个东西
+     */
+    [self.mainView addSubview:imageView];
     //记录位置
-    CGRect startRact = [imageView convertRect:imageView.bounds toView:cell];
+    CGRect startRect = [imageView convertRect:imageView.bounds toView:self.currentCell.operationView];
     //一个图层的
-    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:startRact imageUrl:model.img imageView:imageView];
+    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:startRect imageUrl:model.img tagNum:imageView.tag];
     //这里能加 没问题
     [cellModel.imageArray addObject:imageModel];
     
@@ -468,22 +524,12 @@
     self.tagID++;
     
     [self.collectionView reloadData];
-    
-    /*
-        数据模型：
-        一个数组：cell --> 组 ——> 内容
-     840 0
-     100 1
-     980 2
-     
-     */
 }
 
 //快速创建方法
 -(EditImageView *)speedInitImageView:(NSString *)imgUrl{
     EditImageView *imageView = [[EditImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-    imageView.delagate = self;
-//    imageView.image = [UIImage imageNamed:imgUrl];
+    imageView.delegate = self;
     
     [imageView sd_setImageWithURL:[NSURL URLWithString:imgUrl] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
     }];
@@ -507,35 +553,54 @@
 //设置当前View
 -(void)EditImageViewWithView:(EditImageView *)view{
     //获取添加view的行 拿到行数据 在行中的数组中遍历
-    NSInteger i = 0;
-    ZZTDIYCellModel *cellModel = self.cartoonEditArray[view.row];
-    for (ZZTEditImageViewModel *model in cellModel.imageArray) {
- 
-        if(model.imageView == view){
-            self.currentView = view;
-//            NSLog(@"nsinter:%ld",i);
-            //当前View被点击的时候 CollectionView 不能被滑动
-            self.collectionView.scrollEnabled = NO;
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+    
+    /*
+        1.取出来的 不一定是一个类型
+        2.判断取出来的是什么model类
+        3.如果是E就照写
+        4.如果是R就 空着
+     */
+    
+    for(int i = 0;i < cellModel.imageArray.count;i++){
+        if([NSStringFromClass([cellModel.imageArray[i] class]) isEqualToString:@"ZZTEditImageViewModel"]){
+            ZZTEditImageViewModel *model = cellModel.imageArray[i];
+            if(model.tagNum == view.tag){
+                self.currentView = view;
+                self.collectionView.scrollEnabled = NO;
+            }else{
+                EditImageView *imageView = self.currentCell.operationView.subviews[i];
+                [imageView hideEditBtn];
+            }
         }else{
-            [model.imageView hideEditBtn];
+            //如果当前View 是方框
+            ZZTFangKuangModel *model = cellModel.imageArray[i];
+            RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
+            if(model.tagNum == rectangleView.tag){
+                self.mainView = rectangleView;
+                self.currentView = rectangleView;
+                self.collectionView.scrollEnabled = NO;
+            }else{
+//                RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
+//                self.mainView = rectangleView.mainView;
+            }
+            
         }
-        i++;
     }
 }
 
-//更新移动的位置
+
+//更新移动的位置 没有将入方框的 移动任务
 -(void)updateImageViewFrame:(EditImageView *)view{
     //获取对应行
-    ZZTCartoonDrawView *cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:view.row inSection:0]];
-    
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[view.row];
 
     //获取改变后的位置
-    CGRect startRact = [view convertRect:view.bounds toView:cell.operationView];
+    CGRect startRact = [view convertRect:view.bounds toView:self.currentCell.operationView];
     
     //更新位置
     for (ZZTEditImageViewModel *model in cellModel.imageArray) {
-        if(model.imageView == view){
+        if(model.tagNum == view.tag){
             model.imageViewFrame = startRact;
         }
     }
@@ -561,40 +626,47 @@
 //移除对象
 -(void)removeEdit:(NSNotification *)notify{
     //传过来的是一个view
-    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
-
     EditImageView *editImgView = notify.object;
-
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+    
     for (int i = 0; i < cellModel.imageArray.count; i++) {
         ZZTEditImageViewModel *model = cellModel.imageArray[i];
-        if(model.imageView == editImgView)
+        if(model.tagNum == editImgView.tag)
         {
             [cellModel.imageArray removeObject:model];
-            [model.imageView removeFromSuperview];
+            [editImgView removeFromSuperview];
         }
     }
     
     [self.collectionView reloadData];
-    /*
-      搞清楚删除的对象  index 不能用- 1 来写
-      要获取。
-     */
 }
 
 //隐藏所有Btn的状态
 - (void)hideAllBtn{
+    
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
 
     //当没有选中时 可以滑动
     self.collectionView.scrollEnabled = YES;
-    
-    for (ZZTEditImageViewModel *model in cellModel.imageArray) {
-        [model.imageView hideEditBtn];
+    //判断如果是框 应该怎么搞？？
+    for (int i = 0; i < cellModel.imageArray.count; i++) {
+        //这个数组之中 有的不只是一个类型的元素
+        /*
+            取出这一个元素   判断对象类名
+            如果是这个  应该怎么样 如果是这个 应该怎么样
+         */
+        if([NSStringFromClass([self.currentCell.operationView.subviews[i] class]) isEqualToString:@"EditImageView"]){
+            EditImageView *imageView = self.currentCell.operationView.subviews[i];
+            [imageView hideEditBtn];
+        }else{
+            
+        }
     }
+    
     [self.collectionView reloadData];
 }
 
-//截图，获取到image(保存)
+//截图，获取到image(保存) 未解决
 - (void)imageThumb{
     [self hideAllBtn];
     NSMutableArray *imageArray = [NSMutableArray array];
@@ -622,20 +694,6 @@
     //恢复当前cell的透明度
     ZZTCartoonDrawView *cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_selectRow inSection:0]];
     cell.alpha = 1;
-}
-
-//设置隐藏View
--(void)setupTapView{
-//    UIView *TapView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.midView.width, self.midView.height)];
-//    TapView.backgroundColor = [UIColor clearColor];
-//    [self.midView addSubview:TapView];
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapClick:)];
-//    [TapView addGestureRecognizer:tap];
-}
-
-- (void)tapClick:(UITapGestureRecognizer *)tapGesture{
-    [_materialLibraryView removeFromSuperview];
-    [self hideAllBtn];
 }
 
 -(void)dealloc{
@@ -691,6 +749,9 @@
     [self.view addSubview:_materialLibraryView];
     
     //添加取消手势
-    UITapGestureRecognizer *recognizerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)]; [recognizerTap setNumberOfTapsRequired:1]; recognizerTap.cancelsTouchesInView = NO; [[UIApplication sharedApplication].keyWindow addGestureRecognizer:recognizerTap];
+    UITapGestureRecognizer *recognizerTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapBehind:)];
+    [recognizerTap setNumberOfTapsRequired:1];
+    recognizerTap.cancelsTouchesInView = NO;
+    [self.midView addGestureRecognizer:recognizerTap];
 }
 @end
