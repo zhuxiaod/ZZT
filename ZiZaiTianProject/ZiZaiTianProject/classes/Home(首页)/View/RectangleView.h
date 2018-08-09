@@ -15,6 +15,12 @@
 
 -(void)checkRectangleView:(RectangleView *)rectangleView;
 
+-(void)setupMainView:(RectangleView *)rectangleView;
+
+-(void)enlargedAfterEditView:(RectangleView *)rectangleView isBig:(BOOL)isBig;
+
+-(void)updateRectangleViewFrame:(RectangleView *)view;
+
 @end
 
 @interface RectangleView : UIView

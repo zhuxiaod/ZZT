@@ -26,6 +26,8 @@
     CGFloat proportion;
     CGRect lastFrame;
     
+    CGPoint _startTouchPoint;
+    CGPoint _startTouchCenter;
     BOOL isBig;
 }
 
@@ -155,6 +157,7 @@ CGPoint legend_point;
     if(self.delegate && [self.delegate respondsToSelector:@selector(checkRectangleView:)]){
         [self.delegate checkRectangleView:self];
     }
+
     //默认状态为no
     isMove = NO;
     //获取响应事件的对象
@@ -173,7 +176,11 @@ CGPoint legend_point;
 
 -(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     [super touchesMoved:touches withEvent:event];
-    //如果是可移动状态
+    
+    if(self.delegate && [self.delegate respondsToSelector:@selector(setupMainView:)]){
+        [self.delegate setupMainView:self];
+    }
+//    如果是可移动状态
     if (!isMove) {
         return;
     }
@@ -207,6 +214,10 @@ CGPoint legend_point;
     }
 }
 -(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(updateRectangleViewFrame:)]) {
+        [self.delegate updateRectangleViewFrame:self];
+    }
+    
 }
 #pragma mark - 初始化
 -(void)addUI{
@@ -282,10 +293,11 @@ CGPoint legend_point;
     
     UIPinchGestureRecognizer *PinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
     [self addGestureRecognizer:PinchGestureRecognizer];
-    
+
     UITapGestureRecognizer *TapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureTarget:)];
     TapGestureRecognizer.numberOfTapsRequired = 2;
     [self addGestureRecognizer:TapGestureRecognizer];
+    self.layer.masksToBounds = YES;
 }
 
 #pragma mark - 双击事件
@@ -312,13 +324,18 @@ CGPoint legend_point;
         }
         
         self.frame = CGRectMake(0, 0, selfWidth, selfHeight);
+        //放大后代理
         isBig = YES;
+        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:)]){
+            [self.delegate enlargedAfterEditView:self isBig:isBig];
+        }
     }else{
         self.frame = lastFrame;
         isBig = NO;
+        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:)]){
+             [self.delegate enlargedAfterEditView:self isBig:isBig];
+        }
     }
-    
-    
 }
 
 #pragma mark - 捏合手势

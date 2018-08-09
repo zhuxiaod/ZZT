@@ -91,8 +91,6 @@
         [self.delegate EditImageViewWithView:self];
     }
     //展示框
-//    NSLog(@"%ld",(long)self.tag);
-    //把tag传出去 就知道是哪个传的了
     [self showEditBtn];
     UITouch *touch = [touches anyObject];
     //获取点击时所在父View的位置

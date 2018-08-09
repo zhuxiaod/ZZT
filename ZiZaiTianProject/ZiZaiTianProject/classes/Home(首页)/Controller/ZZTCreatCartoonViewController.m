@@ -19,7 +19,7 @@
 #import "RectangleView.h"
 #import "ZZTFangKuangModel.h"
 
-@interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate,RectangleViewDelegate>
+@interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate,RectangleViewDelegate,UIGestureRecognizerDelegate>
 //舞台
 @property (weak, nonatomic) IBOutlet UIView *midView;
 @property (weak, nonatomic) UICollectionView *collectionView;
@@ -62,7 +62,10 @@
 
 //框
 @property (nonatomic,strong) UIView *mainView;
-
+//是否被移动之后
+@property (nonatomic,assign) BOOL isMoveAfter;
+//是否能向方框添加素材
+@property (nonatomic,assign) BOOL isAddM;
 @end
 
 @implementation ZZTCreatCartoonViewController
@@ -97,7 +100,7 @@
     self.operationOnce = YES;
     //默认当前行
     self.selectRow = 0;
-    self.tagNum = 1;
+    self.tagNum = 0;
    //测试数据
     ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:600 isSelect:YES];
 //    EditImageView *imageView1 = [self speedInitImageView:@"peien"];
@@ -109,13 +112,16 @@
     
     //是否清空
     self.isEmpty = NO;
+    //是否能向方框  添加素材
+    self.isAddM = NO;
     //关闭滑动返回
     self.rr_backActionDisAble = YES;
     //隐藏nav
     self.rr_navHidden = YES;
     
     //当前cell之中是否有方框
-    
+    //方框是否移动之后
+    self.isMoveAfter = NO;
     
     //注册移除image的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeEdit:) name:@"remove" object:NULL];
@@ -126,6 +132,7 @@
     //UICollectionView
     [self setupCollectionView];
     
+
 }
 #pragma mark 设置CollectionView
 -(void)setupCollectionView{
@@ -161,6 +168,7 @@
     //每个cell的数据
     ZZTDIYCellModel *model = self.cartoonEditArray[indexPath.row];
     
+  
 //    //恢复操作 并用 isOnce 控制
 //    if(self.isOnce == YES){
 //        for (int i = 0; i < model.imageArray.count; i++) {
@@ -180,6 +188,9 @@
     }
     
     if(self.operationOnce == YES){
+        if (indexPath == [NSIndexPath indexPathForRow:0 inSection:0]) {
+            self.mainView = cell.operationView;
+        }
         self.currentCell = cell;
         self.operationOnce = NO;
     }
@@ -229,8 +240,13 @@
     self.selectRow = indexPath.row;
         [self.collectionView layoutIfNeeded];
     self.currentCell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-    self.mainView = self.currentCell.operationView;
-    
+    //判断view 移动后会触发一次 那一次是不会响应这一条的
+    if(self.isMoveAfter == NO){
+        [self cannelFangKuangColor];
+    }{
+        self.isMoveAfter = NO;
+    }
+
     //改变选中状态
     for (ZZTDIYCellModel *mod in self.cartoonEditArray) {
         if(mod == model){
@@ -241,7 +257,19 @@
     }
     [self.collectionView reloadData];
 }
-
+//点击cell 切换mainView
+-(void)cannelFangKuangColor{
+    self.mainView = self.currentCell.operationView;
+    for (int i = 0; i < self.currentCell.operationView.subviews.count; i++) {
+        if([NSStringFromClass([self.currentCell.operationView.subviews[i] class]) isEqualToString:@"RectangleView"]){
+            if (self.currentCell.operationView.subviews[i] != self.mainView) {
+                RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
+                rectangleView.mainView.backgroundColor = [UIColor grayColor];
+            }
+        }
+    }
+    self.collectionView.scrollEnabled = YES;
+}
 #pragma mark 设置CollectionViewCell是否可以被点击
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     return YES;
@@ -391,14 +419,15 @@
 #pragma mark - 创建方框
 - (IBAction)advance:(id)sender {
     //方框对象
-    RectangleView *rectangView = [[RectangleView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    RectangleView *rectangView = [[RectangleView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
     //获取tableView 当前View
     rectangView.superView = self.currentCell.operationView;
     rectangView.delegate = self;
     rectangView.isClick = YES;
     rectangView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
-    self.mainView = rectangView.mainView;
+//    self.mainView = rectangView.mainView;
+    [self checkRectangleView:rectangView];
     [self.currentCell.operationView addSubview:rectangView];
     
     //cell
@@ -410,27 +439,144 @@
     ZZTFangKuangModel *FKModel = [ZZTFangKuangModel initWithViewFrame:startRect tagNum:rectangView.tagNum];
     [cellModel.imageArray addObject:FKModel];
 }
-
+#warning wwwwwwwww
 //设置方框为当前View
 -(void)checkRectangleView:(RectangleView *)rectangleView{
-    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
     
     self.currentView = rectangleView;
+//    rectangleView.mainView.backgroundColor = [UIColor redColor];
     self.collectionView.scrollEnabled = NO;
-
-    for(int i = 0;i < cellModel.imageArray.count;i++){
-        if([NSStringFromClass([cellModel.imageArray[i] class]) isEqualToString:@"ZZTFangKuangModel"]){
-            ZZTFangKuangModel *model = cellModel.imageArray[i];
-            RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
-            if(model.tagNum == rectangleView.tagNum){
-                self.mainView = rectangleView;
-                self.currentView = rectangleView;
-                self.collectionView.scrollEnabled = NO;
+    self.mainView = rectangleView.mainView;
+    self.mainView.backgroundColor = [UIColor redColor];
+    
+    
+    //除了此view 所有view隐藏
+    for (int i = 0; i < self.currentCell.operationView.subviews.count; i++) {
+        //做个判断
+        //如果是方框 改变方框的颜色
+        //如果是e 隐藏
+        //如果是方框
+        if([NSStringFromClass([self.currentCell.operationView.subviews[i] class]) isEqualToString:@"RectangleView"]){
+            //每个都遍历一下 与方框不相同的
+            if(self.currentCell.operationView.subviews[i] != rectangleView){
+                RectangleView *view = self.currentCell.operationView.subviews[i];
+                view.mainView.backgroundColor = [UIColor grayColor];
             }
+        }else{
+            EditImageView *imageView = self.currentCell.operationView.subviews[i];
+            [imageView hideEditBtn];
         }
     }
 }
 
+//方框是否移动了
+-(void)setupMainView:(RectangleView *)rectangleView{
+    self.isMoveAfter = YES;
+}
+//双击编辑前双击编辑后 要把方框也传过来才行 不然不知道是那一个
+-(void)enlargedAfterEditView:(RectangleView *)rectangleView isBig:(BOOL)isBig{
+    self.isAddM = isBig;
+    ZZTFangKuangModel *FKModel = [[ZZTFangKuangModel alloc] init];
+    CGFloat pW = self.currentCell.operationView.width / rectangleView.width;
+    CGFloat pH = self.currentCell.operationView.height / rectangleView.height;
+    CGFloat proportion = 0;
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
+    for (int i = 0; i < cellModel.imageArray.count; i++) {
+        if([NSStringFromClass([cellModel.imageArray[i] class]) isEqualToString:@"ZZTFangKuangModel"]){
+            FKModel = cellModel.imageArray[i];
+            //得到这个方框
+            //也得到了这个方框里面的内容
+        }
+    }
+    
+    
+    /*
+     1.放大之后
+     2.存储的数组 发生了改变
+     3.记录所在方框位置的 并放入数组
+     3.缩小之后 按比例重新计算
+     4.计算出素材的大小
+     5.计算出素材的坐标
+     */
+    //放大了应该怎么做
+    if(self.isAddM == YES){
+        for (UIView *view in self.mainView.subviews) {
+            [view removeFromSuperview];
+        }
+        
+        if (pW < pH) {
+            proportion = pW;
+        }else{
+            proportion = pH;
+        }
+        
+        for (int i = 0; i < FKModel.viewArray.count; i++) {
+            ZZTEditImageViewModel *model = FKModel.viewArray[i];
+            NSLog(@"frame:%@",NSStringFromCGRect(model.imageViewFrame));
+            CGFloat x  = model.imageViewFrame.origin.x * proportion;
+            CGFloat y  = model.imageViewFrame.origin.y * proportion;
+            CGFloat w  = model.imageViewFrame.size.width * proportion;
+            CGFloat h  = model.imageViewFrame.size.height * proportion;
+            CGRect frame = CGRectMake(x, y, w, h);
+            NSLog(@"frame:%@",NSStringFromCGRect(frame));
+            EditImageView *imageView = [[EditImageView alloc] initWithFrame:frame];
+            [imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl]];
+            [self.mainView addSubview:imageView];
+            model.imageViewFrame = frame;
+        }
+    }else{
+        //缩小应该怎么做？？
+        //得到放大之后的长宽 与 缩小后的长宽 比例是多少
+        //一般放大的长宽为长和高   我只需要知道
+        //获取这个方框的数组
+        //将数组中的素材数据取出 通过计算重新添加  更新数据
+        for (UIView *view in self.mainView.subviews) {
+            [view removeFromSuperview];
+        }
+        
+        if (pW < pH) {
+            proportion = pW;
+        }else{
+            proportion = pH;
+        }
+        
+        for (int i = 0; i < FKModel.viewArray.count; i++) {
+            ZZTEditImageViewModel *model = FKModel.viewArray[i];
+            NSLog(@"frame:%@",NSStringFromCGRect(model.imageViewFrame));
+            CGFloat x  = model.imageViewFrame.origin.x / proportion;
+            CGFloat y  = model.imageViewFrame.origin.y / proportion;
+            CGFloat w  = model.imageViewFrame.size.width / proportion;
+            CGFloat h  = model.imageViewFrame.size.height / proportion;
+            CGRect frame = CGRectMake(x, y, w, h);
+            NSLog(@"frame:%@",NSStringFromCGRect(frame));
+            EditImageView *imageView = [[EditImageView alloc] initWithFrame:frame];
+            [imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl]];
+            [self.mainView addSubview:imageView];
+            model.imageViewFrame = frame;
+        }
+    }
+}
+-(void)updateRectangleViewFrame:(RectangleView *)view{
+//    //获取对应行
+//    CGRect startRact = [view convertRect:view.bounds toView:self.currentCell.operationView];
+//
+//    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+//    ZZTFangKuangModel *FKModel = [[ZZTFangKuangModel alloc] init];
+//    for (int i = 0; i < cellModel.imageArray.count; i++) {
+//        if([NSStringFromClass([cellModel.imageArray[i] class]) isEqualToString:@"ZZTFangKuangModel"] && FKModel.tagNum == self.mainView.tag){
+//            FKModel = cellModel.imageArray[i];
+//        }
+//    }
+//    //model
+//    for (int i = 0; i < FKModel.viewArray.count; i++) {
+//        ZZTFangKuangModel *model = FKModel.viewArray[i];
+//        if(model.tagNum == view.tag){
+//            model.viewFrame = startRact;
+//            NSLog(@"updataFrame:%@",NSStringFromCGRect(startRact));
+//        }
+//    }
+    
+}
 //后退 清空恢复
 - (IBAction)retreat:(id)sender {
     if (_isEmpty == YES) {
@@ -484,46 +630,54 @@
 {
     [self loadMaterialData:fodderType modelType:modelType modelSubtype:modelSubtype];
 }
-
 #pragma mark 添加一个图层并备份
 -(void)sendImageWithModel:(ZZTFodderListModel *)model{
     //获取当前行的数据
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
-    
     //新图层
     EditImageView *imageView = [self speedInitImageView:model.img];
     imageView.tag = self.tagNum;
     self.tagNum = self.tagNum + 1;
+    //记录位置
+    CGRect startRect = [imageView convertRect:imageView.bounds toView:self.mainView];
+    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:startRect imageUrl:model.img tagNum:imageView.tag];
+    NSLog(@"startRect:%@",NSStringFromCGRect(startRect));
     //这里改一下
     /*
-        当有方框的时候 并当前view为方框的时候
-        方框还要放大
-        把素材添加到方框之类
+        判断mainView是什么东西
+        从而将素材加入到不同的数组
      
-        方框
-        cell是如何添加素材的
-        默认设置第一个cell为当前view
-        然后每点一个cell确认 设置为当前页
-        方框
-        已经将cell设置成为当前页 1   方框 0 1 2 3 4
-        点击cell上的方框的时候  进行判断  如果这个view是框的话
-        将设置 图层设置为框
-     
-        已将方框添加视图 明天进一步稳定这个东西
      */
-    [self.mainView addSubview:imageView];
-    //记录位置
-    CGRect startRect = [imageView convertRect:imageView.bounds toView:self.currentCell.operationView];
-    //一个图层的
-    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:startRect imageUrl:model.img tagNum:imageView.tag];
-    //这里能加 没问题
-    [cellModel.imageArray addObject:imageModel];
-    
+    //如果是方框
+    if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
+        if(self.isAddM == YES){
+            [self.mainView addSubview:imageView];
+            //添加到数组
+            //获取方框的模型
+            for (int i = 0; i < cellModel.imageArray.count; i++) {
+                if([NSStringFromClass([cellModel.imageArray[i] class]) isEqualToString:@"ZZTFangKuangModel"]){
+                    ZZTFangKuangModel *FKModel = cellModel.imageArray[i];
+                    //取出来方框
+                    //对这个方框模型上加入视图
+                    if(FKModel.tagNum == self.mainView.tag){
+                        [FKModel.viewArray addObject:imageModel];
+                    }
+                }
+            }
+        }else{
+            NSLog(@"必须放大View以后才能添加素材");
+        }
+    }else{
+        //不是方框可直接添加素材
+        //素材模型
+        //这里能加 没问题
+        [cellModel.imageArray addObject:imageModel];
+        [self.mainView addSubview:imageView];
+    }
     //将新创建的view设置为当前View
     [self EditImageViewWithView:imageView];
     self.tagID++;
-    
-    [self.collectionView reloadData];
+
 }
 
 //快速创建方法
@@ -550,41 +704,54 @@
     }
 }
 
+#warning 正在施工。。。
 //设置当前View
 -(void)EditImageViewWithView:(EditImageView *)view{
-    //获取添加view的行 拿到行数据 在行中的数组中遍历
-    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
-    
     /*
         1.取出来的 不一定是一个类型
         2.判断取出来的是什么model类
         3.如果是E就照写
         4.如果是R就 空着
+     
+        但是会获取方框上的素材
+        判断 点击的是方框上的  还是cell上的
+        可以对mainView进行判断
+     
+        设置当前view
+     
+        如果是cell上的
+     
+     
+        如果是方框上的
+     
      */
+    /*
+        获取当前行
+        扫描此行的所有空间
+        找到当前点击的空间的数据
+        设置当前view
+        关闭cv滑动
+        除这个view以外的view 隐藏
+     */
+    //如果是素材  选中 隐藏 ok
+    self.currentView = view;
+    self.collectionView.scrollEnabled = NO;
     
-    for(int i = 0;i < cellModel.imageArray.count;i++){
-        if([NSStringFromClass([cellModel.imageArray[i] class]) isEqualToString:@"ZZTEditImageViewModel"]){
-            ZZTEditImageViewModel *model = cellModel.imageArray[i];
-            if(model.tagNum == view.tag){
-                self.currentView = view;
-                self.collectionView.scrollEnabled = NO;
-            }else{
+    //因为现在有方框了 所以要改变一下
+    for(int i = 0;i < self.currentCell.operationView.subviews.count;i++){
+        if([NSStringFromClass([self.currentCell.operationView.subviews[i] class]) isEqualToString:@"EditImageView"]){
+            if(self.currentCell.operationView.subviews[i] != view){
                 EditImageView *imageView = self.currentCell.operationView.subviews[i];
                 [imageView hideEditBtn];
             }
         }else{
-            //如果当前View 是方框
-            ZZTFangKuangModel *model = cellModel.imageArray[i];
+            //如果是方框
             RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
-            if(model.tagNum == rectangleView.tag){
-                self.mainView = rectangleView;
-                self.currentView = rectangleView;
-                self.collectionView.scrollEnabled = NO;
+            if(rectangleView.mainView == self.mainView){
+                rectangleView.mainView.backgroundColor = [UIColor redColor];
             }else{
-//                RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
-//                self.mainView = rectangleView.mainView;
+                rectangleView.mainView.backgroundColor = [UIColor grayColor];
             }
-            
         }
     }
 }
@@ -592,16 +759,33 @@
 
 //更新移动的位置 没有将入方框的 移动任务
 -(void)updateImageViewFrame:(EditImageView *)view{
-    //获取对应行
-    ZZTDIYCellModel *cellModel = self.cartoonEditArray[view.row];
-
-    //获取改变后的位置
-    CGRect startRact = [view convertRect:view.bounds toView:self.currentCell.operationView];
+    //更新的位置
+    CGRect startRact = [view convertRect:view.bounds toView:self.mainView];
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+    ZZTFangKuangModel *FKModel = [[ZZTFangKuangModel alloc] init];
     
-    //更新位置
-    for (ZZTEditImageViewModel *model in cellModel.imageArray) {
-        if(model.tagNum == view.tag){
-            model.imageViewFrame = startRact;
+    //如果是方框
+    if([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]){
+        for (int i = 0; i < cellModel.imageArray.count; i++) {
+            if([NSStringFromClass([cellModel.imageArray[i] class]) isEqualToString:@"ZZTFangKuangModel"] && FKModel.tagNum == self.mainView.tag){
+                FKModel = cellModel.imageArray[i];
+            }
+        }
+        //model
+        for (int i = 0; i < FKModel.viewArray.count; i++) {
+            ZZTEditImageViewModel *model = FKModel.viewArray[i];
+            if(model.tagNum == view.tag){
+                model.imageViewFrame = startRact;
+                NSLog(@"updataFrame:%@",NSStringFromCGRect(startRact));
+            }
+        }
+    }else{
+        //更新位置
+        for (ZZTEditImageViewModel *model in cellModel.imageArray) {
+            if(model.tagNum == view.tag){
+                model.imageViewFrame = startRact;
+                NSLog(@"updataFrame:%@",NSStringFromCGRect(startRact));
+            }
         }
     }
 }
@@ -644,26 +828,26 @@
 //隐藏所有Btn的状态
 - (void)hideAllBtn{
     
-    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
-
-    //当没有选中时 可以滑动
-    self.collectionView.scrollEnabled = YES;
-    //判断如果是框 应该怎么搞？？
-    for (int i = 0; i < cellModel.imageArray.count; i++) {
-        //这个数组之中 有的不只是一个类型的元素
-        /*
-            取出这一个元素   判断对象类名
-            如果是这个  应该怎么样 如果是这个 应该怎么样
-         */
-        if([NSStringFromClass([self.currentCell.operationView.subviews[i] class]) isEqualToString:@"EditImageView"]){
-            EditImageView *imageView = self.currentCell.operationView.subviews[i];
-            [imageView hideEditBtn];
-        }else{
-            
-        }
-    }
-    
-    [self.collectionView reloadData];
+//    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+//
+//    //当没有选中时 可以滑动
+//    self.collectionView.scrollEnabled = YES;
+//    //判断如果是框 应该怎么搞？？
+//    for (int i = 0; i < cellModel.imageArray.count; i++) {
+//        //这个数组之中 有的不只是一个类型的元素
+//        /*
+//            取出这一个元素   判断对象类名
+//            如果是这个  应该怎么样 如果是这个 应该怎么样
+//         */
+//        if([NSStringFromClass([self.mainView.subviews[i] class]) isEqualToString:@"EditImageView"]){
+//                EditImageView *imageView = self.currentCell.operationView.subviews[i];
+//            [imageView hideEditBtn];
+//        }else{
+//
+//        }
+//    }
+//
+//    [self.collectionView reloadData];
 }
 
 //截图，获取到image(保存) 未解决
