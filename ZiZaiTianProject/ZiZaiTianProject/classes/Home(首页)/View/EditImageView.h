@@ -12,7 +12,9 @@
 
 @protocol EditImageViewDelegate<NSObject>
 
--(void)EditImageViewWithView:(EditImageView *)view;
+-(void)EditImageViewWithViewIncell:(EditImageView *)view;
+
+-(void)EditImageViewWithViewInRectangleView:(EditImageView *)view;
 
 -(void)updateImageViewFrame:(EditImageView *)view;
 
@@ -51,5 +53,10 @@
 @property (nonatomic,assign) CGRect viewFrame;
 
 @property (nonatomic,assign) NSInteger row;
+//所在父类的名称
+@property (nonatomic,strong) NSString *superViewName;
+
+@property (nonatomic,assign) NSInteger superViewTag;
+
 
 @end

@@ -28,7 +28,6 @@
     
     CGPoint _startTouchPoint;
     CGPoint _startTouchCenter;
-    BOOL isBig;
 }
 
 @end
@@ -43,13 +42,26 @@ int i = 0;
         //添加UI
         [self addUI];
         currentProportion = 0;
-        isBig = NO;
+        self.isBig = NO;
         self.isClick = NO;
     }
     return self;
 }
 
-
+-(void)setIsBig:(BOOL)isBig{
+    _isBig = isBig;
+    if(isBig == NO){
+        for (int i = 0; i < self.subviews.count; i++) {
+            UIView *view = self.subviews[i];
+            view.userInteractionEnabled = NO;
+        }
+    }else{
+        for (int i = 0; i < self.subviews.count; i++) {
+            UIView *view = self.subviews[i];
+            view.userInteractionEnabled = YES;
+        }
+    }
+}
 #pragma mark - 对边操作
 -(void)tapTarget:(UIPanGestureRecognizer *)panGesture{
     //改变变量
@@ -309,7 +321,7 @@ CGPoint legend_point;
     CGFloat pH = self.superView.height / self.height;
     
     //是放大
-    if(isBig == NO){
+    if(self.isBig == NO){
         lastFrame = self.frame;
 
         //等比放大
@@ -325,15 +337,15 @@ CGPoint legend_point;
         
         self.frame = CGRectMake(0, 0, selfWidth, selfHeight);
         //放大后代理
-        isBig = YES;
-        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:)]){
-            [self.delegate enlargedAfterEditView:self isBig:isBig];
+        self.isBig = YES;
+        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:)]){
+            [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion];
         }
     }else{
         self.frame = lastFrame;
-        isBig = NO;
-        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:)]){
-             [self.delegate enlargedAfterEditView:self isBig:isBig];
+        self.isBig = NO;
+        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:)]){
+            [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion];
         }
     }
 }

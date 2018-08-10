@@ -22,8 +22,14 @@
 
 -(void)setViewFrame:(CGRect)viewFrame{
     _viewFrame = viewFrame;
+//    [self addUI];
 }
 - (void)addUI{
+    [_borderView removeFromSuperview];
+    [_editImgView removeFromSuperview];
+    [_closeImgView removeFromSuperview];
+
+    
     //间距 20
     CGFloat space = 20;
     //外框
@@ -87,9 +93,19 @@
 }
 //点击的开始
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(EditImageViewWithView:)]) {
-        [self.delegate EditImageViewWithView:self];
+    //方框的
+    //所在方框上的
+    if ([self.superViewName isEqualToString:@"UIView"]) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(EditImageViewWithViewInRectangleView:)]) {
+            [self.delegate EditImageViewWithViewInRectangleView:self];
+        }
+    }else{
+        //所在cell上的
+        if (self.delegate && [self.delegate respondsToSelector:@selector(EditImageViewWithViewIncell:)]) {
+            [self.delegate EditImageViewWithViewIncell:self];
+        }
     }
+    
     //展示框
     [self showEditBtn];
     UITouch *touch = [touches anyObject];
@@ -100,7 +116,6 @@
     _isMove = YES;
     CGPoint p = [touch locationInView:self];
     
-//    NSLog(@"ttddddddddd----- %@   %@",NSStringFromCGRect(_editImgView.frame),NSStringFromCGPoint(p));
     //判断一个CGPoint 是否包含再另一个UIView的CGRect里面,常用与测试给定的对象之间是否又重叠
     if (CGRectContainsPoint(_editImgView.frame,p)) {
         _isMove = NO;

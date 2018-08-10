@@ -17,7 +17,7 @@
 
 -(void)setupMainView:(RectangleView *)rectangleView;
 
--(void)enlargedAfterEditView:(RectangleView *)rectangleView isBig:(BOOL)isBig;
+-(void)enlargedAfterEditView:(RectangleView *)rectangleView isBig:(BOOL)isBig proportion:(CGFloat)proportion;
 
 -(void)updateRectangleViewFrame:(RectangleView *)view;
 
@@ -30,6 +30,8 @@
 @property(nonatomic,weak) id<RectangleViewDelegate>   delegate;
 
 @property (nonatomic,assign) BOOL isClick;
+
+@property (nonatomic,assign) BOOL isBig;
 
 @property (nonatomic,assign) NSInteger tagNum;
 //方框存放视图的东西
