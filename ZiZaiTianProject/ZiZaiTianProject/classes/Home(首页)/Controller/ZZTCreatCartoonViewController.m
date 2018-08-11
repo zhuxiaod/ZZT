@@ -363,9 +363,9 @@
 
 #pragma mark 改变图片上下级功能
 #pragma 从cell上获取当前方框
-#warning 可能一个地方没搞好 明天来看
 -(RectangleView *)rectangleViewFromMainOperationView{
     RectangleView *rectangleView = [[RectangleView alloc] init];
+    //在cell上获得这个方框
     for (int i = 0; i < MainOperationView.subviews.count; i++) {
         //从cell中得到方框
         rectangleView = MainOperationView.subviews[i];
@@ -377,65 +377,101 @@
 }
 #pragma 上一层
 - (IBAction)upLevel:(id)sender {
-
-    //如果是方框
-    if([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]){
-        //获取当前操作的方框
-        RectangleView *rectangleView = [self rectangleViewFromMainOperationView];
-        
-        //获取方框上的所有控件
-        NSArray *array = rectangleView.mainView.subviews;
-        //获取方框上当前View的索引
-        [self upLayerFromArray:array];
-
+    //如果我当前选择的这个东西是一个方框
+    if([NSStringFromClass([self.currentView class])isEqualToString:@"RectangleView"]){
+        [self exchangeViewUpIndex];
     }else{
-        //得到当前选择View在数据中的索引
-        NSArray *array = MainOperationView.subviews;
-        //上一层操作
-        [self upLayerFromArray:array];
+        EditImageView *imageView = (EditImageView *)self.currentView;
+        //改素材在方框上面
+        if ([imageView.superViewName isEqualToString:@"UIView"]) {
+            [self exchangeFangKuangViewUpIndex];
+        }else{
+            [self exchangeViewUpIndex];
+        }
     }
- 
 }
-//上一层操作
--(void)upLayerFromArray:(NSArray *)array{
+//方框中上一层
+-(void)exchangeFangKuangViewUpIndex{
+    NSArray *array = self.mainView.subviews;
     NSInteger index = [self getCurrentViewIndex:array];
+    RectangleView *rectangleView = [self rectangleViewFromMainOperationView];
+    ZZTFangKuangModel *model = [self rectangleModelFromView:rectangleView];
+    
+    if(index == (array.count - 1)){
+        NSLog(@"已经到最上方了");
+    }else{
+        [self.mainView exchangeSubviewAtIndex:index withSubviewAtIndex:(index + 1)];
+        
+        [model.viewArray exchangeObjectAtIndex:index withObjectAtIndex:(index + 1)];
+    }
+}
+//View中上一层
+-(void)exchangeViewUpIndex{
+    NSArray *array = MainOperationView.subviews;
+    NSInteger index = [self getFangKuangViewIndex:array];
+    
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
     
     if(index == (array.count - 1)){
         NSLog(@"已经到最上方了");
     }else{
         //改变数据的位置
-        [self exchangeViewIndex:index exchangeIndex:(index + 1)];
+        [MainOperationView exchangeSubviewAtIndex:index withSubviewAtIndex:(index + 1)];
+        [cellModel.imageArray exchangeObjectAtIndex:index withObjectAtIndex:(index + 1)];
         
         [self.collectionView reloadData];
     }
 }
+
 #pragma 下一层
 - (IBAction)downLevel:(id)sender {
-    //方框
-    if([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]){
-        
-        RectangleView *rectangleView = [self rectangleViewFromMainOperationView];
-
-        NSArray *array = rectangleView.mainView.subviews;
-        
-        [self downLayerFromArray:array];
+    //如果我当前选择的这个东西是一个方框
+    if([NSStringFromClass([self.currentView class])isEqualToString:@"RectangleView"]){
+#warning bug
+        [self exchangeViewDownIndex];
     }else{
-        //得到当前选择View在数据中的索引
-        NSArray *array = MainOperationView.subviews;
-        
-        [self downLayerFromArray:array];
+        EditImageView *imageView = (EditImageView *)self.currentView;
+        //改素材在方框上面
+        if ([imageView.superViewName isEqualToString:@"UIView"]) {
+            [self exchangeFangKuangViewDownIndex];
+        }else{
+            [self exchangeViewDownIndex];
+        }
     }
 }
-//下一层操作
--(void)downLayerFromArray:(NSArray *)array{
+//方框中下一层
+-(void)exchangeFangKuangViewDownIndex{
+    NSArray *array = self.mainView.subviews;
     NSInteger index = [self getCurrentViewIndex:array];
+    RectangleView *rectangleView = [self rectangleViewFromMainOperationView];
+    ZZTFangKuangModel *model = [self rectangleModelFromView:rectangleView];
+    
     if(index == 0){
         NSLog(@"已经到最下方了");
     }else{
-        //改变数据的位置
-        [self exchangeViewIndex:index exchangeIndex:(index - 1)];
+        [self.mainView exchangeSubviewAtIndex:index withSubviewAtIndex:(index - 1)];
+        
+        [model.viewArray exchangeObjectAtIndex:index withObjectAtIndex:(index - 1)];
     }
 }
+//View中上一层
+-(void)exchangeViewDownIndex{
+    NSArray *array = MainOperationView.subviews;
+    NSInteger index = [self getFangKuangViewIndex:array];
+    
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
+    
+    if(index == 0){
+        NSLog(@"已经到最上方了");
+    }else{
+        //改变数据的位置
+        [MainOperationView exchangeSubviewAtIndex:index withSubviewAtIndex:(index - 1)];
+        [cellModel.imageArray exchangeObjectAtIndex:index withObjectAtIndex:(index - 1)];
+        
+        [self.collectionView reloadData];
+    }
+}
+
 //查看当前View的索引
 -(NSInteger)getCurrentViewIndex:(NSArray *)array{
     //不仅要知道当前选中的index
@@ -451,34 +487,20 @@
     return index;
 }
 
-//交换2个视图的层级位置 和 数据所在的位置
--(void)exchangeViewIndex:(NSInteger )index exchangeIndex:(NSInteger )exchangeIndex{
-    //得到当前行
-    //为什么没创建
-
-    ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
-
-    if([NSStringFromClass([self.mainView class])isEqualToString:@"UIView"]){
-        //获得当前方框
-        RectangleView *rectangleView = [self rectangleViewFromMainOperationView];
-
-        ZZTFangKuangModel *model = [self rectangleModelFromView:rectangleView];
-        //如果是方框 就这么上下层3
-        if(model.viewArray.count > 0){
-            [rectangleView.mainView exchangeSubviewAtIndex:index withSubviewAtIndex:exchangeIndex];
-            [model.viewArray exchangeObjectAtIndex:index withObjectAtIndex:exchangeIndex];
-        }
-        
-    }else{
-        ZZTCartoonDrawView *cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_selectRow inSection:0]];
-
-        if(cellModel.imageArray.count > 0){
-            [cell.operationView exchangeSubviewAtIndex:index withSubviewAtIndex:exchangeIndex];
-            //交换两个视图的位置
-            [cellModel.imageArray exchangeObjectAtIndex:index withObjectAtIndex:exchangeIndex];
+-(NSInteger)getFangKuangViewIndex:(NSArray *)array{
+    NSInteger index = 0;
+    RectangleView *currentView = (RectangleView *)self.currentView;
+    //获取所在视图上的索引
+    for (int i = 0; i < array.count; i++) {
+        RectangleView *imageView = array[i];
+        if(imageView.tagNum == currentView.tagNum){
+            index = i;
+            break;
         }
     }
+    return index;
 }
+
 #pragma 获取当前方框的模型
 -(ZZTFangKuangModel *)rectangleModelFromView:(RectangleView *)rectangleView{
     //取到模型组  改变模型的数据
@@ -691,7 +713,7 @@
                     //获取方框的模型
                     ZZTFangKuangModel *FKModel = cellModel.imageArray[i];
                     //如果方框模型对应现在所选方框 存储数据
-                    if(FKModel.tagNum == self.currentRectangleView.tag){
+                    if(FKModel.tagNum == self.currentRectangleView.tagNum){
                         [FKModel.viewArray addObject:imageModel];
                     }
                 }
