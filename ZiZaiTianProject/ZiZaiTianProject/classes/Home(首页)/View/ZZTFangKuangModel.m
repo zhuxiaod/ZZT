@@ -15,6 +15,7 @@
     }
     return _viewArray;
 }
+
 +(instancetype)initWithViewFrame:(CGRect)viewFrame tagNum:(NSInteger)tagNum{
     ZZTFangKuangModel *model = [[ZZTFangKuangModel alloc] init];
     model.viewFrame = viewFrame;

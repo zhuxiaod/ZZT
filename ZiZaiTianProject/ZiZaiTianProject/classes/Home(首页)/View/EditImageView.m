@@ -22,7 +22,6 @@
 
 -(void)setViewFrame:(CGRect)viewFrame{
     _viewFrame = viewFrame;
-//    [self addUI];
 }
 - (void)addUI{
     [_borderView removeFromSuperview];
@@ -70,6 +69,7 @@
     //发送移除通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"remove" object:self];
 }
+
 //可编辑状态
 - (void)showEditBtn{
     _isHide = NO;
@@ -155,7 +155,7 @@
         CGFloat rad = angle/180*M_PI;
         self.transform = CGAffineTransformMakeScale(scale, scale);
         self.transform = CGAffineTransformRotate(self.transform,rad);
-//        self.transform = CGAffineTransformMakeRotation(ra);
+        
     }
 }
 //切换状态
@@ -165,7 +165,6 @@
     }
     _isMove = NO;
     self.viewFrame = _editImgView.frame;
-//    NSLog(@"end----- %f  %f   ",_editImgView.frame.origin.x,_editImgView.frame.origin.y);
 }
 
 

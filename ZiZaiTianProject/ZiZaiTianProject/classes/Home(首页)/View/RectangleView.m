@@ -30,6 +30,15 @@
     CGPoint _startTouchCenter;
 }
 
+@property (nonatomic,weak) UIView *topBorder;
+@property (nonatomic,weak) UIView *leftBorder;
+@property (nonatomic,weak) UIView *rightBorder;
+@property (nonatomic,weak) UIView *bottomBorder;
+@property (nonatomic,strong) UIPanGestureRecognizer *click1;
+@property (nonatomic,strong) UIPanGestureRecognizer *click2;
+@property (nonatomic,strong) UIPanGestureRecognizer *click3;
+@property (nonatomic,strong) UIPanGestureRecognizer *click4;
+
 @end
 
 @implementation RectangleView
@@ -50,16 +59,25 @@ int i = 0;
 
 -(void)setIsBig:(BOOL)isBig{
     _isBig = isBig;
+    //没有变大
     if(isBig == NO){
-        for (int i = 0; i < self.subviews.count; i++) {
-            UIView *view = self.subviews[i];
-            view.userInteractionEnabled = NO;
-        }
+            self.mainView.userInteractionEnabled = NO;
+            [self.topBorder addGestureRecognizer:self.click1];
+            [self.leftBorder addGestureRecognizer:self.click2];
+            [self.rightBorder addGestureRecognizer:self.click3];
+            [self.bottomBorder addGestureRecognizer:self.click4];
     }else{
-        for (int i = 0; i < self.subviews.count; i++) {
-            UIView *view = self.subviews[i];
-            view.userInteractionEnabled = YES;
-        }
+        //变大
+        self.mainView.userInteractionEnabled = YES;
+        //边失去控制
+        [self.topBorder removeGestureRecognizer:self.click1];
+        
+        [self.leftBorder removeGestureRecognizer:self.click2];
+        
+        [self.rightBorder removeGestureRecognizer:self.click3];
+        
+        [self.bottomBorder removeGestureRecognizer:self.click4];
+
     }
 }
 #pragma mark - 对边操作
@@ -87,6 +105,8 @@ int i = 0;
         startWidth = self.width;
         startX = self.x;
         startY = self.y;
+        //结束时
+        lastFrame = self.frame;
         
     }else if (panGesture.state == UIGestureRecognizerStateChanged){
         width = startWidth;
@@ -241,20 +261,24 @@ CGPoint legend_point;
     UIView *topBorder = [[UIView alloc] init];
     topBorder.tag = 1;
     topBorder.backgroundColor = [UIColor blackColor];
+    self.topBorder = topBorder;
     [self addSubview:topBorder];
     
     UIView *leftBorder = [[UIView alloc] init];
     leftBorder.tag = 2;
     leftBorder.backgroundColor = [UIColor blackColor];
+    self.leftBorder = leftBorder;
     [self addSubview:leftBorder];
     
     UIView *rightBorder = [[UIView alloc] init];
     rightBorder.tag = 3;
+    self.rightBorder = rightBorder;
     rightBorder.backgroundColor = [UIColor blackColor];
     [self addSubview:rightBorder];
     
     UIView *bottomBorder = [[UIView alloc] init];
     bottomBorder.tag = 4;
+    self.bottomBorder = bottomBorder;
     bottomBorder.backgroundColor = [UIColor blackColor];
     [self addSubview:bottomBorder];
     
@@ -294,6 +318,7 @@ CGPoint legend_point;
     }];
     
     UIPanGestureRecognizer *click1 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
+
     UIPanGestureRecognizer *click2 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
     UIPanGestureRecognizer *click3 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
     UIPanGestureRecognizer *click4 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
@@ -303,6 +328,11 @@ CGPoint legend_point;
     [rightBorder addGestureRecognizer:click3];
     [bottomBorder addGestureRecognizer:click4];
     
+    self.click1 = click1;
+    self.click2 = click2;
+    self.click3 = click3;
+    self.click4 = click4;
+    
     UIPinchGestureRecognizer *PinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
     [self addGestureRecognizer:PinchGestureRecognizer];
 
@@ -310,6 +340,17 @@ CGPoint legend_point;
     TapGestureRecognizer.numberOfTapsRequired = 2;
     [self addGestureRecognizer:TapGestureRecognizer];
     self.layer.masksToBounds = YES;
+    
+    //删除
+    UITapGestureRecognizer *removeGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeGestureRecognizer:)];
+    removeGestureRecognizer.numberOfTapsRequired = 3;
+    [self addGestureRecognizer:removeGestureRecognizer];
+}
+
+#pragma mark - 删除事件
+-(void)removeGestureRecognizer:(UITapGestureRecognizer *)gesture{
+    self.hidden = YES;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"removeRectangleView" object:self];
 }
 
 #pragma mark - 双击事件

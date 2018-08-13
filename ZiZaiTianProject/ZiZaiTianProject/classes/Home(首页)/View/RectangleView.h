@@ -37,4 +37,6 @@
 //方框存放视图的东西
 @property (nonatomic,strong) UIView *mainView;
 
+-(void)tapGestureTarget:(UITapGestureRecognizer *)gesture;
+
 @end
