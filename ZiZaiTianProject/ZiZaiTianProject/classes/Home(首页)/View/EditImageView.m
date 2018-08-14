@@ -24,9 +24,9 @@
     _viewFrame = viewFrame;
 }
 - (void)addUI{
-    [_borderView removeFromSuperview];
-    [_editImgView removeFromSuperview];
-    [_closeImgView removeFromSuperview];
+//    [_borderView removeFromSuperview];
+//    [_editImgView removeFromSuperview];
+//    [_closeImgView removeFromSuperview];
 
     
     //间距 20
@@ -43,6 +43,7 @@
 //
     //编辑图标
     UIImage *editImg = [UIImage imageNamed:@"Enlarge.png"];
+    
     UIImageView *editImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width-editImg.size.width/2-5, -space, editImg.size.width, editImg.size.height)];
     editImgView.image = editImg;
     editImgView.center = CGPointMake(borderView.frame.origin.x+borderView.frame.size.width, borderView.frame.origin.y);
@@ -72,7 +73,7 @@
 
 //可编辑状态
 - (void)showEditBtn{
-    _isHide = NO;
+//    _isHide = NO;
     if (self.delegate && [self.delegate respondsToSelector:@selector(checkViewIsHidden:)]) {
         [self.delegate checkViewIsHidden:self];
     }
@@ -80,9 +81,17 @@
     _editImgView.hidden = NO;
     _closeImgView.hidden = NO;
 }
+-(void)setIsHide:(BOOL)isHide{
+    _isHide = isHide;
+    if(isHide == YES){
+        [self hideEditBtn];
+    }else{
+        [self showEditBtn];
+    }
+}
 //隐藏
 - (void)hideEditBtn{
-    _isHide = YES;
+//    _isHide = YES;
     
     if (self.delegate && [self.delegate respondsToSelector:@selector(checkViewIsHidden:)]) {
         [self.delegate checkViewIsHidden:self];
@@ -107,7 +116,8 @@
     }
     
     //展示框
-    [self showEditBtn];
+//    [self showEditBtn];
+    self.isHide = NO;
     UITouch *touch = [touches anyObject];
     //获取点击时所在父View的位置
     _startTouchPoint = [touch locationInView:self.superview];

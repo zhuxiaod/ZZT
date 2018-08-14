@@ -18,9 +18,10 @@
 #import "ZZTPaletteView.h"
 #import "RectangleView.h"
 #import "ZZTFangKuangModel.h"
+#import "ZZTBubbleImageView.h"
 
 #define MainOperationView self.currentCell.operationView
-@interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate,RectangleViewDelegate,UIGestureRecognizerDelegate>
+@interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate,RectangleViewDelegate,UIGestureRecognizerDelegate,ZZTBubbleImageViewDelegate>
 //舞台
 @property (weak, nonatomic) IBOutlet UIView *midView;
 
@@ -230,6 +231,15 @@
 //数据要用model来装才行
 #pragma mark 点击CollectionViewCell 触发事件
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    //获取cell
+    ZZTDIYCellModel *model = self.cartoonEditArray[indexPath.row];
+    self.mainView = MainOperationView;
+    self.currentView = MainOperationView;
+    //当前行
+    self.selectRow = indexPath.row;
+    [self.collectionView layoutIfNeeded];
+    //当前cell
+    self.currentCell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:indexPath];
     //点击cell 空白处 隐藏图层编辑框
     [self hideAllBtn];
     //材料选择栏关闭
@@ -243,15 +253,7 @@
         //缩小操作
         [rectangleView tapGestureTarget:nil];
     }
-    //获取cell
-    ZZTDIYCellModel *model = self.cartoonEditArray[indexPath.row];
-    self.mainView = self.currentCell.operationView;
-    self.currentView = MainOperationView;
-    //当前行
-    self.selectRow = indexPath.row;
-    [self.collectionView layoutIfNeeded];
-    //当前cell
-    self.currentCell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:indexPath];
+    
     //判断view 移动后会触发一次 那一次是不会响应这一条的
     if(self.isMoveAfter == NO){
         [self cannelFangKuangColor];
@@ -356,15 +358,17 @@
 
 //翻转  有bug
 - (IBAction)spin:(id)sender {
-    //是当前对象才能被翻转   如果是方框里面的要翻转 还不行
+    //是当前对象才能被翻转
     if([NSStringFromClass([self.currentView class]) isEqualToString:@"EditImageView"]){
         EditImageView *currentView = (EditImageView *)self.currentView;
         if(currentView && currentView.isHide == NO){
             currentView.image = [currentView.image flipHorizontal];
         }
-    }else{
-        //如果是方框
-        //如果实现这个 需要算法
+    }else if([NSStringFromClass([self.currentView class]) isEqualToString:@"ZZTBubbleImageView"]){
+        ZZTBubbleImageView *currentView = (ZZTBubbleImageView *)self.currentView;
+        if(currentView && currentView.isHide == NO){
+            currentView.image = [currentView.image flipHorizontal];
+        }
     }
 }
 
@@ -391,7 +395,16 @@
     if([NSStringFromClass([self.currentView class])isEqualToString:@"RectangleView"]){
         //获取方框的索引
         [self exchangeViewUpIndex:2];
-    }else{
+        
+    }else if([NSStringFromClass([self.currentView class])isEqualToString:@"ZZTBubbleImageView"]){
+        //如果是汽泡
+        ZZTBubbleImageView *imageView = (ZZTBubbleImageView *)self.currentView;
+        if([imageView.superViewName isEqualToString:@"UIView"]){
+            [self exchangeFangKuangViewUpIndex];
+        }else{
+            [self exchangeViewUpIndex:1];
+        }
+    }else if([NSStringFromClass([self.currentView class])isEqualToString:@"EditImageView"]){
         EditImageView *imageView = (EditImageView *)self.currentView;
         //改素材在方框上面
         if ([imageView.superViewName isEqualToString:@"UIView"]) {
@@ -401,7 +414,6 @@
         }
     }
 }
-
 //方框之中的位置交换 上一层
 -(void)exchangeFangKuangViewUpIndex{
     //获得正在编辑的View
@@ -452,7 +464,15 @@
     if([NSStringFromClass([self.currentView class])isEqualToString:@"RectangleView"]){
 
         [self exchangeViewDownIndex:2];
-    }else{
+    }else if([NSStringFromClass([self.currentView class])isEqualToString:@"ZZTBubbleImageView"]){
+        //如果是汽泡
+        ZZTBubbleImageView *imageView = (ZZTBubbleImageView *)self.currentView;
+        if([imageView.superViewName isEqualToString:@"UIView"]){
+            [self exchangeFangKuangViewDownIndex];
+        }else{
+            [self exchangeViewDownIndex:1];
+        }
+    }else if([NSStringFromClass([self.currentView class])isEqualToString:@"EditImageView"]){
         EditImageView *imageView = (EditImageView *)self.currentView;
         //改素材在方框上面
         if ([imageView.superViewName isEqualToString:@"UIView"]) {
@@ -510,6 +530,12 @@
                 index = i;
                 break;
             }
+        }else if ([NSStringFromClass([array[i] class]) isEqualToString:@"ZZTBubbleImageView"]){
+            ZZTBubbleImageView *imageView = array[i];
+            if(imageView.tag == self.currentView.tag){
+                index = i;
+                break;
+            }
         }
     }
     return index;
@@ -547,17 +573,19 @@
     }
     return model;
 }
+
 #pragma mark - 创建方框
 - (IBAction)advance:(id)sender {
     //方框View
-    RectangleView *rectangView = [[RectangleView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    RectangleView *rectangView = [[RectangleView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 200, 200)];
     //方框永远在cell之上
     rectangView.superView = MainOperationView;
     rectangView.delegate = self;
     rectangView.isClick = YES;
     rectangView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
-    //设置方框为当前View
+   
+
     [self checkRectangleView:rectangView];
     
     [MainOperationView addSubview:rectangView];
@@ -572,30 +600,34 @@
     [cellModel.imageArray addObject:FKModel];
 }
 
-//设置方框为当前View
+////设置方框为当前View
 -(void)checkRectangleView:(RectangleView *)rectangleView{
-    
-    self.currentView = rectangleView;
-    self.collectionView.scrollEnabled = NO;
+    //设置方框为当前View
     self.mainView = rectangleView.mainView;
     self.currentRectangleView = rectangleView;
     self.mainView.backgroundColor = [UIColor redColor];
-    
-    //遍历cell上的视图
-    for (int i = 0; i < MainOperationView.subviews.count; i++) {
-        //如果是cell上的方框
-        if([NSStringFromClass([MainOperationView.subviews[i] class]) isEqualToString:@"RectangleView"]){
-            //非选中方框
-            if(MainOperationView.subviews[i] != rectangleView){
-                RectangleView *view = MainOperationView.subviews[i];
-                view.mainView.backgroundColor = [UIColor grayColor];
-            }
-        }else{
-            //如果是素材
-            EditImageView *imageView = MainOperationView.subviews[i];
-            [imageView hideEditBtn];
-        }
-    }
+    [self exceptCurrentViewHiddenOtherView:rectangleView];
+//    self.currentView = rectangleView;
+//    self.collectionView.scrollEnabled = NO;
+//    self.mainView = rectangleView.mainView;
+//    self.currentRectangleView = rectangleView;
+//    self.mainView.backgroundColor = [UIColor redColor];
+//
+//    //遍历cell上的视图
+//    for (int i = 0; i < MainOperationView.subviews.count; i++) {
+//        //如果是cell上的方框
+//        if([NSStringFromClass([MainOperationView.subviews[i] class]) isEqualToString:@"RectangleView"]){
+//            //非选中方框
+//            if(MainOperationView.subviews[i] != rectangleView){
+//                RectangleView *view = MainOperationView.subviews[i];
+//                view.mainView.backgroundColor = [UIColor grayColor];
+//            }
+//        }else{
+//            //如果是素材
+//            EditImageView *imageView = MainOperationView.subviews[i];
+//            imageView.isHide = YES;
+//        }
+//    }
 }
 
 //方框是否移动了
@@ -645,9 +677,15 @@
             CGFloat w  = model.imageViewFrame.size.width * self.proportion;
             CGFloat h  = model.imageViewFrame.size.height * self.proportion;
             CGRect frame = CGRectMake(x, y, w, h);
-            if (model.tagNum == self.mainView.subviews[i].tag) {
-                EditImageView *image = self.mainView.subviews[i];
+            //mainView 要变成当前的方框
+            if(model.viewType == 2){
+                ZZTBubbleImageView *image = self.currentRectangleView.mainView.subviews[i];
                 image.frame = frame;
+                image.isHide = YES;
+            }else{
+                EditImageView *image = self.currentRectangleView.mainView.subviews[i];
+                image.frame = frame;
+                image.isHide = YES;
             }
             model.imageViewFrame = frame;
         }
@@ -659,10 +697,15 @@
             CGFloat w  = model.imageViewFrame.size.width / self.proportion;
             CGFloat h  = model.imageViewFrame.size.height / self.proportion;
             CGRect frame = CGRectMake(x, y, w, h);
-            if (model.tagNum == self.mainView.subviews[i].tag) {
-                EditImageView *image = self.mainView.subviews[i];
+            
+            if(model.viewType == 2){
+                ZZTBubbleImageView *image = self.currentRectangleView.mainView.subviews[i];
                 image.frame = frame;
-                [image hideEditBtn];
+                image.isHide = YES;
+            }else{
+                EditImageView *image = self.currentRectangleView.mainView.subviews[i];
+                image.frame = frame;
+                image.isHide = YES;
             }
             model.imageViewFrame = frame;
         }
@@ -742,9 +785,10 @@
     self.tagNum = self.tagNum + 1;
     imageView.superViewTag = self.mainView.tag;
     //记录位置
-    CGRect startRect = [imageView convertRect:imageView.bounds toView:self.mainView];
+    CGRect startRect = imageView.frame;
+    NSLog(@"startRect:%@",NSStringFromCGRect(imageView.frame));
     //素材Model
-    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:startRect imageUrl:model.img tagNum:imageView.tag superView:NSStringFromClass([self.mainView class]) superViewTag:self.mainView.tag];
+    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:startRect imageUrl:model.img tagNum:imageView.tag superView:NSStringFromClass([self.mainView class]) superViewTag:self.mainView.tag viewType:1];
     //如果是方框
     if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
         //如果可以加入素材 便加入图层
@@ -754,7 +798,9 @@
             ZZTFangKuangModel *FKModel = [self rectangleModelFromView:(RectangleView *)self.mainView];
 
             [FKModel.viewArray addObject:imageModel];
-            [self EditImageViewWithViewInRectangleView:imageView];
+            [self exceptCurrentViewHiddenOtherView:imageView];
+
+//            [self EditImageViewWithViewInRectangleView:imageView];
 
         }else{
             //否则失败
@@ -764,13 +810,132 @@
         //不是方框可直接添加素材到cell之中
         [cellModel.imageArray addObject:imageModel];
         [self.mainView addSubview:imageView];
-        [self EditImageViewWithViewIncell:imageView];
+//        [self EditImageViewWithViewIncell:imageView];
+        [self exceptCurrentViewHiddenOtherView:imageView];
     }
 }
+/*
+    先把文本框里面的内容UI统一 一下
+    然后做一个关于这个view的增删改查
+ */
+#pragma mark - 添加文字框
+-(void)sendTextImageWithModel:(ZZTFodderListModel *)model{
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
 
+    ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 100, 100) text:@"请点击输入内容"];
+    imageView.bubbleDelegate = self;
+    imageView.superViewName = NSStringFromClass([self.mainView class]);
+    [imageView sd_setImageWithURL:[NSURL URLWithString:model.img]];
+    //设置tag值
+    imageView.tag = self.tagNum;
+    self.tagNum = self.tagNum + 1;
+    //记录位置
+    CGRect startRect = [imageView convertRect:imageView.bounds toView:self.mainView];
+    //素材Model
+    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:startRect imageUrl:model.img tagNum:imageView.tag superView:NSStringFromClass([self.mainView class]) superViewTag:self.mainView.tag viewType:2];
+    //如果是加入方框
+    if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
+        //如果可以加入素材 便加入图层
+        if(self.isAddM == YES){
+            [self.mainView addSubview:imageView];
+            
+            ZZTFangKuangModel *FKModel = [self rectangleModelFromView:(RectangleView *)self.mainView];
+            
+            [FKModel.viewArray addObject:imageModel];
+            //不管之前的呢 怎么快 怎么来
+            [self exceptCurrentViewHiddenOtherView:imageView];
+        }else{
+            //否则失败
+            NSLog(@"必须放大View以后才能添加素材");
+        }
+    }else{
+        //不是方框可直接添加素材到cell之中
+        [cellModel.imageArray addObject:imageModel];
+        [self.mainView addSubview:imageView];
+        [self exceptCurrentViewHiddenOtherView:imageView];
+    }
+}
+-(void)bubbleViewDidBeginEditing:(ZZTBubbleImageView *)bubbleView{
+    [self exceptCurrentViewHiddenOtherView:bubbleView];
+}
+-(void)bubbleViewDidBeginMoving:(ZZTBubbleImageView *)bubbleView{
+    CGRect startRact = [bubbleView convertRect:bubbleView.bounds toView:self.mainView];
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+    //如果是方框
+    if([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]){
+        ZZTFangKuangModel *FKModel = [self rectangleModelFromView:(RectangleView *)self.mainView];
+        
+        //更新model中的数据
+        for (int i = 0; i < FKModel.viewArray.count; i++) {
+            ZZTEditImageViewModel *model = FKModel.viewArray[i];
+            if(model.tagNum == bubbleView.tag){
+                model.imageViewFrame = startRact;
+                NSLog(@"model.imageViewFrame:%@",NSStringFromCGRect(model.imageViewFrame));
+            }
+        }
+    }else{
+        //更新位置
+        for (ZZTEditImageViewModel *model in cellModel.imageArray) {
+            if(model.tagNum == bubbleView.tag){
+                model.imageViewFrame = startRact;
+            }
+        }
+    }
+}
+-(void)exceptCurrentViewHiddenOtherView:(UIView *)view{
+    self.currentView = view;
+    self.collectionView.scrollEnabled = NO;
+    
+    RectangleView *rectangleView = [self rectangleViewFromMainOperationView];
+    //遍历方框
+    for (int i = 0; i < rectangleView.mainView.subviews.count; i++) {
+        //如果不是当前素材 便隐藏内容
+        if(rectangleView.mainView.subviews[i] != view){
+            //如果方框中的类容是素材
+            if ([NSStringFromClass([rectangleView.mainView.subviews[i] class])isEqualToString:@"EditImageView"]) {
+                EditImageView *imageView = rectangleView.mainView.subviews[i];
+                imageView.isHide = YES;
+            }
+            //如果是聊天框
+            else if ([NSStringFromClass([rectangleView.mainView.subviews[i] class])isEqualToString:@"ZZTBubbleImageView"] && rectangleView.mainView.subviews[i] != view){
+                ZZTBubbleImageView *BubbleImageView = rectangleView.mainView.subviews[i];
+                
+                BubbleImageView.isHide = YES;
+            }
+//            else if ([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"RectangleView"]){
+//                //如果是方框
+//                RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
+//                if(rectangleView.mainView == self.mainView){
+//                    rectangleView.mainView.backgroundColor = [UIColor redColor];
+//                }else{
+//                    rectangleView.mainView.backgroundColor = [UIColor grayColor];
+//                }
+//            }
+        }
+    }
+    for (int i = 0; i < MainOperationView.subviews.count; i++) {
+        //如果不是当前素材 便隐藏内容
+        if([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"EditImageView"] && MainOperationView.subviews[i] != view){
+            EditImageView *imageView = MainOperationView.subviews[i];
+            imageView.isHide = YES;
+        }//如果是聊天框
+        else if ([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"ZZTBubbleImageView"] && MainOperationView.subviews[i] != view){
+            ZZTBubbleImageView *BubbleImageView = MainOperationView.subviews[i];
+            BubbleImageView.isHide = YES;
+        }else if ([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"RectangleView"]){
+            //如果是方框
+            RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
+            if(rectangleView.mainView == self.mainView){
+                rectangleView.mainView.backgroundColor = [UIColor redColor];
+            }else{
+                rectangleView.mainView.backgroundColor = [UIColor grayColor];
+            }
+        }
+    }
+}
 //快速创建方法
 -(EditImageView *)speedInitImageView:(NSString *)imgUrl{
-    EditImageView *imageView = [[EditImageView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    EditImageView *imageView = [[EditImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 100, 100)];
     imageView.delegate = self;
     
     //记录父类的名字
@@ -795,44 +960,18 @@
 }
 
 //将素材加入到cell之中
+
+/*
+    这个功能是干什么的 - -
+    将这个view设置成为当前View
+    除当前View以外的View 状态
+ */
 -(void)EditImageViewWithViewIncell:(EditImageView *)view{
-   
-    self.currentView = view;
-    self.collectionView.scrollEnabled = NO;
-    
-    for(int i = 0;i < MainOperationView.subviews.count;i++){
-        //如果素材
-        if([NSStringFromClass([MainOperationView.subviews[i] class]) isEqualToString:@"EditImageView"]){
-            //如果素材在cell上
-            if(MainOperationView.subviews[i] != view){
-                EditImageView *imageView = self.currentCell.operationView.subviews[i];
-                [imageView hideEditBtn];
-            }
-        }else{
-            //如果是方框
-            RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
-            if(rectangleView.mainView == self.mainView){
-                rectangleView.mainView.backgroundColor = [UIColor redColor];
-            }else{
-                rectangleView.mainView.backgroundColor = [UIColor grayColor];
-            }
-        }
-    }
+    [self exceptCurrentViewHiddenOtherView:view];
 }
-//素材放在方框之中
+//素材放在方框之中   属性改动
 -(void)EditImageViewWithViewInRectangleView:(EditImageView *)view{
-    self.currentView = view;
-    self.collectionView.scrollEnabled = NO;
-    
-    RectangleView *rectangleView = [self rectangleViewFromMainOperationView];
-    //遍历方框
-    for (int i = 0; i < rectangleView.mainView.subviews.count; i++) {
-        //如果不是当前素材 便隐藏内容
-        if(rectangleView.mainView.subviews[i] != view){
-            EditImageView *imageView = rectangleView.mainView.subviews[i];
-            [imageView hideEditBtn];
-        }
-    }
+    [self exceptCurrentViewHiddenOtherView:view];
 }
 
 //更新素材的位置
@@ -841,7 +980,7 @@
     CGRect startRact = [view convertRect:view.bounds toView:self.mainView];
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
     
-//    //如果是方框
+    //如果是方框
     if([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]){
         ZZTFangKuangModel *FKModel = [self rectangleModelFromView:(RectangleView *)self.mainView];
 
@@ -912,21 +1051,12 @@
     }
 }
 
-//隐藏所有Btn的状态
+//隐藏所有Btn的状态 bug
 - (void)hideAllBtn{
-    //获取当前行的数据
-    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
-    //当没有选中时 可以滑动
+    UIView *view = [[UIView alloc] init];
+    [self exceptCurrentViewHiddenOtherView:view];
     self.collectionView.scrollEnabled = YES;
-    //隐藏cell上素材的框 框的状态如何变化 还没写
-    for (int i = 0; i < cellModel.imageArray.count; i++) {
-        //如果是素材 隐藏框
-        if(![NSStringFromClass([MainOperationView.subviews[i] class]) isEqualToString:@"RectangleView"]){
-            EditImageView *imageView = MainOperationView.subviews[i];
-            [imageView hideEditBtn];
-        }
-    }
-    [self.collectionView reloadData];
+
 }
 
 //截图，获取到image(保存) 未解决

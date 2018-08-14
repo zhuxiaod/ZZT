@@ -182,6 +182,7 @@
 		049A99DC20E3879700ED27C9 /* ZZTVIPViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 049A99DA20E3879700ED27C9 /* ZZTVIPViewController.xib */; };
 		049A99EA20E394BB00ED27C9 /* ZZTVIPTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 049A99E820E394BB00ED27C9 /* ZZTVIPTopView.m */; };
 		049A99EB20E394BB00ED27C9 /* ZZTVIPTopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 049A99E920E394BB00ED27C9 /* ZZTVIPTopView.xib */; };
+		04B4250321227CB600FDEE58 /* ZZTBubbleImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B4250121227CB500FDEE58 /* ZZTBubbleImageView.m */; };
 		04B9FF4120E506FC007CC582 /* ZZTChildCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B9FF3F20E506FB007CC582 /* ZZTChildCollectionView.m */; };
 		04CF25942105AACA0026EC8F /* ZZTMaterialLibraryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF25932105AACA0026EC8F /* ZZTMaterialLibraryView.m */; };
 		04CF25972105B0AB0026EC8F /* ZZTMaterialKindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF25962105B0AB0026EC8F /* ZZTMaterialKindView.m */; };
@@ -528,6 +529,8 @@
 		049A99E720E394BA00ED27C9 /* ZZTVIPTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTVIPTopView.h; sourceTree = "<group>"; };
 		049A99E820E394BB00ED27C9 /* ZZTVIPTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZTVIPTopView.m; sourceTree = "<group>"; };
 		049A99E920E394BB00ED27C9 /* ZZTVIPTopView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZZTVIPTopView.xib; sourceTree = "<group>"; };
+		04B4250121227CB500FDEE58 /* ZZTBubbleImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZTBubbleImageView.m; sourceTree = "<group>"; };
+		04B4250221227CB600FDEE58 /* ZZTBubbleImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTBubbleImageView.h; sourceTree = "<group>"; };
 		04B9FF3F20E506FB007CC582 /* ZZTChildCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZZTChildCollectionView.m; path = "ZiZaiTianProject/classes/Me(我的)/View/ZZTChildCollectionView.m"; sourceTree = SOURCE_ROOT; };
 		04B9FF4020E506FC007CC582 /* ZZTChildCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZZTChildCollectionView.h; path = "ZiZaiTianProject/classes/Me(我的)/View/ZZTChildCollectionView.h"; sourceTree = SOURCE_ROOT; };
 		04CF25922105AACA0026EC8F /* ZZTMaterialLibraryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTMaterialLibraryView.h; sourceTree = "<group>"; };
@@ -738,6 +741,8 @@
 				046FF6662101C35B005DED73 /* Read */,
 				0421C0282119CA600068AD21 /* RectangleView.h */,
 				0421C0292119CA600068AD21 /* RectangleView.m */,
+				04B4250221227CB600FDEE58 /* ZZTBubbleImageView.h */,
+				04B4250121227CB500FDEE58 /* ZZTBubbleImageView.m */,
 				047720EE2106BC6C00FC97B5 /* materialLibrary.json */,
 				04CF25922105AACA0026EC8F /* ZZTMaterialLibraryView.h */,
 				04CF25932105AACA0026EC8F /* ZZTMaterialLibraryView.m */,
@@ -1553,6 +1558,7 @@
 				046FF6712101EB25005DED73 /* ZZTCreatPlayViewController.m in Sources */,
 				0471A88620F8596100ABFF35 /* ZZTCircleModel.m in Sources */,
 				0471A84720F59BE600ABFF35 /* ZZTSecondCell.m in Sources */,
+				04B4250321227CB600FDEE58 /* ZZTBubbleImageView.m in Sources */,
 				0421C033211AC6910068AD21 /* ZZTFangKuangModel.m in Sources */,
 				0466839220F314860095C6BC /* NetWorkManager.m in Sources */,
 				042BA0B720E9BF2F003E279A /* ZZTAttentionCell.m in Sources */,

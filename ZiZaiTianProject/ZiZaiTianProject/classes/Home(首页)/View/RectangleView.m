@@ -253,6 +253,8 @@ CGPoint legend_point;
 }
 #pragma mark - 初始化
 -(void)addUI{
+    
+    
     UIView *mainView = [[UIView alloc] init];
     mainView.backgroundColor = [UIColor grayColor];
     self.mainView = mainView;
@@ -281,6 +283,16 @@ CGPoint legend_point;
     self.bottomBorder = bottomBorder;
     bottomBorder.backgroundColor = [UIColor blackColor];
     [self addSubview:bottomBorder];
+    
+    //编辑按钮
+    UIButton *centerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [centerBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    [centerBtn setTintColor:[UIColor whiteColor]];
+    centerBtn.frame = CGRectMake( self.bounds.size.width / 2,self.bounds.size.height / 2, self.bounds.size.width * 0.2,  self.bounds.size.height*0.2);
+    centerBtn.backgroundColor = [UIColor colorWithHexString:@"#91EDF2"];
+    centerBtn.layer.borderColor = [UIColor colorWithHexString:@"#62C7AC"].CGColor;
+    centerBtn.layer.borderWidth = 1.0f;
+    [self addSubview:centerBtn];
     
     [mainView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.mas_top);
@@ -315,6 +327,11 @@ CGPoint legend_point;
         make.left.mas_equalTo(self.mas_left);
         make.right.mas_equalTo(self.mas_right);
         make.height.mas_equalTo(8);
+    }];
+    
+    [centerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(self);
+        make.centerY.mas_equalTo(self);
     }];
     
     UIPanGestureRecognizer *click1 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];

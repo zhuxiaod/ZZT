@@ -214,8 +214,16 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     //获取View的信息
     ZZTFodderListModel *model = self.dataSource[indexPath.row];
-    if(self.delagate && [self.delagate respondsToSelector:@selector(sendImageWithModel:)]){
-        [self.delagate sendImageWithModel:model];
+   
+    if([self.str isEqualToString:@"文字"]){
+        //设置一个文字的代理方法
+        if(self.delagate && [self.delagate respondsToSelector:@selector(sendTextImageWithModel:)]){
+            [self.delagate sendTextImageWithModel:model];
+        }
+    }else{
+        if(self.delagate && [self.delagate respondsToSelector:@selector(sendImageWithModel:)]){
+            [self.delagate sendImageWithModel:model];
+        }
     }
 }
 

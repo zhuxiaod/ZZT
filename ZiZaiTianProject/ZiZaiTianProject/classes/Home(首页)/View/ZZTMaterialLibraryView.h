@@ -15,6 +15,8 @@
 
 -(void)sendImageWithModel:(ZZTFodderListModel *)model;
 
+-(void)sendTextImageWithModel:(ZZTFodderListModel *)model;
+
 @end
 
 @interface ZZTMaterialLibraryView : UIView

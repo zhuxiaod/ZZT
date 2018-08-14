@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 @class ZZTCreationEntranceModel;
+
 @interface ZZTCreatCartoonViewController : BaseViewController
+
 @property (nonatomic,strong) ZZTCreationEntranceModel *model;
+
 @end

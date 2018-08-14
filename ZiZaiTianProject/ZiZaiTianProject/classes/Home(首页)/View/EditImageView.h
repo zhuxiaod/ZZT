@@ -42,7 +42,7 @@
 
 }
 
-- (void)hideEditBtn;
+//- (void)hideEditBtn;
 
 - (void)closeBtnClick:(UIButton *)btn;
 
