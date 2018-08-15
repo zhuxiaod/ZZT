@@ -47,8 +47,14 @@
 #import "ZZTCartoonCell.h"
 #import "MBProgressHUD.h"
 #import "UIImage+Rotate.h"
+#import "UIView+Extension.h"
+
+#define imageHost @"p872ue3rt.bkt.clouddn.com"
 
 #define detailViewHeaderHeight 60
+#define ZZTAccessKey @"otsMMnYSaZw9UgT-OUFSc46m3UOVaqr-ysR07Dwq"
+#define ZZTSecretKey @"cJqacuOHqDq_zR4R4m2LUdFMRFMGUf8HC-1owpAw"
+#define ZZTBucket image
 #define MyLog(...) NSLog(__VA_ARGS__);
 /** 屏幕尺寸 */
 #define SCREEN_BOUNDS [UIScreen mainScreen].bounds

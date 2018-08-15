@@ -38,7 +38,7 @@
 @property (nonatomic,strong) UIPanGestureRecognizer *click2;
 @property (nonatomic,strong) UIPanGestureRecognizer *click3;
 @property (nonatomic,strong) UIPanGestureRecognizer *click4;
-
+@property (nonatomic,strong) UIButton *centerBtn;
 @end
 
 @implementation RectangleView
@@ -66,6 +66,8 @@ int i = 0;
             [self.leftBorder addGestureRecognizer:self.click2];
             [self.rightBorder addGestureRecognizer:self.click3];
             [self.bottomBorder addGestureRecognizer:self.click4];
+            [self.centerBtn setTitle:@"编辑" forState:UIControlStateNormal];
+            self.centerBtn.alpha = 1;
     }else{
         //变大
         self.mainView.userInteractionEnabled = YES;
@@ -77,6 +79,8 @@ int i = 0;
         [self.rightBorder removeGestureRecognizer:self.click3];
         
         [self.bottomBorder removeGestureRecognizer:self.click4];
+        [self.centerBtn setTitle:@"完成" forState:UIControlStateNormal];
+        self.centerBtn.alpha = 0.6;
 
     }
 }
@@ -180,6 +184,15 @@ int i = 0;
     }
 }
 
+-(void)setIsHide:(BOOL)isHide{
+    _isHide = isHide;
+    //隐藏
+    if (isHide == YES) {
+        self.centerBtn.hidden = YES;
+    }else{
+        self.centerBtn.hidden = NO;
+    }
+}
 #pragma mark - 移动手势
 BOOL isMove;
 CGPoint legend_point;
@@ -192,6 +205,7 @@ CGPoint legend_point;
 
     //默认状态为no
     isMove = NO;
+    self.isHide = NO;
     //获取响应事件的对象
     UITouch *touch = [touches anyObject];
     //获取在屏幕上的点
@@ -249,50 +263,57 @@ CGPoint legend_point;
     if (self.delegate && [self.delegate respondsToSelector:@selector(updateRectangleViewFrame:)]) {
         [self.delegate updateRectangleViewFrame:self];
     }
-    
 }
 #pragma mark - 初始化
 -(void)addUI{
     
-    
     UIView *mainView = [[UIView alloc] init];
-    mainView.backgroundColor = [UIColor grayColor];
+    mainView.backgroundColor = [UIColor whiteColor];
     self.mainView = mainView;
     [self addSubview:mainView];
     //创建4条边
     UIView *topBorder = [[UIView alloc] init];
     topBorder.tag = 1;
-    topBorder.backgroundColor = [UIColor blackColor];
+    topBorder.backgroundColor = [UIColor clearColor];
     self.topBorder = topBorder;
     [self addSubview:topBorder];
     
     UIView *leftBorder = [[UIView alloc] init];
     leftBorder.tag = 2;
-    leftBorder.backgroundColor = [UIColor blackColor];
+    leftBorder.backgroundColor = [UIColor clearColor];
     self.leftBorder = leftBorder;
     [self addSubview:leftBorder];
     
     UIView *rightBorder = [[UIView alloc] init];
     rightBorder.tag = 3;
     self.rightBorder = rightBorder;
-    rightBorder.backgroundColor = [UIColor blackColor];
+    rightBorder.backgroundColor = [UIColor clearColor];
     [self addSubview:rightBorder];
     
     UIView *bottomBorder = [[UIView alloc] init];
     bottomBorder.tag = 4;
     self.bottomBorder = bottomBorder;
-    bottomBorder.backgroundColor = [UIColor blackColor];
+    bottomBorder.backgroundColor = [UIColor clearColor];
     [self addSubview:bottomBorder];
     
     //编辑按钮
     UIButton *centerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [centerBtn setTitle:@"编辑" forState:UIControlStateNormal];
     [centerBtn setTintColor:[UIColor whiteColor]];
-    centerBtn.frame = CGRectMake( self.bounds.size.width / 2,self.bounds.size.height / 2, self.bounds.size.width * 0.2,  self.bounds.size.height*0.2);
+    centerBtn.frame = CGRectMake( self.bounds.size.width / 2,self.bounds.size.height / 2, 100,  100);
+    centerBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     centerBtn.backgroundColor = [UIColor colorWithHexString:@"#91EDF2"];
     centerBtn.layer.borderColor = [UIColor colorWithHexString:@"#62C7AC"].CGColor;
     centerBtn.layer.borderWidth = 1.0f;
+//    [centerBtn addTarget:self action:@selector(tapGestureTarget:) forControlEvents:UIControlEventTouchUpInside];
+    centerBtn.layer.cornerRadius = centerBtn.frame.size.height / 2;
+    centerBtn.layer.masksToBounds = YES;
+    _centerBtn = centerBtn;
     [self addSubview:centerBtn];
+    
+    //边线
+    self.layer.borderWidth = 2.0f;
+    self.layer.borderColor = [UIColor blackColor].CGColor;
     
     [mainView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.mas_top);
@@ -332,10 +353,12 @@ CGPoint legend_point;
     [centerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(self);
         make.centerY.mas_equalTo(self);
+        make.height.mas_equalTo(100);
+        make.width.mas_equalTo(100);
+
     }];
     
     UIPanGestureRecognizer *click1 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
-
     UIPanGestureRecognizer *click2 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
     UIPanGestureRecognizer *click3 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
     UIPanGestureRecognizer *click4 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
@@ -353,9 +376,13 @@ CGPoint legend_point;
     UIPinchGestureRecognizer *PinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
     [self addGestureRecognizer:PinchGestureRecognizer];
 
+
     UITapGestureRecognizer *TapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureTarget:)];
-    TapGestureRecognizer.numberOfTapsRequired = 2;
-    [self addGestureRecognizer:TapGestureRecognizer];
+    TapGestureRecognizer.numberOfTapsRequired = 1;
+    [self.centerBtn addGestureRecognizer:TapGestureRecognizer];
+    
+    [TapGestureRecognizer requireGestureRecognizerToFail:PinchGestureRecognizer];
+
     self.layer.masksToBounds = YES;
     
     //删除

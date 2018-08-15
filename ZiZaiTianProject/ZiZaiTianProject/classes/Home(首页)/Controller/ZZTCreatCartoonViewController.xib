@@ -12,7 +12,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ZZTCreatCartoonViewController">
             <connections>
+                <outlet property="commitBtn" destination="WXO-eL-aoh" id="9AY-kJ-ka1"/>
                 <outlet property="midView" destination="udn-ai-VL3" id="aI0-cf-VNB"/>
+                <outlet property="toolBar" destination="MZc-VQ-JZg" id="5Fa-eZ-zdd"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -54,16 +56,16 @@
                                 <action selector="empty:" destination="-1" id="F68-0N-z5n"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" id="EQp-lc-rLo">
+                        <barButtonItem id="EQp-lc-rLo">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WXO-eL-aoh">
-                                <rect key="frame" x="305" y="5" width="54" height="34"/>
+                                <rect key="frame" x="322" y="5" width="37" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.7843137255" green="0.80784313730000001" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="提交"/>
+                                <connections>
+                                    <action selector="commit:" destination="-1" eventType="touchUpInside" id="FI7-CY-RZ0"/>
+                                </connections>
                             </button>
-                            <connections>
-                                <action selector="commit:" destination="-1" id="Lpf-1N-gbh"/>
-                            </connections>
                         </barButtonItem>
                     </items>
                 </toolbar>
@@ -358,7 +360,7 @@
                 <constraint firstItem="wZy-fa-kd6" firstAttribute="trailing" secondItem="Q5M-cg-NOt" secondAttribute="trailing" id="q8n-aG-zll"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
-            <point key="canvasLocation" x="-220" y="-85"/>
+            <point key="canvasLocation" x="-360" y="-98"/>
         </view>
         <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="ptG-4r-6He"/>
     </objects>

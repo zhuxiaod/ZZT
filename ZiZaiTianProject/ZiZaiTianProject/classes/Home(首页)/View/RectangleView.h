@@ -33,6 +33,8 @@
 
 @property (nonatomic,assign) BOOL isBig;
 
+@property (nonatomic,assign) BOOL isHide;
+
 @property (nonatomic,assign) NSInteger tagNum;
 //方框存放视图的东西
 @property (nonatomic,strong) UIView *mainView;

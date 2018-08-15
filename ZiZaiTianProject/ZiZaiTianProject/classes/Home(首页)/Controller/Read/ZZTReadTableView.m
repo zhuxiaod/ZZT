@@ -72,7 +72,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 
 -(void)loadBannerData{
     weakself(self);
-    [AFNHttpTool POST:@"http://120.79.178.191:8888/homepage/banner" parameters:nil success:^(id responseObject) {
+    [AFNHttpTool POST:@"http://192.168.0.165:8888/homepage/banner" parameters:nil success:^(id responseObject) {
         NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
         NSArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
         weakSelf.bannerModelArray = array;

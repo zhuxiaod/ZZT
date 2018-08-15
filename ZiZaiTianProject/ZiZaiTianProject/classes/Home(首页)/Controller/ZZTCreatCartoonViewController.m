@@ -19,6 +19,7 @@
 #import "RectangleView.h"
 #import "ZZTFangKuangModel.h"
 #import "ZZTBubbleImageView.h"
+#import "ZZTChapterlistModel.h"
 
 #define MainOperationView self.currentCell.operationView
 @interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate,RectangleViewDelegate,UIGestureRecognizerDelegate,ZZTBubbleImageViewDelegate>
@@ -71,9 +72,22 @@
 @property (nonatomic,assign) CGFloat proportion;
 
 @property (nonatomic,strong) RectangleView *currentRectangleView;
+//图片地址数组
+@property (nonatomic,strong) NSMutableArray *imageUrlArr;
+
+@property (weak, nonatomic) IBOutlet UIToolbar *toolBar;
+@property (weak, nonatomic) IBOutlet UIButton *commitBtn;
+
 @end
 
 @implementation ZZTCreatCartoonViewController
+//图片地址数组
+-(NSMutableArray *)imageUrlArr{
+    if(!_imageUrlArr){
+        _imageUrlArr = [NSMutableArray array];
+    }
+    return _imageUrlArr;
+}
 
 //漫画页
 -(NSMutableArray *)cartoonEditArray{
@@ -104,7 +118,7 @@
     [self setBOOL];
    
     //测试数据
-    ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:600 isSelect:YES];
+    ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:self.view.height - 88 isSelect:YES];
     [self.cartoonEditArray addObject:cell];
     
     //注册移除image的通知
@@ -115,7 +129,11 @@
     //UICollectionView
     [self setupCollectionView];
     
+    [self.toolBar layoutIfNeeded];
+    
+
 }
+
 #pragma 定义初始变量
 -(void)setBOOL{
     //恢复只执行一次
@@ -278,7 +296,7 @@
         if([NSStringFromClass([MainOperationView.subviews[i] class]) isEqualToString:@"RectangleView"]){
             if (MainOperationView.subviews[i] != self.mainView) {
                 RectangleView *rectangleView = MainOperationView.subviews[i];
-                rectangleView.mainView.backgroundColor = [UIColor grayColor];
+                rectangleView.mainView.backgroundColor = [UIColor whiteColor];
             }
         }
     }
@@ -303,7 +321,7 @@
         //加页cell
         footerView.addCellBtnClick = ^(UIButton *btn) {
             //cell的属性
-            ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:300 isSelect:NO];
+            ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:self.view.height - 88   isSelect:NO];
             //更新cell的数据源
             NSMutableArray *array = self.cartoonEditArray;
             [array addObject:cell];
@@ -352,8 +370,37 @@
     [self.collectionView reloadData];
 }
 
-//提交  未做
+#pragma mark 提交
 - (IBAction)commit:(id)sender {
+    //说明有内容
+    if(self.imageUrlArr.count > 0){
+        for (int i = 0; i < self.imageUrlArr.count; i++) {
+            
+        }
+//        /cartoon/insertCartoonChapter    参数 String userId,
+//        String cartoonId,     漫画id
+//        String chapterCover,  地址
+//        String chapterName   章节名称
+        NSString *string = [self.imageUrlArr componentsJoinedByString:@","];
+        NSDictionary *dic = @{
+                              @"userId":@"1",
+                              @"cartoonId":@"1",
+                              @"chapterCover":string,
+                              @"chapterName":@"1",
+                              @"chapterId":@"1"
+                              };
+        ZZTChapterlistModel *model = [[ZZTChapterlistModel alloc] init];
+        [AFNHttpTool POST:@"http://192.168.0.165:8888/cartoon/insertCartoonChapter" parameters:dic success:^(id responseObject) {
+            NSLog(@"成功了");
+        } failure:^(NSError *error) {
+            
+        }];
+    }else{
+        //根据页面 需要来增删改查
+        NSLog(@"无内容");
+    }
+  
+    
 }
 
 //翻转  有bug
@@ -585,7 +632,6 @@
     rectangView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
    
-
     [self checkRectangleView:rectangView];
     
     [MainOperationView addSubview:rectangView];
@@ -605,7 +651,7 @@
     //设置方框为当前View
     self.mainView = rectangleView.mainView;
     self.currentRectangleView = rectangleView;
-    self.mainView.backgroundColor = [UIColor redColor];
+//    self.mainView.backgroundColor = [UIColor redColor];
     [self exceptCurrentViewHiddenOtherView:rectangleView];
 //    self.currentView = rectangleView;
 //    self.collectionView.scrollEnabled = NO;
@@ -926,9 +972,9 @@
             //如果是方框
             RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
             if(rectangleView.mainView == self.mainView){
-                rectangleView.mainView.backgroundColor = [UIColor redColor];
+                rectangleView.isHide = NO;
             }else{
-                rectangleView.mainView.backgroundColor = [UIColor grayColor];
+                rectangleView.isHide = YES;
             }
         }
     }
@@ -1059,34 +1105,74 @@
 
 }
 
-//截图，获取到image(保存) 未解决
+#pragma mark 截图 这里要搞个异步
 - (void)imageThumb{
     [self hideAllBtn];
+
     NSMutableArray *imageArray = [NSMutableArray array];
    
     //循环截图
     //多少个cell 截图多少次
     for(int i = 0;i < self.cartoonEditArray.count;i++){
-        
+        //数据管理cell  数据错误
         ZZTCartoonDrawView *cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         cell.alpha = 1;
+        //开启
+        UIGraphicsBeginImageContextWithOptions(cell.bounds.size, NO, [UIScreen mainScreen].scale);
         
-        CGPoint point = [[cell superview] convertPoint:cell.frame.origin toView:cell];
-        CGRect rect = CGRectMake(point.x, point.y, cell.frame.size.width, cell.frame.size.height);
+        UIImage *resultingImage = [[UIImage alloc] init];
+        [resultingImage drawInRect:CGRectMake(0, 0,cell.bounds.size.width, cell.bounds.size.height)];
         
-        UIGraphicsBeginImageContext(rect.size);
         [cell.layer renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage * viewImage = UIGraphicsGetImageFromCurrentImageContext();
+        
+        resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+        
         UIGraphicsEndImageContext();
-        [imageArray addObject:viewImage];
+        
+        
+        [imageArray addObject:resultingImage];
         //保存本地
-        UIImageWriteToSavedPhotosAlbum(viewImage, nil, nil, nil);
+//        resultingImage = [resultingImage stretchableImageWithLeftCapWidth:SCREEN_WIDTH topCapHeight:SCREEN_HEIGHT];
+        UIImageWriteToSavedPhotosAlbum(resultingImage, nil, nil, nil);
         
         cell.alpha = 0.6;
     }
+    
     //恢复当前cell的透明度
     ZZTCartoonDrawView *cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_selectRow inSection:0]];
     cell.alpha = 1;
+    
+    //上传七牛云
+    for (int i = 0; i < imageArray.count; i++) {
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = [formatter stringFromDate:[NSDate date]];
+        NSString *imgName = [formatter stringFromDate:[NSDate date]];
+        NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        NSMutableString *randomString = [NSMutableString stringWithCapacity:32];
+        for (NSInteger i = 0; i < 32; i++) {
+            [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform((uint32_t)letters.length)]];
+        }
+        imgName = [NSString stringWithFormat:@"%@%@.png",imgName,randomString];
+        //写入
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:imgName];
+        BOOL result = [UIImagePNGRepresentation(imageArray[i]) writeToFile:filePath atomically:YES];
+        
+        if (result == YES) {
+            NSLog(@"保存成功");
+            
+            AFNHttpTool *tool = [[AFNHttpTool alloc] init];
+            NSString *toke = [tool makeToken:ZZTAccessKey secretKey:ZZTSecretKey];
+            
+            [AFNHttpTool putImagePath:filePath key:imgName token:toke complete:^(id objc) {
+                NSLog(@"%@",objc); //  上传成功并获取七牛云的图片地址
+                [self.imageUrlArr addObject:objc];
+            }];
+            
+        }else{
+            NSLog(@"保存失败");
+        }
+    }
 }
 
 -(void)dealloc{

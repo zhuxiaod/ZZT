@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
 // 七牛云
+#import "QiniuSDK.h"
 
 @interface AFNHttpTool : NSObject
+
 
 + (AFHTTPSessionManager *)sharedHttpSession;
 
@@ -40,6 +42,13 @@
      success:(void (^)(id responseObject))success
      failure:(void (^)(NSError *error))failure;
 
++ (QNUploadManager *)sharedUpload;
 
++ (void)putImagePath:(NSString *)path
+                 key:(NSString *)key
+               token:(NSString *)token
+            complete:(void (^)(id objc))complete;
+
+- (NSString *)makeToken:(NSString *)accessKey secretKey:(NSString *)secretKey;
 
 @end
