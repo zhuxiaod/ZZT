@@ -76,11 +76,23 @@
 @property (nonatomic,strong) NSMutableArray *imageUrlArr;
 
 @property (weak, nonatomic) IBOutlet UIToolbar *toolBar;
-@property (weak, nonatomic) IBOutlet UIButton *commitBtn;
 
+@property (weak, nonatomic) IBOutlet UIButton *commitBtn;
+//一章的卡通内容
+@property (strong,nonatomic) NSMutableArray *cartoonArray;
+//记录现在正在那一页面
+@property (assign,nonatomic) NSInteger currentIndex;
 @end
 
 @implementation ZZTCreatCartoonViewController
+//一章的卡通内容
+-(NSMutableArray *)cartoonArray{
+    if (!_cartoonArray) {
+        _cartoonArray = [NSMutableArray array];
+    }
+    return _cartoonArray;
+}
+
 //图片地址数组
 -(NSMutableArray *)imageUrlArr{
     if(!_imageUrlArr){
@@ -129,9 +141,6 @@
     //UICollectionView
     [self setupCollectionView];
     
-    [self.toolBar layoutIfNeeded];
-    
-
 }
 
 #pragma 定义初始变量
@@ -156,6 +165,8 @@
     //交互开启
     self.view.userInteractionEnabled = YES;
     self.midView.userInteractionEnabled = YES;
+    //编辑器制作页初始化为0
+    _currentIndex = 0;
 }
 #pragma mark 设置CollectionView
 -(void)setupCollectionView{
@@ -171,6 +182,7 @@
     collectionView.dataSource = self;
     _collectionView = collectionView;
     [collectionView registerNib:[UINib nibWithNibName:@"ZZTAddLengthFooterView" bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"footerView"];
+    collectionView.scrollEnabled = NO;
     [self.midView addSubview:collectionView];
 }
 
@@ -300,7 +312,7 @@
             }
         }
     }
-    self.collectionView.scrollEnabled = YES;
+//    self.collectionView.scrollEnabled = YES;
 }
 
 #pragma mark 设置CollectionViewCell是否可以被点击
@@ -344,14 +356,162 @@
 - (IBAction)save:(UIBarButtonItem *)sender {
     [self imageThumb];
 }
+//恢复操作
+-(void)restoreAtIndex{
+//    for (UIView *view in MainOperationView.subviews) {
+//        [view removeFromSuperview];
+//    }
+    [self.collectionView reloadData];
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+    //获取上一页的内容
+    ZZTDIYCellModel *indexModel = self.cartoonArray[self.currentIndex];
+    //遍历这一页的内容
+    for (int i = 0; i < indexModel.imageArray.count; i++) {
+         self.mainView = MainOperationView;
+        //如果是第一层的素材
+        if([NSStringFromClass([indexModel.imageArray[i] class])isEqualToString:@"ZZTEditImageViewModel"]){
+            //设置添加视图
+            ZZTEditImageViewModel *model = (ZZTEditImageViewModel *)indexModel.imageArray[i];
+            //如果是普通的素材
+            if(model.viewType == 1){
+                EditImageView *imageView = [self speedInitImageView:model];
+                //素材Model
+                ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:model.imageViewFrame imageUrl:model.imageUrl tagNum:imageView.tag superView:NSStringFromClass([self.mainView class]) superViewTag:self.mainView.tag viewType:1];
+                //不是方框可直接添加素材到cell之中
+                [cellModel.imageArray addObject:imageModel];
+            }else{
+                ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
+                //素材Model
+                ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum superView:NSStringFromClass([self.mainView class]) superViewTag:self.mainView.tag viewType:2];
+                //不是方框可直接添加素材到cell之中
+                [cellModel.imageArray addObject:imageModel];
+            }
+        }else if([NSStringFromClass([indexModel.imageArray[i] class])isEqualToString:@"ZZTFangKuangModel"]){
+            //方框
+            self.mainView = MainOperationView;
+            ZZTFangKuangModel *mode = (ZZTFangKuangModel *)indexModel.imageArray[i];
+            RectangleView *rectangView = [self createFuangKuangViewWithModel:mode];
+            //如果这个方框里面是有内容的
+            //位置的更新没有被传进去
+            if(mode.viewArray.count > 0){
+                for (int i = 0; i < mode.viewArray.count; i++) {
+                    if([NSStringFromClass([mode.viewArray[i] class])isEqualToString:@"ZZTEditImageViewModel"]){
+                        //设置添加视图
+                        ZZTEditImageViewModel *model = (ZZTEditImageViewModel *)mode.viewArray[i];
+                        if(model.viewType == 1){
+                            self.mainView = rectangView.mainView;
 
-//上一页
+                            EditImageView *imageView = [self speedInitImageView:model];
+                            //素材Model
+                            ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:model.imageViewFrame imageUrl:model.imageUrl tagNum:imageView.tag superView:NSStringFromClass([self.mainView class]) superViewTag:self.mainView.tag viewType:1];
+                            
+                            //不是方框可直接添加素材到cell之中
+                            [cellModel.imageArray addObject:imageModel];
+                        }else{
+                            self.mainView = rectangView.mainView;
+                            ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
+                            //素材Model
+                            ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum superView:NSStringFromClass([self.mainView class]) superViewTag:self.mainView.tag viewType:2];
+                            //不是方框可直接添加素材到cell之中
+                            [cellModel.imageArray addObject:imageModel];
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+#pragma mark 上一页
 - (IBAction)previousPage:(id)sender {
+    //安全操作
+    if(self.currentIndex == 0){
+        NSLog(@"没有上一页");
+        //最后一个  保存当前类型
+    }else if(self.currentIndex == self.cartoonArray.count){
+        //只会有一行 所以可以
+        ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+        //保存成功  加入的是第一页的内容
+        ZZTDIYCellModel *model = [cellModel copy];
+        [self.cartoonArray addObject:model];
+        self.currentIndex--;
+        //数据是数据 视图是视图
+        //数据初始化
+        cellModel.imageArray = nil;
+        //视图初始化
+        for (UIView *view in MainOperationView.subviews) {
+            [view removeFromSuperview];
+        }
+        [self restoreAtIndex];
+    }else{
+        //       ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+        //保存成功  加入的是第一页的内容
+        ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+
+//        ZZTDIYCellModel *model = [cellModel copy];
+//        [self.cartoonArray addObject:model];
+        self.currentIndex--;
+        //数据是数据 视图是视图
+        //数据初始化
+        cellModel.imageArray = nil;
+        //视图初始化
+        for (UIView *view in MainOperationView.subviews) {
+            [view removeFromSuperview];
+        }
+        [self restoreAtIndex];
+    }
 }
 
-//下一页
+#pragma mark 下一页
 - (IBAction)nextPage:(id)sender {
+    NSLog(@"self.current:%ld",self.currentIndex);
+    //新的一页
+    //0 1 1 2 
+    if(self.currentIndex == self.cartoonArray.count || self.currentIndex == 0){
+        //只会有一行 所以可以
+        ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+        //保存成功  加入的是第一页的内容
+        ZZTDIYCellModel *model = [cellModel copy];
+        [self.cartoonArray addObject:model];
+        self.currentIndex++;
+        //数据是数据 视图是视图
+        //数据初始化
+        cellModel.imageArray = nil;
+        //视图初始化
+        for (UIView *view in MainOperationView.subviews) {
+            [view removeFromSuperview];
+        }
+    }else{
+        self.currentIndex++;
+        [self restoreAtIndex];
+        //       //只会有一行 所以可以
+//        ZZTDIYCellModel *cellModel = self.cartoonArray[self.currentIndex];
+        //保存成功  加入的是第一页的内容
+//        ZZTDIYCellModel *model = [cellModel copy];
+////        [self.cartoonArray addObject:model];
+//        self.currentIndex++;
+//        //数据是数据 视图是视图
+//        //数据初始化
+////        cellModel.imageArray = nil;
+//        //视图初始化
+//        for (UIView *view in MainOperationView.subviews) {
+//            [view removeFromSuperview];
+//        }
+    }
 }
+-(ZZTBubbleImageView *)createBubbleImageViewWithModel:(ZZTEditImageViewModel *)model{
+    
+    ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:model.imageViewFrame text:@"请点击输入内容"];
+    imageView.bubbleDelegate = self;
+    imageView.superViewName = NSStringFromClass([self.mainView class]);
+    [imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl]];
+    //设置tag值
+    imageView.tag = self.tagNum;
+    self.tagNum = self.tagNum + 1;
+    [self.mainView addSubview:imageView];
+    [self exceptCurrentViewHiddenOtherView:imageView];
+    return imageView;
+}
+
 
 #pragma mark - 全部清空
 - (IBAction)empty:(id)sender {
@@ -623,29 +783,43 @@
 
 #pragma mark - 创建方框
 - (IBAction)advance:(id)sender {
-    //方框View
-    RectangleView *rectangView = [[RectangleView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 200, 200)];
+    [self createFuangKuangViewWithModel:nil];
+}
+
+-(RectangleView *)createFuangKuangViewWithModel:(ZZTFangKuangModel *)model{
+
+    CGRect viewFrame;
+    if(model){
+        viewFrame = model.viewFrame;
+    }else{
+        viewFrame = CGRectMake(self.midView.center.x/2, 20, 200, 200);
+    }
+    RectangleView *rectangView = [[RectangleView alloc] initWithFrame:viewFrame];
     //方框永远在cell之上
     rectangView.superView = MainOperationView;
     rectangView.delegate = self;
     rectangView.isClick = YES;
     rectangView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
-   
+    
     [self checkRectangleView:rectangView];
     
     [MainOperationView addSubview:rectangView];
+    //添加方框model
+    [self addFangKuangModelWithView:rectangView];
     
-    //cell
-    ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
-    
-    //位置数据
-    CGRect startRect = [rectangView convertRect:rectangView.bounds toView:MainOperationView];
-    //方框模型
-    ZZTFangKuangModel *FKModel = [ZZTFangKuangModel initWithViewFrame:startRect tagNum:rectangView.tagNum];
-    [cellModel.imageArray addObject:FKModel];
+    return rectangView;
+
 }
 
+-(void)addFangKuangModelWithView:(RectangleView *)rectangleView{
+    //cell
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
+    //位置数据
+    //方框模型
+    ZZTFangKuangModel *FKModel = [ZZTFangKuangModel initWithViewFrame:rectangleView.frame tagNum:rectangleView.tagNum];
+    [cellModel.imageArray addObject:FKModel];
+}
 ////设置方框为当前View
 -(void)checkRectangleView:(RectangleView *)rectangleView{
     //设置方框为当前View
@@ -653,32 +827,20 @@
     self.currentRectangleView = rectangleView;
 //    self.mainView.backgroundColor = [UIColor redColor];
     [self exceptCurrentViewHiddenOtherView:rectangleView];
-//    self.currentView = rectangleView;
-//    self.collectionView.scrollEnabled = NO;
-//    self.mainView = rectangleView.mainView;
-//    self.currentRectangleView = rectangleView;
-//    self.mainView.backgroundColor = [UIColor redColor];
-//
-//    //遍历cell上的视图
-//    for (int i = 0; i < MainOperationView.subviews.count; i++) {
-//        //如果是cell上的方框
-//        if([NSStringFromClass([MainOperationView.subviews[i] class]) isEqualToString:@"RectangleView"]){
-//            //非选中方框
-//            if(MainOperationView.subviews[i] != rectangleView){
-//                RectangleView *view = MainOperationView.subviews[i];
-//                view.mainView.backgroundColor = [UIColor grayColor];
-//            }
-//        }else{
-//            //如果是素材
-//            EditImageView *imageView = MainOperationView.subviews[i];
-//            imageView.isHide = YES;
-//        }
-//    }
 }
 
-//方框是否移动了
+#pragma mark 方框移动
 -(void)setupMainView:(RectangleView *)rectangleView{
     self.isMoveAfter = YES;
+    CGRect startRect = [rectangleView convertRect:rectangleView.bounds toView:self.mainView];
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+    
+    for (ZZTFangKuangModel *model in cellModel.imageArray) {
+        if(model.tagNum == rectangleView.tagNum){
+            model.viewFrame = rectangleView.frame;
+            NSLog(@"viewFrame:%@",NSStringFromCGRect(model.viewFrame));
+        }
+    }
 }
 
 #pragma mark 获取cell之上的方框模型
@@ -824,30 +986,22 @@
 -(void)sendImageWithModel:(ZZTFodderListModel *)model{
     //获取当前行的数据
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
-    //新图层
-    EditImageView *imageView = [self speedInitImageView:model.img];
-    //设置tag值
-    imageView.tag = self.tagNum;
-    self.tagNum = self.tagNum + 1;
-    imageView.superViewTag = self.mainView.tag;
-    //记录位置
-    CGRect startRect = imageView.frame;
-    NSLog(@"startRect:%@",NSStringFromCGRect(imageView.frame));
-    //素材Model
+    
+    //通过字符串创建
+    EditImageView *imageView = [self speedInitImageViewWithStr:model.img];
+    CGRect startRect = [imageView convertRect:imageView.bounds toView:self.mainView];
+    //存储数据
     ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:startRect imageUrl:model.img tagNum:imageView.tag superView:NSStringFromClass([self.mainView class]) superViewTag:self.mainView.tag viewType:1];
-    //如果是方框
+    
+    //方框内
     if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
         //如果可以加入素材 便加入图层
         if(self.isAddM == YES){
             [self.mainView addSubview:imageView];
-
+            //要方框数据
             ZZTFangKuangModel *FKModel = [self rectangleModelFromView:(RectangleView *)self.mainView];
-
             [FKModel.viewArray addObject:imageModel];
             [self exceptCurrentViewHiddenOtherView:imageView];
-
-//            [self EditImageViewWithViewInRectangleView:imageView];
-
         }else{
             //否则失败
             NSLog(@"必须放大View以后才能添加素材");
@@ -856,7 +1010,6 @@
         //不是方框可直接添加素材到cell之中
         [cellModel.imageArray addObject:imageModel];
         [self.mainView addSubview:imageView];
-//        [self EditImageViewWithViewIncell:imageView];
         [self exceptCurrentViewHiddenOtherView:imageView];
     }
 }
@@ -866,6 +1019,7 @@
  */
 #pragma mark - 添加文字框
 -(void)sendTextImageWithModel:(ZZTFodderListModel *)model{
+
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
 
     ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 100, 100) text:@"请点击输入内容"];
@@ -873,7 +1027,7 @@
     imageView.superViewName = NSStringFromClass([self.mainView class]);
     [imageView sd_setImageWithURL:[NSURL URLWithString:model.img]];
     //设置tag值
-    imageView.tag = self.tagNum;
+    imageView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
     //记录位置
     CGRect startRect = [imageView convertRect:imageView.bounds toView:self.mainView];
@@ -901,11 +1055,15 @@
         [self exceptCurrentViewHiddenOtherView:imageView];
     }
 }
+
+//设置当前View
 -(void)bubbleViewDidBeginEditing:(ZZTBubbleImageView *)bubbleView{
     [self exceptCurrentViewHiddenOtherView:bubbleView];
 }
+//View开始移动
 -(void)bubbleViewDidBeginMoving:(ZZTBubbleImageView *)bubbleView{
-    CGRect startRact = [bubbleView convertRect:bubbleView.bounds toView:self.mainView];
+    CGRect startRect = [bubbleView convertRect:bubbleView.bounds toView:self.mainView];
+    NSLog(@"startRect:%@",NSStringFromCGRect(startRect));
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
     //如果是方框
     if([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]){
@@ -914,20 +1072,20 @@
         //更新model中的数据
         for (int i = 0; i < FKModel.viewArray.count; i++) {
             ZZTEditImageViewModel *model = FKModel.viewArray[i];
-            if(model.tagNum == bubbleView.tag){
-                model.imageViewFrame = startRact;
-                NSLog(@"model.imageViewFrame:%@",NSStringFromCGRect(model.imageViewFrame));
+            if(model.tagNum == bubbleView.tagNum){
+                model.imageViewFrame = startRect;
             }
         }
     }else{
         //更新位置
         for (ZZTEditImageViewModel *model in cellModel.imageArray) {
-            if(model.tagNum == bubbleView.tag){
-                model.imageViewFrame = startRact;
+            if(model.tagNum == bubbleView.tagNum){
+                model.imageViewFrame = startRect;
             }
         }
     }
 }
+
 -(void)exceptCurrentViewHiddenOtherView:(UIView *)view{
     self.currentView = view;
     self.collectionView.scrollEnabled = NO;
@@ -945,18 +1103,8 @@
             //如果是聊天框
             else if ([NSStringFromClass([rectangleView.mainView.subviews[i] class])isEqualToString:@"ZZTBubbleImageView"] && rectangleView.mainView.subviews[i] != view){
                 ZZTBubbleImageView *BubbleImageView = rectangleView.mainView.subviews[i];
-                
                 BubbleImageView.isHide = YES;
             }
-//            else if ([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"RectangleView"]){
-//                //如果是方框
-//                RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
-//                if(rectangleView.mainView == self.mainView){
-//                    rectangleView.mainView.backgroundColor = [UIColor redColor];
-//                }else{
-//                    rectangleView.mainView.backgroundColor = [UIColor grayColor];
-//                }
-//            }
         }
     }
     for (int i = 0; i < MainOperationView.subviews.count; i++) {
@@ -979,18 +1127,42 @@
         }
     }
 }
-//快速创建方法
--(EditImageView *)speedInitImageView:(NSString *)imgUrl{
+#pragma mark 恢复绘图素材
+-(EditImageView *)speedInitImageView:(ZZTEditImageViewModel *)model{
+
+    EditImageView *imageView = [[EditImageView alloc] initWithFrame:model.imageViewFrame];
+    imageView.delegate = self;
+    //记录父类的名字
+    imageView.superViewName = NSStringFromClass([self.mainView class]);
+    [imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    }];
+    [self addEditImageView:imageView];
+    return imageView;
+}
+
+#pragma mark 创建素材
+-(EditImageView *)speedInitImageViewWithStr:(NSString *)imgUrl{
+    //创建坐标默认
     EditImageView *imageView = [[EditImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 100, 100)];
     imageView.delegate = self;
-    
     //记录父类的名字
     imageView.superViewName = NSStringFromClass([self.mainView class]);
     [imageView sd_setImageWithURL:[NSURL URLWithString:imgUrl] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
     }];
-
+    //设置tag值
+    imageView.tag = self.tagNum;
+    self.tagNum = self.tagNum + 1;
+    imageView.superViewTag = self.mainView.tag;
+//    [self addEditImageView:imageView];
     return imageView;
 }
+//添加到图层之中去
+-(void)addEditImageView:(EditImageView *)imageView{
+    
+    [self.mainView addSubview:imageView];
+    [self exceptCurrentViewHiddenOtherView:imageView];
+}
+
 #pragma mark EditImageViewDelegate
 //控制collectionView是否可以滑动
 -(void)checkViewIsHidden:(EditImageView *)view{
@@ -1001,7 +1173,7 @@
     }
     else{
         //collectionView能动
-        self.collectionView.scrollEnabled = YES;
+//        self.collectionView.scrollEnabled = YES;
     }
 }
 
@@ -1101,10 +1273,19 @@
 - (void)hideAllBtn{
     UIView *view = [[UIView alloc] init];
     [self exceptCurrentViewHiddenOtherView:view];
-    self.collectionView.scrollEnabled = YES;
+//    self.collectionView.scrollEnabled = YES;
 
 }
-
+/*
+    理一下
+    保存一页是好的
+ 
+    上一页：如果没有上一页  数组index == 0 提示
+    如果有上一页此页以cell为单位保存在数组之中
+    清空此页内容
+    获取上一页内容的数组
+    动态创建
+ */
 #pragma mark 截图 这里要搞个异步
 - (void)imageThumb{
     [self hideAllBtn];
@@ -1142,37 +1323,37 @@
     ZZTCartoonDrawView *cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:_selectRow inSection:0]];
     cell.alpha = 1;
     
-    //上传七牛云
-    for (int i = 0; i < imageArray.count; i++) {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = [formatter stringFromDate:[NSDate date]];
-        NSString *imgName = [formatter stringFromDate:[NSDate date]];
-        NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        NSMutableString *randomString = [NSMutableString stringWithCapacity:32];
-        for (NSInteger i = 0; i < 32; i++) {
-            [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform((uint32_t)letters.length)]];
-        }
-        imgName = [NSString stringWithFormat:@"%@%@.png",imgName,randomString];
-        //写入
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-        NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:imgName];
-        BOOL result = [UIImagePNGRepresentation(imageArray[i]) writeToFile:filePath atomically:YES];
-        
-        if (result == YES) {
-            NSLog(@"保存成功");
-            
-            AFNHttpTool *tool = [[AFNHttpTool alloc] init];
-            NSString *toke = [tool makeToken:ZZTAccessKey secretKey:ZZTSecretKey];
-            
-            [AFNHttpTool putImagePath:filePath key:imgName token:toke complete:^(id objc) {
-                NSLog(@"%@",objc); //  上传成功并获取七牛云的图片地址
-                [self.imageUrlArr addObject:objc];
-            }];
-            
-        }else{
-            NSLog(@"保存失败");
-        }
-    }
+//    //上传七牛云
+//    for (int i = 0; i < imageArray.count; i++) {
+//        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//        formatter.dateFormat = [formatter stringFromDate:[NSDate date]];
+//        NSString *imgName = [formatter stringFromDate:[NSDate date]];
+//        NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+//        NSMutableString *randomString = [NSMutableString stringWithCapacity:32];
+//        for (NSInteger i = 0; i < 32; i++) {
+//            [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform((uint32_t)letters.length)]];
+//        }
+//        imgName = [NSString stringWithFormat:@"%@%@.png",imgName,randomString];
+//        //写入
+//        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+//        NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:imgName];
+//        BOOL result = [UIImagePNGRepresentation(imageArray[i]) writeToFile:filePath atomically:YES];
+//
+//        if (result == YES) {
+//            NSLog(@"保存成功");
+//
+//            AFNHttpTool *tool = [[AFNHttpTool alloc] init];
+//            NSString *toke = [tool makeToken:ZZTAccessKey secretKey:ZZTSecretKey];
+//
+//            [AFNHttpTool putImagePath:filePath key:imgName token:toke complete:^(id objc) {
+//                NSLog(@"%@",objc); //  上传成功并获取七牛云的图片地址
+//                [self.imageUrlArr addObject:objc];
+//            }];
+//
+//        }else{
+//            NSLog(@"保存失败");
+//        }
+//    }
 }
 
 -(void)dealloc{

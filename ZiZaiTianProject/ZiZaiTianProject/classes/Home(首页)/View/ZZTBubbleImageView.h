@@ -35,6 +35,9 @@
 @property (nonatomic,strong) NSString *superViewName;
 
 @property (nonatomic,strong) ZZTEditImageViewModel *model;
+
+@property (nonatomic,assign) NSInteger tagNum;
+
 -(instancetype)initWithFrame:(CGRect)frame text:(NSString *)text;
 
 @end
