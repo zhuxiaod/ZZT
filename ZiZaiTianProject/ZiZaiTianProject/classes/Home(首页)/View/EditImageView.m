@@ -162,10 +162,15 @@
         _closeImgView.transform = CGAffineTransformMakeScale(1.0f/scale, 1.0f/scale);
         _borderView.layer.borderWidth = 2*1.0f/scale;
         
+        
         CGFloat rad = angle/180*M_PI;
         self.transform = CGAffineTransformMakeScale(scale, scale);
         self.transform = CGAffineTransformRotate(self.transform,rad);
-        
+    
+        //试一下  写一个代理
+        if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewTransform:scale:rad:)]) {
+            [self.delegate updateImageViewTransform:self scale:scale rad:rad];
+        }
     }
 }
 //切换状态

@@ -18,6 +18,8 @@
 
 -(void)updateImageViewFrame:(EditImageView *)view;
 
+-(void)updateImageViewTransform:(EditImageView *)view scale:(CGFloat)scale rad:(CGFloat)rad;
+
 //观察View是否隐藏
 -(void)checkViewIsHidden:(EditImageView *)view;
 
@@ -57,6 +59,8 @@
 @property (nonatomic,strong) NSString *superViewName;
 
 @property (nonatomic,assign) NSInteger superViewTag;
+
+@property (nonatomic,assign) NSInteger tagNum;
 
 
 @end

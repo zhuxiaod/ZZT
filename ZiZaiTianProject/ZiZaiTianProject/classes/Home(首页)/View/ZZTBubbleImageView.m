@@ -231,7 +231,7 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2)
     _model = model;
     
 }
-#pragma 移动手势
+#pragma mark 移动手势
 -(void)moveGestureAction:(UIGestureRecognizer *)recognizer{
     //起点
     touchLocation = [recognizer locationInView:self.superview];
@@ -248,11 +248,12 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2)
         beginBounds = self.bounds;
         
     } else if (recognizer.state == UIGestureRecognizerStateChanged) {
+       
+        [self setCenter:CGPointMake(beginningCenter.x+(touchLocation.x-beginningPoint.x), beginningCenter.y+(touchLocation.y-beginningPoint.y))];
+
         if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginMoving:)]) {
             [self.bubbleDelegate bubbleViewDidBeginMoving:self];
         }
-        [self setCenter:CGPointMake(beginningCenter.x+(touchLocation.x-beginningPoint.x), beginningCenter.y+(touchLocation.y-beginningPoint.y))];
-
     } else if (recognizer.state == UIGestureRecognizerStateEnded) {
         [self setCenter:CGPointMake(beginningCenter.x+(touchLocation.x-beginningPoint.x), beginningCenter.y+(touchLocation.y-beginningPoint.y))];
 
@@ -322,6 +323,9 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2)
         float angleDiff = deltaAngle - ang;
         self.transform = CGAffineTransformMakeRotation(-angleDiff);
         
+        if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidRotate:rad:)]) {
+            [self.bubbleDelegate bubbleViewDidRotate:self rad:angleDiff];
+        }
         if (IS_IOS_7) {
             self.textView.textContainerInset = UIEdgeInsetsZero;
         }else{
@@ -358,7 +362,7 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2)
         }
         [self centerTextVertically];
     }else if ([recognizer state] == UIGestureRecognizerStateEnded){
-        
+  
     }
 }
 

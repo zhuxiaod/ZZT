@@ -18,6 +18,8 @@
 
 - (void)bubbleViewDidBeginMoving:(ZZTBubbleImageView *)bubbleView;
 
+- (void)bubbleViewDidRotate:(ZZTBubbleImageView *)bubbleView rad:(CGFloat)rad;
+
 @end
 
 @interface ZZTBubbleImageView : UIImageView<UITextViewDelegate,UIGestureRecognizerDelegate>
@@ -32,11 +34,10 @@
 
 @property (nonatomic,assign) BOOL isHide;
 
-@property (nonatomic,strong) NSString *superViewName;
-
 @property (nonatomic,strong) ZZTEditImageViewModel *model;
 
 @property (nonatomic,assign) NSInteger tagNum;
+@property (nonatomic,strong) NSString *superViewName;
 
 -(instancetype)initWithFrame:(CGRect)frame text:(NSString *)text;
 
