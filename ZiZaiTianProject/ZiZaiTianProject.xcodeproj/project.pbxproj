@@ -154,6 +154,8 @@
 		047720FE210822AE00FC97B5 /* EditImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 047720FD210822AE00FC97B5 /* EditImageView.m */; };
 		04772101210823EC00FC97B5 /* ZZTImageEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04772100210823EC00FC97B5 /* ZZTImageEditView.m */; };
 		047721032108545B00FC97B5 /* b.png in Resources */ = {isa = PBXBuildFile; fileRef = 047721022108545B00FC97B5 /* b.png */; };
+		047ECEBA212814D3008D1E82 /* ColorInButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 047ECEB9212814D3008D1E82 /* ColorInButton.m */; };
+		047ECEBC212814E3008D1E82 /* ColorInButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = 047ECEBB212814E3008D1E82 /* ColorInButton.xib */; };
 		0484E7D6210ABBFD00C39369 /* ZZTEditImageViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0484E7D5210ABBFD00C39369 /* ZZTEditImageViewModel.m */; };
 		0484E7DA210AFC3400C39369 /* ZZTCartoonDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0484E7D8210AFC3400C39369 /* ZZTCartoonDrawView.m */; };
 		0484E7DB210AFC3400C39369 /* ZZTCartoonDrawView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0484E7D9210AFC3400C39369 /* ZZTCartoonDrawView.xib */; };
@@ -483,6 +485,9 @@
 		047720FF210823EC00FC97B5 /* ZZTImageEditView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTImageEditView.h; sourceTree = "<group>"; };
 		04772100210823EC00FC97B5 /* ZZTImageEditView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTImageEditView.m; sourceTree = "<group>"; };
 		047721022108545B00FC97B5 /* b.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = b.png; sourceTree = "<group>"; };
+		047ECEB8212814D3008D1E82 /* ColorInButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ColorInButton.h; sourceTree = "<group>"; };
+		047ECEB9212814D3008D1E82 /* ColorInButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ColorInButton.m; sourceTree = "<group>"; };
+		047ECEBB212814E3008D1E82 /* ColorInButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColorInButton.xib; sourceTree = "<group>"; };
 		0484E7D4210ABBFD00C39369 /* ZZTEditImageViewModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ZZTEditImageViewModel.h; path = "ZiZaiTianProject/classes/Home(首页)/Controller/ZZTEditImageViewModel.h"; sourceTree = SOURCE_ROOT; };
 		0484E7D5210ABBFD00C39369 /* ZZTEditImageViewModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ZZTEditImageViewModel.m; path = "ZiZaiTianProject/classes/Home(首页)/Controller/ZZTEditImageViewModel.m"; sourceTree = SOURCE_ROOT; };
 		0484E7D7210AFC3400C39369 /* ZZTCartoonDrawView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTCartoonDrawView.h; sourceTree = "<group>"; };
@@ -899,6 +904,16 @@
 			path = imgae;
 			sourceTree = "<group>";
 		};
+		047ECEB72128148D008D1E82 /* btn */ = {
+			isa = PBXGroup;
+			children = (
+				047ECEB8212814D3008D1E82 /* ColorInButton.h */,
+				047ECEB9212814D3008D1E82 /* ColorInButton.m */,
+				047ECEBB212814E3008D1E82 /* ColorInButton.xib */,
+			);
+			path = btn;
+			sourceTree = "<group>";
+		};
 		048C333C20E211B200F69CE1 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -1198,6 +1213,7 @@
 		F7C04C0920DF3E9E0055E7A8 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				047ECEB72128148D008D1E82 /* btn */,
 				0466835A20F308350095C6BC /* Macro */,
 				0466838720F314860095C6BC /* Tools */,
 				F7C04C1220DF43C90055E7A8 /* Category */,
@@ -1360,6 +1376,7 @@
 				04DE14AC20E4E691009DF030 /* ZZTCartoonCell.xib in Resources */,
 				040A04092100ADA1000FAE13 /* ZZTUpdateViewController.xib in Resources */,
 				F7C04BF020DF3D190055E7A8 /* Assets.xcassets in Resources */,
+				047ECEBC212814E3008D1E82 /* ColorInButton.xib in Resources */,
 				F7C04BEE20DF3D190055E7A8 /* Main.storyboard in Resources */,
 				041EE0AB20EB66170012FEDF /* ZZTSettingSwichCell.xib in Resources */,
 				049A99B820E3288400ED27C9 /* ZXDFastLoginView.xib in Resources */,
@@ -1553,6 +1570,7 @@
 				0471A86B20F72FB700ABFF35 /* ZZTWordCell.m in Sources */,
 				046FF6632101B66E005DED73 /* ZZTCreationEntranceView.m in Sources */,
 				040A03B120FD8706000FAE13 /* ZZTStoryDetailCell.m in Sources */,
+				047ECEBA212814D3008D1E82 /* ColorInButton.m in Sources */,
 				046FF66E2101E0D5005DED73 /* ZZTCreationEntranceModel.m in Sources */,
 				0471A83120F5926A00ABFF35 /* ZZTCreationTableView.m in Sources */,
 				F7C04C1820DF44260055E7A8 /* UIBarButtonItem+Item.m in Sources */,
