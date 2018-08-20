@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-@class ZZTCartonnPlayModel;
+@class ZZTCarttonDetailModel;
 
 static CGFloat spaceing = 10;
 
 @interface ZZTJiuGongGeView : UIView
 
-@property (nonatomic,strong) ZZTCartonnPlayModel *model;
+@property (nonatomic,strong) ZZTCarttonDetailModel *model;
 
 + (void)jiuGongGeLayout:(NSArray<ZZTJiuGongGeView *> *)views WithMaxSize:(CGSize)maxSize WithRow:(NSInteger)row;
 

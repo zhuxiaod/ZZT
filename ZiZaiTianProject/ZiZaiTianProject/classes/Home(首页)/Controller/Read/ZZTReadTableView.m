@@ -33,7 +33,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 //猜你喜欢数据源
 -(NSArray *)caiNiXiHuan{
     if (!_caiNiXiHuan) {
-        _caiNiXiHuan = @[[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"]];
+        _caiNiXiHuan = [NSArray array];
     }
     return _caiNiXiHuan;
 }
@@ -66,8 +66,27 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
          self.showsVerticalScrollIndicator = NO;
         //bannerData
         [self loadBannerData];
+        //为您推荐数据
+        [self loadWeiNingTuiJian];
     }
     return self;
+}
+
+-(void)loadWeiNingTuiJian{
+    
+    NSDictionary *dic = @{
+                          @"bookType":@"",
+                          @"cartoonType":@"2",
+                          @"pageNum":@"1",
+                          @"pageSize":@"10"
+                          };
+    [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"cartoon/cartoonlist"] parameters:dic success:^(id responseObject) {
+        NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+        NSMutableArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
+        self.caiNiXiHuan = array;
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 -(void)loadBannerData{
@@ -137,7 +156,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 }
 //添加headerView
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    NSString *title = @"猜你喜欢";
+    NSString *title = @"为您推荐";
     ZZTCartoonHeaderView *head = [[ZZTCartoonHeaderView alloc] init];
     head.moreOnClick = ^{
         ZZTMoreViewController *moreVC = [[ZZTMoreViewController alloc] init];

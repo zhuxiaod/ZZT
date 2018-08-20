@@ -16,8 +16,6 @@
 
 @end
 
-
-
 @implementation ZZTJiuGongGeView
 
 +(void)jiuGongGeLayout:(NSArray<ZZTJiuGongGeView *> *)views WithMaxSize:(CGSize)maxSize WithRow:(NSInteger)row{
@@ -31,7 +29,11 @@
     CGFloat y,x;
     
     for (NSInteger section = 0; section < row; section++) {
-        y = section * (itemHeight + spaceing) + spaceing;
+        if(section == 0){
+            y = 2;
+        }else{
+            y = section * (itemHeight + spaceing) + spaceing;
+        }
         for (NSInteger index = 0; index < itemCount; index++) {
             x = index * (itemWidth + spaceing) + spaceing;
             
@@ -40,14 +42,39 @@
     }
 }
 
--(void)setModel:(ZZTCartonnPlayModel *)model{
+-(void)setModel:(ZZTCarttonDetailModel *)model{
     _model = model;
     //设置图片
-    self.imageView.image = [UIImage imageNamed:@"chuTian"];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:model.cover]];
     
-    self.titleLabel.text = @"雏田大女神";
+    if([model.type isEqualToString:@"1"]){
+        model.bookName = [model.bookName stringByAppendingString:@"(漫画)"];
+        NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc] initWithString:model.bookName];
+        [attriStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0,4)];
+        self.titleLabel.text = attriStr;
+    }
     
-    self.CartoonTitle.text = @"热血";
+    CGFloat titleH = 12;
+    
+    CGFloat spaceing2 = 2;
+    CGFloat titleW = 30;
+
+    NSArray *array = [model.bookType componentsSeparatedByString:@","];
+    
+    for (int i = 0; i < array.count; i++) {
+        NSInteger col = i % array.count;
+        CGFloat margin = 5;
+        CGFloat x = margin + (titleW + margin) * col;
+
+        //标签
+        UILabel *title = [UILabel new];
+        title.font = [UIFont systemFontOfSize:12];
+        title.text = array[i];
+        [title setTextColor:[UIColor colorWithHexString:@"#C7C8C9"]];
+        title.frame = CGRectMake(x, self.height - titleH + spaceing2, titleW, titleH);
+        [self addSubview:title];
+    }
+    
 }
 
 -(instancetype)initWithFrame:(CGRect)frame
@@ -60,8 +87,8 @@
 }
 
 -(void)setupUI{
-    UIImageView *imageView = [UIImageView new];
     
+    UIImageView *imageView = [UIImageView new];
     imageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
     imageView.layer.borderWidth = 0.5;
     [self addSubview:imageView];
@@ -75,14 +102,6 @@
     [self addSubview:label];
     
     self.titleLabel = label;
-    //标签
-    UILabel *title = [UILabel new];
-    title.font = [UIFont systemFontOfSize:12];
-    title.textColor = [UIColor whiteColor];
-    [title setTextColor:[UIColor blackColor]];
-    [self addSubview:title];
-    
-    self.CartoonTitle = title;
 }
 
 -(void)layoutSubviews{
@@ -96,7 +115,6 @@
 
     self.imageView.frame = CGRectMake(0, 0, self.width, self.height-labelH-titleH-spaceing2-spaceing2);
     self.titleLabel.frame = CGRectMake(spaceing1, self.height-labelH-titleH , self.width - 10, labelH);
-    self.CartoonTitle.frame = CGRectMake(spaceing1, self.height - titleH + spaceing2, self.width - 10, titleH);
 }
 
 @end

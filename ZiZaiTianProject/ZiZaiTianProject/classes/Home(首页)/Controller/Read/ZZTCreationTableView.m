@@ -11,6 +11,10 @@
 #import "ZZTCreationBtnCellTableViewCell.h"
 #import "CaiNiXiHuanCell.h"
 #import "ZZTCartoonHeaderView.h"
+#import "ZZTCreationButtonView.h"
+#import "ZZTBookType.h"
+#import "ZZTCartonnPlayModel.h"
+#import "ZZTCarttonDetailModel.h"
 
 @interface ZZTCreationTableView ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -29,7 +33,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 #pragma mark - lazyLoad
 -(NSArray *)caiNiXiHuan{
     if (!_caiNiXiHuan) {
-        _caiNiXiHuan = @[[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"],[ZZTCartonnPlayModel initPlayWithImage:@"chutian" labelName:@"大女神啊啊啊" title:@"热血"]];
+        _caiNiXiHuan = [NSArray array];
     }
     return _caiNiXiHuan;
 }
@@ -51,12 +55,32 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         self.showsVerticalScrollIndicator = NO;
         //注册cell
         [self registerClass:[ZZTCycleCell class]  forCellReuseIdentifier:zzTCycleCell];
-        [self registerClass:[ZZTCreationBtnCellTableViewCell class]  forCellReuseIdentifier:zztCreationCell];
+        [self registerClass:[ZZTCreationButtonView class]  forCellReuseIdentifier:zztCreationCell];
         [self registerClass:[CaiNiXiHuanCell class]  forCellReuseIdentifier:caiNiXiHuan];
         [self loadBannerData];
+        //为您推荐数据
+        [self loadWeiNingTuiJian];
     }
     return self;
 }
+
+-(void)loadWeiNingTuiJian{
+    
+    NSDictionary *dic = @{
+                          @"bookType":@"",
+                          @"cartoonType":@"2",
+                          @"pageNum":@"1",
+                          @"pageSize":@"10"
+                          };
+    [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"cartoon/cartoonlist"] parameters:dic success:^(id responseObject) {
+        NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+        NSMutableArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
+        self.caiNiXiHuan = array;
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
 #pragma mark - tableView代理
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 3;
@@ -79,9 +103,11 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         cell.isTime = YES;
         return cell;
     }else if(indexPath.section == 1) {
-        ZZTCreationBtnCellTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:zztCreationCell];
+        //创建一个View 来管理这三个button是最好的
+//        UITableViewCell *cell = [[UITableViewCell alloc] init];
+        //然后用九宫格来做#import "ZZTCreationButtonView.h"
+        ZZTCreationButtonView *cell = [tableView dequeueReusableCellWithIdentifier:zztCreationCell];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.str = @"朱晓俊";
         return cell;
     }else if (indexPath.section == 2){
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:caiNiXiHuan];
@@ -100,7 +126,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
     if (indexPath.section == 0) {
         return (SCREEN_HEIGHT - navHeight + 20) * 0.4;
     }else if (indexPath.section == 1){
-        return 100;
+        return 120;
     }else{
         return 400;
     }
@@ -108,7 +134,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 
 //添加headerView
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    NSString *title = @"猜你喜欢";
+    NSString *title = @"为您推荐";
     ZZTCartoonHeaderView *head = [[ZZTCartoonHeaderView alloc] init];
     head.title = title;
     return head;
@@ -116,7 +142,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (section == 2) {
-        return self.height * 0.05;
+        return self.height * 0.04;
     }else{
         return 0;
     }

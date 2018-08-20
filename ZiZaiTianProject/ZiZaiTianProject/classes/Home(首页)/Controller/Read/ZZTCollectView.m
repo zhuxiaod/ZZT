@@ -15,7 +15,6 @@
 
 @end
 
-
 @implementation ZZTCollectView
 
 - (NSArray *)cartoons{

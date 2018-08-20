@@ -10,7 +10,6 @@
 #import "ZZTSecondBtn.h"
 #import "ZZTSecondCell.h"
 #import "ZZTEasyBtnModel.h"
-#import "ZZTCreationEntranceView.h"
 #import "ZZTCreatCartoonViewController.h"
 #import "ZZTCreationEntranceModel.h"
 #import "ZZTCreatPlayViewController.h"
@@ -94,36 +93,36 @@ static NSString *const zztCreationCell = @"zztCreationCell";
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     if(indexPath.row == 0){
         
-        ZZTCreationEntranceView *ceView = [ZZTCreationEntranceView CreationEntranceViewWithFrame:CGRectMake(0, 0, [self myViewController].view.width, [self myViewController].view.height - 44)];
+//        ZZTCreationEntranceView *ceView = [ZZTCreationEntranceView CreationEntranceViewWithFrame:CGRectMake(0, 0, [self myViewController].view.width, [self myViewController].view.height - 44)];
       
         
-        //设置样式
-        ceView.viewTitel.text = @"创建漫画";
-        ceView.nameText.placeholder = @"请输入漫画名称";
-        ceView.titleText.placeholder = @"请输入漫画名称";
-
-        ceView.TureBtnBlock = ^(ZZTCreationEntranceModel *model) {
-            ZZTCreatCartoonViewController *ccvc = [[ZZTCreatCartoonViewController alloc] init];
-                ccvc.hidesBottomBarWhenPushed = YES;
-            ccvc.model = model;
-            [[self myViewController].navigationController pushViewController:ccvc animated:YES];
-        };
-        
-        [[self myViewController].view addSubview:ceView];
+//        //设置样式
+//        ceView.viewTitel.text = @"创建漫画";
+//        ceView.nameText.placeholder = @"请输入漫画名称";
+//        ceView.titleText.placeholder = @"请输入漫画名称";
+//
+//        ceView.TureBtnBlock = ^(ZZTCreationEntranceModel *model) {
+//            ZZTCreatCartoonViewController *ccvc = [[ZZTCreatCartoonViewController alloc] init];
+//                ccvc.hidesBottomBarWhenPushed = YES;
+//            ccvc.model = model;
+//            [[self myViewController].navigationController pushViewController:ccvc animated:YES];
+//        };
+//
+//        [[self myViewController].view addSubview:ceView];
         
     }else if(indexPath.row == 1){
         
-        ZZTCreationEntranceView *ceView = [ZZTCreationEntranceView CreationEntranceViewWithFrame:CGRectMake(0, 0, [self myViewController].view.width, [self myViewController].view.height - 44)];
-        ceView.viewTitel.text = @"创建剧本";
-        ceView.nameText.placeholder = @"请输入剧本名称";
-        ceView.titleText.placeholder = @"请输入剧本名称";
-        ceView.TureBtnBlock = ^(ZZTCreationEntranceModel *model) {
-            ZZTCreatPlayViewController *ccvc = [[ZZTCreatPlayViewController alloc] init];
-            ccvc.hidesBottomBarWhenPushed = YES;
-            ccvc.model = model;
-            [[self myViewController].navigationController pushViewController:ccvc animated:YES];
-        };
-        [[self myViewController].view addSubview:ceView];
+//        ZZTCreationEntranceView *ceView = [ZZTCreationEntranceView CreationEntranceViewWithFrame:CGRectMake(0, 0, [self myViewController].view.width, [self myViewController].view.height - 44)];
+//        ceView.viewTitel.text = @"创建剧本";
+//        ceView.nameText.placeholder = @"请输入剧本名称";
+//        ceView.titleText.placeholder = @"请输入剧本名称";
+//        ceView.TureBtnBlock = ^(ZZTCreationEntranceModel *model) {
+//            ZZTCreatPlayViewController *ccvc = [[ZZTCreatPlayViewController alloc] init];
+//            ccvc.hidesBottomBarWhenPushed = YES;
+//            ccvc.model = model;
+//            [[self myViewController].navigationController pushViewController:ccvc animated:YES];
+//        };
+//        [[self myViewController].view addSubview:ceView];
     }else if(indexPath.row == 2){
         
     }

@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ZZTCreationBtnCellTableViewCell : UITableViewCell
+
 @property (nonatomic,strong) NSString *str;
+
 @end

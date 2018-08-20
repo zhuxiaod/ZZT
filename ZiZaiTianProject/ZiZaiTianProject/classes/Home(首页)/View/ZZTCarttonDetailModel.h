@@ -29,6 +29,12 @@
 @property (nonatomic,strong) NSString *recordNum;
 @property (nonatomic,strong) NSString *ifConcern;
 
+@property (nonatomic,strong) NSString *cartoonType;
+
+@property (nonatomic,strong) NSString *ifrelease;
+
+@property (nonatomic,assign) NSInteger commentNum;
+
 
 
 

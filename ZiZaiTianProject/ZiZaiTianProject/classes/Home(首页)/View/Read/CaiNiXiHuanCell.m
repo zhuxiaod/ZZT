@@ -28,14 +28,18 @@ static NSUInteger itemCount = 6;
     // Initialization code
 }
 
+
+
 //设置数据
 - (void)setTopics:(NSArray *)topics {
     _topics = topics;
-    //数据对应模型
-    [self.items enumerateObjectsUsingBlock:^(ZZTJiuGongGeView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        //赋值
-        obj.model = topics[idx];
-    }];
+    if (topics.count > 0) {
+        //数据对应模型
+        [self.items enumerateObjectsUsingBlock:^(ZZTJiuGongGeView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            //赋值
+            obj.model = topics[idx];
+        }];
+    }
 }
 
 - (void)layoutSubviews {

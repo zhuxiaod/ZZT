@@ -10,9 +10,9 @@ static const CGFloat contentHeight = 22.0f;
 
 #import "ZZTCartoonHeaderView.h"
 @interface ZZTCartoonHeaderView ()
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *more;
-@property (weak, nonatomic) IBOutlet UIView *yellowView;
+@property (weak, nonatomic)  UILabel *titleView;
+@property (weak, nonatomic)  UIButton *more;
+@property (weak, nonatomic)  UIView *yellowView;
 
 @end
 
@@ -28,38 +28,32 @@ static const CGFloat contentHeight = 22.0f;
 
 -(void)setupUI{
     CGFloat w = 5;
-    //黄色图标
-    UIView *yellowView = [[UIView alloc] init];
-    
-    yellowView.backgroundColor = subjectColor;
-    yellowView.layer.cornerRadius  = w * 0.5;
-    yellowView.layer.masksToBounds = YES;
-    
-    [self addSubview:yellowView];
-    
-    [yellowView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
-        make.left.equalTo(self).offset(spaceing);
-        make.height.equalTo(@(contentHeight * 0.8));
-        make.width.equalTo(@(w));
-    }];
+//    //黄色图标
+//    UIView *yellowView = [[UIView alloc] init];
+//
+//    yellowView.backgroundColor = subjectColor;
+//    yellowView.layer.cornerRadius  = w * 0.5;
+//    yellowView.layer.masksToBounds = YES;
+//
+//    [self addSubview:yellowView];
+//
+//    [yellowView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(self);
+//        make.left.equalTo(self).offset(spaceing);
+//        make.height.equalTo(@(contentHeight * 0.8));
+//        make.width.equalTo(@(w));
+//    }];
     
     //标题
     UILabel *titleView = [[UILabel alloc] init];
     
     titleView.font = [UIFont systemFontOfSize:15];
     titleView.textColor = colorWithWhite(0.5);
-    
-    [self addSubview:titleView];
-    
-    
-    [titleView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
-        make.left.equalTo(yellowView.mas_right).offset(spaceing * 0.5);
-        make.height.equalTo(@(contentHeight));
-    }];
-    
     self.titleView = titleView;
+    [titleView setTextColor:[UIColor blackColor]];
+    [self addSubview:titleView];
+    self.titleView = titleView;
+    
     //更多button
     UIButton *more = [[UIButton alloc] init];
     [more setTitle:@"更多" forState:UIControlStateNormal];
@@ -69,20 +63,27 @@ static const CGFloat contentHeight = 22.0f;
     more.layer.borderColor = [UIColor lightGrayColor].CGColor;
     [more setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     [more addTarget:self action:@selector(moreEvent:) forControlEvents:UIControlEventTouchUpInside];
-    
     [self addSubview:more];
+    self.more = more;
     
-    [more mas_makeConstraints:^(MASConstraintMaker *make) {
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    [self.titleView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self);
+        make.left.equalTo(self.mas_left).offset(spaceing);
+        make.height.equalTo(@(contentHeight));
+    }];
+    
+    [self.more mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self);
         make.right.equalTo(self).offset(-spaceing);
         make.height.equalTo(@(contentHeight));
+        make.top.equalTo(@(2));
         make.width.equalTo(@(40));
     }];
-    
-    
-    self.more = more;
 }
-
 //先走
 -(void)setTitle:(NSString *)title{
     _title = title;
