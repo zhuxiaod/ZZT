@@ -57,9 +57,10 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         [self registerClass:[ZZTCycleCell class]  forCellReuseIdentifier:zzTCycleCell];
         [self registerClass:[ZZTCreationButtonView class]  forCellReuseIdentifier:zztCreationCell];
         [self registerClass:[CaiNiXiHuanCell class]  forCellReuseIdentifier:caiNiXiHuan];
-        [self loadBannerData];
         //为您推荐数据
         [self loadWeiNingTuiJian];
+        
+        [self loadBannerData];
     }
     return self;
 }
@@ -72,7 +73,8 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
                           @"pageNum":@"1",
                           @"pageSize":@"10"
                           };
-    [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"cartoon/cartoonlist"] parameters:dic success:^(id responseObject) {
+    NSString *api = [ZZTAPI stringByAppendingString:@"cartoon/cartoonlist"];
+    [AFNHttpTool POST:api parameters:dic success:^(id responseObject) {
         NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
         NSMutableArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
         self.caiNiXiHuan = array;
@@ -104,8 +106,6 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         return cell;
     }else if(indexPath.section == 1) {
         //创建一个View 来管理这三个button是最好的
-//        UITableViewCell *cell = [[UITableViewCell alloc] init];
-        //然后用九宫格来做#import "ZZTCreationButtonView.h"
         ZZTCreationButtonView *cell = [tableView dequeueReusableCellWithIdentifier:zztCreationCell];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;

@@ -11,7 +11,6 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundView;
 
-
 @property (weak, nonatomic) IBOutlet UIView *colorView;
 
 @property (weak, nonatomic) IBOutlet UILabel *label;

@@ -120,7 +120,6 @@ static NSString * const offsetKeyPath = @"contentOffset";
         
         [self scrollWithOffsetX:offsetX];
     }
-    
 }
 
 - (instancetype)initWithFrame:(CGRect)frame TextArray:(NSArray *)textArray {
@@ -131,7 +130,6 @@ static NSString * const offsetKeyPath = @"contentOffset";
     
     return listView;
 }
-
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -199,7 +197,8 @@ static NSString * const offsetKeyPath = @"contentOffset";
         label.textAlignment = NSTextAlignmentCenter;
         label.tag = index;
         label.text = text;
-        label.textColor = [UIColor blackColor];
+        //颜色
+        label.textColor = [UIColor grayColor];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelDidTap:)];
         [label addGestureRecognizer:tap];
         

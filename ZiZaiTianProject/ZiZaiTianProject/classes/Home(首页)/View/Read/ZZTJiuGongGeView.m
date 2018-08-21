@@ -48,10 +48,15 @@
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:model.cover]];
     
     if([model.type isEqualToString:@"1"]){
-        model.bookName = [model.bookName stringByAppendingString:@"(漫画)"];
-        NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc] initWithString:model.bookName];
-        [attriStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0,4)];
-        self.titleLabel.text = attriStr;
+        NSString *bookName = [model.bookName stringByAppendingString:@"(漫画)"];
+        NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc] initWithString:bookName];
+        [attriStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(attriStr.length - 4,4)];
+        self.titleLabel.attributedText = attriStr;
+    }else if([model.type isEqualToString:@"2"]){
+        NSString *bookName = [model.bookName stringByAppendingString:@"(剧本)"];
+        NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc] initWithString:bookName];
+        [attriStr addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(attriStr.length - 4,4)];
+        self.titleLabel.attributedText = attriStr;
     }
     
     CGFloat titleH = 12;

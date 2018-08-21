@@ -33,7 +33,7 @@
         ZXDCartoonFlexoBtn *cartoon = [[ZXDCartoonFlexoBtn alloc] init];
         self.cartoon = cartoon;
         [cartoon setTitle:@"创建漫画" forState:UIControlStateNormal];
-        [cartoon setImage:[UIImage imageNamed:@"read_creat_but"] forState:UIControlStateNormal];
+        [cartoon setImage:[UIImage imageNamed:@"创作-图标-创建漫画"] forState:UIControlStateNormal];
         cartoon.titleLabel.font = [UIFont systemFontOfSize:14];
         [cartoon setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         //添加事件
@@ -44,7 +44,7 @@
         ZXDCartoonFlexoBtn *play = [[ZXDCartoonFlexoBtn alloc] init];
         self.play = play;
         [play setTitle:@"创建剧本" forState:UIControlStateNormal];
-        [play setImage:[UIImage imageNamed:@"Clock"] forState:UIControlStateNormal];
+        [play setImage:[UIImage imageNamed:@"创作-图标-创建剧本"] forState:UIControlStateNormal];
         play.titleLabel.font = [UIFont systemFontOfSize:14];
         [play setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [play addTarget:self action:@selector(didPlay) forControlEvents:UIControlEventTouchUpInside];
@@ -55,7 +55,7 @@
         ZXDCartoonFlexoBtn *continuation = [[ZXDCartoonFlexoBtn alloc] init];
         self.continuation = continuation;
         [continuation setTitle:@"作品续作" forState:UIControlStateNormal];
-        [continuation setImage:[UIImage imageNamed:@"Clock"] forState:UIControlStateNormal];
+        [continuation setImage:[UIImage imageNamed:@"创作-图标-续作作品"] forState:UIControlStateNormal];
         continuation.titleLabel.font = [UIFont systemFontOfSize:14];
         [continuation setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [continuation addTarget:self action:@selector(didContinuation) forControlEvents:UIControlEventTouchUpInside];

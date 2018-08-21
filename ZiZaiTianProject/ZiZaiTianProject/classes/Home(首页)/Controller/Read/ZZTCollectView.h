@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZZTCollectView : UICollectionView
+@interface ZZTCollectView : UIView
 
 @end

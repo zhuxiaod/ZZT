@@ -311,10 +311,10 @@ NSString *bannerID = @"MeCell";
     }];
 }
 -(void)decry{
-    //解密
-    NSString *data = [self.encryptionManager decryptString:self.getData keyString:@"ZIZAITIAN@666666" iv:[@"A-16-Byte-String" dataUsingEncoding:NSUTF8StringEncoding]];
-    NSData *jsonData = [data dataUsingEncoding:NSUTF8StringEncoding];
-    NSMutableArray *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
-    self.userData = [ZZTUserModel mj_objectWithKeyValues:dic[0]];
+//    //解密
+//    NSString *data = [self.encryptionManager decryptString:self.getData keyString:@"ZIZAITIAN@666666" iv:[@"A-16-Byte-String" dataUsingEncoding:NSUTF8StringEncoding]];
+//    NSData *jsonData = [data dataUsingEncoding:NSUTF8StringEncoding];
+//    NSMutableArray *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
+//    self.userData = [ZZTUserModel mj_objectWithKeyValues:dic[0]];
 }
 @end

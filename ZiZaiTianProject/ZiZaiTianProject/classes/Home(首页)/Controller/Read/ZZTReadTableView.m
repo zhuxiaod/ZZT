@@ -64,10 +64,10 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         [self registerClass:[ZZTCartoonBtnCell class]  forCellReuseIdentifier:zCartoonBtnCell];
         [self registerClass:[CaiNiXiHuanCell class]  forCellReuseIdentifier:caiNiXiHuan];
          self.showsVerticalScrollIndicator = NO;
-        //bannerData
-        [self loadBannerData];
         //为您推荐数据
         [self loadWeiNingTuiJian];
+        //bannerData
+        [self loadBannerData];
     }
     return self;
 }

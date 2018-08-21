@@ -32,6 +32,7 @@
  
 - (void)viewDidLoad {
     [super viewDidLoad];
+     [self.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName : [UIFont fontWithName:@"Helvetica-Bold" size:17]}];
     //全屏滑动
 //    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self.interactivePopGestureRecognizer.delegate action:@selector(handleNavigationTransition:)];
 //    
@@ -47,14 +48,14 @@
 //}
 
 //重写push方法 => push后如果是非控制器便添加一个返回按钮
-//-(void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
-//{
-//    if(self.childViewControllers.count > 0)
-//    {
-//        viewController.navigationItem.leftBarButtonItem = [UIBarButtonItem backItemWithImage:[UIImage imageNamed:@"navigationButtonReturn"] highImage:[UIImage imageNamed:@"navigationButtonReturnClick"] target:self action:@selector(back) title:@"返回"];
-//    }
-//    [super pushViewController:viewController animated:YES];
-//}
+-(void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if(self.childViewControllers.count > 0)
+    {
+        viewController.navigationItem.leftBarButtonItem = [UIBarButtonItem backItemWithImage:[UIImage imageNamed:@"navigationbarBack"] highImage:[UIImage imageNamed:@"navigationbarBack"] target:self action:@selector(back) title:nil];
+    }
+    [super pushViewController:viewController animated:YES];
+}
 
 -(void)back
 {

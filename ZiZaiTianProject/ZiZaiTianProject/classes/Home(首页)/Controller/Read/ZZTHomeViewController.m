@@ -44,6 +44,7 @@ NSString *SuggestionView = @"SuggestionView";
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.view.backgroundColor = [UIColor colorWithHexString:@"#58006E"];
     
     //设置Bar
@@ -92,7 +93,7 @@ NSString *SuggestionView = @"SuggestionView";
     //设置自动调整滚动视图
     [self setAutomaticallyAdjustsScrollViewInsets:NO];
 
-    NSArray *textArray = @[@"创作",@"阅读",@"收藏"];
+    NSArray *textArray = @[@"创作",@"阅读",@"书柜"];
     
     //0.66 默认
     CGFloat listViewWidth    = self.view.width * 0.5;
@@ -133,10 +134,11 @@ NSString *SuggestionView = @"SuggestionView";
     
     //收藏页
     //直接在该页面创建一个collectionView
-    //    ZZTCollectView *collectVC = [[ZZTCollectView alloc] init];
-//    collectVC.backgroundColor = [UIColor whiteColor];
-//    self.collectView = collectVC;
-//    [self.mainView addSubview:collectVC];
+//    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+    ZZTCollectView *collectVC = [[ZZTCollectView alloc] init];
+    collectVC.backgroundColor = [UIColor whiteColor];
+    self.collectView = collectVC;
+    [self.mainView addSubview:collectVC];
 }
 
 #pragma mark - 设置滚动视图
@@ -170,7 +172,7 @@ NSString *SuggestionView = @"SuggestionView";
     //反正是一个页面一起跑页没什么不好吧
     //cell 还没有创建故不能在这里搞
     [_ReadView reloadData];
-    [_collectView reloadData];
+//    [_collectView reloadData];
     [_CreationView reloadData];
 }
 //计时器结束
