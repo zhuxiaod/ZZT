@@ -22,6 +22,7 @@
 #import "ZZTReaderViewController.h"
 
 @interface ZZTWordsDetailViewController ()<UITableViewDelegate,UITableViewDataSource,UINavigationControllerDelegate>
+
 @property (nonatomic,strong) AFHTTPSessionManager *manager;
 @property (nonatomic,strong) EncryptionTools *encryptionManager;
 @property (nonatomic,strong) NSString *getData;
@@ -34,9 +35,8 @@
 
 @property (nonatomic,assign) BOOL isDataCome;
 @property (nonatomic,strong) NSArray *ctComment;
-
-
 @end
+
 NSString *zztWordCell = @"WordCell";
 NSString *NoCell = @"NoCell";
 NSString *zztComment = @"zztComment";

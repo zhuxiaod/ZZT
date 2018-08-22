@@ -12,6 +12,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *image;
 @property (weak, nonatomic) IBOutlet UILabel *cartoonName;
 @property (weak, nonatomic) IBOutlet UIView *kindView;
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
 
 @end
 
@@ -22,24 +23,9 @@
     
     [self.image sd_setImageWithURL:[NSURL URLWithString:cartoon.chapterCover]];
     
-    CGFloat titleH = 12;
-    CGFloat titleW = 40;
-    
-    NSArray *array = [cartoon.bookType componentsSeparatedByString:@","];
-    
-    for (int i = 0; i < array.count; i++) {
-        NSInteger col = i % array.count;
-        CGFloat margin = 5;
-        CGFloat x = margin + (titleW + margin) * col;
-        
-        //标签
-        UILabel *title = [UILabel new];
-        title.font = [UIFont systemFontOfSize:14];
-        title.text = array[i];
-        [title setTextColor:[UIColor colorWithHexString:@"#C7C8C9"]];
-        title.frame = CGRectMake(x, 5, titleW, titleH);
-        [self.kindView addSubview:title];
-    }
+    NSString *title = [cartoon.bookType stringByReplacingOccurrencesOfString:@"," withString:@" "];
+
+    [self.titleView setText:title];
     //没有添加类型
     self.cartoonName.text = cartoon.bookName;
 }

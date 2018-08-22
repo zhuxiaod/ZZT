@@ -17,6 +17,8 @@
 @property(nonatomic,strong)NSString *chapterCover;
 
 @property(nonatomic,strong)NSString *chapterName;
+@property(nonatomic,strong)NSString *userId;
+
 
 @property(nonatomic,assign)NSInteger praiseNum;
 

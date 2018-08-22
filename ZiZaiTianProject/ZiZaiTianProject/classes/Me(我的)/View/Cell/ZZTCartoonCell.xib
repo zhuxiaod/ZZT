@@ -36,9 +36,21 @@
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3s3-fg-5dI">
                         <rect key="frame" x="0.0" y="177" width="125" height="23"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="妖神记" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nKu-AQ-3vW">
+                                <rect key="frame" x="5" y="0.0" width="120" height="23"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="23" id="9GX-0h-n1e"/>
+                            <constraint firstItem="nKu-AQ-3vW" firstAttribute="top" secondItem="3s3-fg-5dI" secondAttribute="top" id="Lkc-Y8-d4x"/>
+                            <constraint firstAttribute="trailing" secondItem="nKu-AQ-3vW" secondAttribute="trailing" id="NKm-a2-jVE"/>
+                            <constraint firstAttribute="bottom" secondItem="nKu-AQ-3vW" secondAttribute="bottom" id="bra-AL-cFg"/>
+                            <constraint firstItem="nKu-AQ-3vW" firstAttribute="leading" secondItem="3s3-fg-5dI" secondAttribute="leading" constant="5" id="e5X-yu-c0I"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -59,6 +71,7 @@
                 <outlet property="cartoonName" destination="hBb-R2-tW0" id="CHo-0w-W0m"/>
                 <outlet property="image" destination="wvV-zp-zZR" id="317-2p-hvI"/>
                 <outlet property="kindView" destination="3s3-fg-5dI" id="ITP-9t-Wzm"/>
+                <outlet property="titleView" destination="nKu-AQ-3vW" id="bWF-oC-a3J"/>
             </connections>
             <point key="canvasLocation" x="-103.5" y="31"/>
         </collectionViewCell>

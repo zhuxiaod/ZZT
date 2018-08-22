@@ -9,16 +9,28 @@
 #import "ZZTRankCell.h"
 @interface ZZTRankCell()
 @property (weak, nonatomic) IBOutlet UIImageView *cartoonImg;
-@property (weak, nonatomic) IBOutlet UILabel *cartoonName;
 @property (weak, nonatomic) IBOutlet UIImageView *rankImage;
 @property (weak, nonatomic) IBOutlet UILabel *rankNum;
+@property (nonatomic,strong) NSMutableArray *array1;
+@property (nonatomic,strong) NSMutableArray *array2;
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
+
 @end
 
 @implementation ZZTRankCell
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
+-(NSMutableArray *)array1{
+    if(_array1){
+        _array1 = [NSMutableArray array];
+    }
+    return _array1;
+}
+
+-(NSMutableArray *)array2{
+    if(_array2){
+        _array2 = [NSMutableArray array];
+    }
+    return _array2;
 }
 
 -(void)setDataModel:(ZZTCarttonDetailModel *)dataModel{
@@ -29,26 +41,10 @@
     
     [_cartoonName setText:dataModel.bookName];
     
-    NSArray *array = [dataModel.bookType componentsSeparatedByString:@","];
-    
-    CGFloat titleH = 20;
-    
-    CGFloat spaceing2 = 2;
-    CGFloat titleW = 30;
-    for (int i = 0; i < array.count; i++) {
-        NSInteger col = i % array.count;
-        CGFloat margin = 5;
-        CGFloat x = self.cartoonName.x + titleW * i + margin;
-//        margin + (titleW + margin) * col;
-        
-        //标签
-        UILabel *title = [UILabel new];
-        title.font = [UIFont systemFontOfSize:12];
-        title.text = array[i];
-        [title setTextColor:[UIColor colorWithHexString:@"#C7C8C9"]];
-        title.frame = CGRectMake(x,self.cartoonName.y+self.cartoonName.height +2, titleW, titleH);
-        [self addSubview:title];
-    }
+    NSString *title = [dataModel.bookType stringByReplacingOccurrencesOfString:@"," withString:@" "];
+    [_titleView setText:title];
+    [_titleView setFont:[UIFont systemFontOfSize:14]];
+    [_titleView setTextColor:[UIColor colorWithHexString:@"#949596"]];
     
     if([dataModel.type isEqualToString:@"1"]){
         NSString *bookName = [dataModel.bookName stringByAppendingString:@"(漫画)"];
@@ -62,6 +58,9 @@
         self.cartoonName.attributedText = attriStr;
     }
 }
+-(void)setIsHave:(BOOL)isHave{
+    _isHave = isHave;
+}
 
 -(void)setCellIndex:(NSInteger)cellIndex{
     if(cellIndex == 0){
@@ -73,8 +72,8 @@
     }else{
         _rankImage.image = [UIImage imageNamed:@"排行榜图标-第4名"];
     }
-
-    _rankNum.text = [NSString stringWithFormat:@"%ld",cellIndex + 1];
+    NSString *str = [NSString stringWithFormat:@"%ld",cellIndex + 1];
+    [_rankNum setText:str];
 }
 
 @end

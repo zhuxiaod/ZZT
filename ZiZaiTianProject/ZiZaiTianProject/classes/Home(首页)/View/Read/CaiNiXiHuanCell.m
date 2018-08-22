@@ -9,7 +9,7 @@
 #import "CaiNiXiHuanCell.h"
 #import "ZZTJiuGongGeView.h"
 #import "ZZTCartonnPlayModel.h"
-#import "ZZTWordsDetailViewController.h"
+#import "ZZTWordDetailViewController.h"
 
 static NSUInteger itemCount = 6;
 
@@ -74,7 +74,8 @@ static NSUInteger itemCount = 6;
     
     NSInteger index = [[tap view] tag];
     NSLog(@"我感受到了你%ld",index);
-    ZZTWordsDetailViewController *detailVC = [[ZZTWordsDetailViewController alloc]init];
+    ZZTWordDetailViewController *detailVC = [[ZZTWordDetailViewController alloc]init];
+    detailVC.cartoonDetail = self.topics[index];
     detailVC.hidesBottomBarWhenPushed = YES;
     [[self findResponderWithClass:[UINavigationController class]] pushViewController:detailVC animated:YES];
 }

@@ -35,7 +35,7 @@
 
 @property (nonatomic,assign) NSInteger commentNum;
 
-
+@property (nonatomic,assign) BOOL isHave;
 
 
 

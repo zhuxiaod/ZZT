@@ -66,11 +66,18 @@ NSString *zztRankCell = @"zztRankCell";
     [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"cartoon/cartoonlist"] parameters:dic success:^(id responseObject) {
         NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
         NSMutableArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
-        self.dataArray = array;
+        self.dataArray = [self addIsHave:array];
         [self.tableView reloadData];
     } failure:^(NSError *error) {
         
     }];
+}
+-(NSArray *)addIsHave:(NSArray *)array{
+    for (int i = 0; i < array.count; i++) {
+        ZZTCarttonDetailModel *model = array[i];
+        model.isHave = NO;
+    }
+    return array;
 }
 -(void)setupTopView{
     //上view
@@ -164,8 +171,11 @@ NSString *zztRankCell = @"zztRankCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ZZTRankCell *cell = [tableView dequeueReusableCellWithIdentifier:zztRankCell];
     ZZTCarttonDetailModel *model = self.dataArray[indexPath.row];
-    cell.dataModel = model;
+    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    NSString *index = [NSString stringWithFormat:@"%ld",indexPath.row];
+    cell.currentIndex = index;
     cell.cellIndex = indexPath.row;
+    cell.dataModel = model;
     return cell;
 }
 

@@ -13,7 +13,7 @@
 #import "ZXDCartoonFlexoBtn.h"
 #import "ZZTProductionShowViewController.h"
 #import "ZZTRankViewController.h"
-
+#import "ZZTClassifyViewController.h"
 @interface ZZTCartoonBtnCell()<UICollectionViewDelegate,UICollectionViewDataSource>
 
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -104,7 +104,7 @@ static NSString *const zxdCartoonBtnCell = @"zxdCartoonBtnCell";
         [classify setImage:[UIImage imageNamed:@"阅读-分类入口-分类"] forState:UIControlStateNormal];
         classify.titleLabel.font = [UIFont systemFontOfSize:14];
         [classify setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [classify addTarget:self action:@selector(classify) forControlEvents:UIControlEventTouchUpInside];
+        [classify addTarget:self action:@selector(classifyTarget) forControlEvents:UIControlEventTouchUpInside];
         [btnView addSubview:classify];
         
         //一条线
@@ -137,6 +137,12 @@ static NSString *const zxdCartoonBtnCell = @"zxdCartoonBtnCell";
     ZZTRankViewController *rankVC = [[ZZTRankViewController alloc] init];
     [self myViewController].hidesBottomBarWhenPushed = YES;
     [[self myViewController].navigationController pushViewController:rankVC animated:YES];
+    [self myViewController].hidesBottomBarWhenPushed = NO;
+}
+-(void)classifyTarget{
+    ZZTClassifyViewController *classifyVC = [[ZZTClassifyViewController alloc] init];
+    [self myViewController].hidesBottomBarWhenPushed = YES;
+    [[self myViewController].navigationController pushViewController:classifyVC animated:YES];
     [self myViewController].hidesBottomBarWhenPushed = NO;
 }
 -(void)loadProductionData:(NSString *)cartoonType VC:(ZZTProductionShowViewController *)VC{

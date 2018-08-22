@@ -11,7 +11,12 @@
 @interface ZZTRankCell : UITableViewCell
 
 @property (nonatomic,strong) ZZTCarttonDetailModel *dataModel;
+@property (weak, nonatomic) IBOutlet UILabel *cartoonName;
 
 @property (nonatomic,assign) NSInteger cellIndex;
+
+@property (nonatomic,strong) NSString *currentIndex;
+
+@property (nonatomic,assign) BOOL isHave;
 
 @end

@@ -45,22 +45,58 @@ static CGFloat const tbSpaceing = 12;
     return self;
 }
 -(void)setupUI{
-    //显示label
+    UIView *topView = [UIView new];
+    topView.backgroundColor = [UIColor colorWithHexString:@"#F0F1F2"];
+    [self addSubview:topView];
+    
+    UIView *bottomView = [UIView new];
+    bottomView.backgroundColor = [UIColor colorWithHexString:@"#F0F1F2"];
+    [self addSubview:bottomView];
+    
+    UILabel *wordLabel = [UILabel new];
+    
+    wordLabel.text = @"作品简介";
+    [self addSubview:wordLabel];
+    
+    //显示内容
     UILabel *descLabel = [UILabel new];
     
     descLabel.numberOfLines = 2;
     descLabel.font = [UIFont systemFontOfSize:12];
-    descLabel.textColor = [UIColor whiteColor];
+    descLabel.textColor = [UIColor colorWithHexString:@"#A7A8A9"];
     descLabel.preferredMaxLayoutWidth = SCREEN_WIDTH - spaceing * 2;
     
     [self addSubview:descLabel];
     
+    [topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self).offset(0);
+        make.right.equalTo(self).offset(0);
+        make.left.equalTo(self).offset(0);
+        make.height.offset(4);
+    }];
+    
+    [wordLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self).offset(spaceing);
+        make.top.equalTo(topView.mas_bottom).offset(5);
+        make.right.equalTo(self).offset(-spaceing);
+        make.height.offset(20);
+    }];
+    
     [descLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).offset(spaceing);
-        make.top.equalTo(self).offset(tbSpaceing);
+        make.top.equalTo(wordLabel.mas_bottom).offset(5);
         make.right.equalTo(self).offset(-spaceing);
         make.bottom.equalTo(self).offset(-tbSpaceing);
     }];
+
+    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self).offset(0);
+        make.right.equalTo(self).offset(0);
+        make.left.equalTo(self).offset(0);
+        make.height.offset(4);
+    }];
+    
+    
     
     self.descLabel = descLabel;
     //底线
