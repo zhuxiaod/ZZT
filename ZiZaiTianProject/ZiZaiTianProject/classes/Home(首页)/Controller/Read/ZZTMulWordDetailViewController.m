@@ -1,19 +1,22 @@
 //
-//  ZZTWordDetailViewController.m
+//  ZZTMulWordDetailViewController.m
 //  ZiZaiTianProject
 //
-//  Created by mac on 2018/8/22.
+//  Created by mac on 2018/8/23.
 //  Copyright © 2018年 zxd. All rights reserved.
 //
 
-#import "ZZTWordDetailViewController.h"
+#import "ZZTMulWordDetailViewController.h"
+#import "ZZTCartoonDetailViewController.h"
 #import "ZZTWordsDetailHeadView.h"
 #import "ZZTWordDescSectionHeadView.h"
-#import "ZZTWordListCell.h"
+#import "ZZTCarttonDetailModel.h"
+#import "ZZTMulWordListCell.h"
 #import "ZZTChapterlistModel.h"
-#import "ZZTCartoonDetailViewController.h"
+#import "ZZTStoryDetailView.h"
 
-@interface ZZTWordDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface ZZTMulWordDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
+
 @property (nonatomic,strong) ZZTWordsDetailHeadView *head;
 
 @property (nonatomic,strong) ZZTWordDescSectionHeadView *descHeadView;
@@ -26,9 +29,9 @@
 
 @end
 
-NSString *zztWordListCell = @"zztWordListCell";
+NSString *zztMulWordListCell = @"zztMulWordListCell";
 
-@implementation ZZTWordDetailViewController
+@implementation ZZTMulWordDetailViewController
 
 -(NSArray *)wordList{
     if(!_wordList){
@@ -40,12 +43,15 @@ NSString *zztWordListCell = @"zztWordListCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.rr_navHidden = YES;
+
     self.view.backgroundColor = [UIColor whiteColor];
+
     //设置顶部页面
     [self setupTopView];
     //设置底部View
     [self setupBottomView];
 }
+
 //设置底部View
 -(void)setupBottomView{
     UIView *bottom = [[UIView alloc] init];
@@ -68,9 +74,11 @@ NSString *zztWordListCell = @"zztWordListCell";
     [starRead setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [bottom addSubview:starRead];
 }
+
 //开始阅读
 -(void)starRead{
     ZZTCartoonDetailViewController *cartoonDetailVC = [[ZZTCartoonDetailViewController alloc] init];
+    cartoonDetailVC.cartoonId = _cartoonDetail.id;
     cartoonDetailVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:cartoonDetailVC animated:YES];
 }
@@ -80,13 +88,12 @@ NSString *zztWordListCell = @"zztWordListCell";
     if(cartoonDetail.id){
         //上部分View
         [self loadtopData:cartoonDetail.id];
-       //目录
+        //目录
         [self loadListData:cartoonDetail.id];
-       //评论
-//        [self loadCommentData:cartoonDetail.id];
+        //评论
+        //        [self loadCommentData:cartoonDetail.id];
     }
 }
-
 //请求该漫画的资料
 -(void)loadtopData:(NSString *)ID{
     //加载用户信息
@@ -99,7 +106,6 @@ NSString *zztWordListCell = @"zztWordListCell";
         //这里有问题 应该是转成数组 然后把对象取出
         ZZTCarttonDetailModel *mode = [ZZTCarttonDetailModel mj_objectWithKeyValues:dic];
         weakSelf.ctDetail = mode;
-
         [self.contentView reloadData];
     } failure:^(NSError *error) {
         
@@ -122,7 +128,6 @@ NSString *zztWordListCell = @"zztWordListCell";
         
     }];
 }
-
 -(void)setupTopView{
     UITableView *contenView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     contenView.backgroundColor = [UIColor whiteColor];
@@ -139,7 +144,7 @@ NSString *zztWordListCell = @"zztWordListCell";
     //设置数据
     self.head.detailModel = self.cartoonDetail;
     //先让数据显示
-    [contenView registerNib:[UINib nibWithNibName:@"ZZTWordListCell" bundle:nil] forCellReuseIdentifier:zztWordListCell];
+    [contenView registerNib:[UINib nibWithNibName:@"ZZTWordListCell" bundle:nil] forCellReuseIdentifier:zztMulWordListCell];
     
     [self.view addSubview:contenView];
     [self.view addSubview:head];
@@ -156,10 +161,18 @@ NSString *zztWordListCell = @"zztWordListCell";
 
 #pragma mark - 内容设置
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ZZTWordListCell *cell = [tableView dequeueReusableCellWithIdentifier:zztWordListCell];
     ZZTChapterlistModel *model = self.wordList[indexPath.row];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.model = model;
+    ZZTMulWordListCell *cell = [[ZZTMulWordListCell  alloc] init];
+    //如果是漫画
+    if([self.ctDetail.type isEqualToString:@"1"]){
+        cell = [ZZTMulWordListCell  mulWordListCellWith:tableView NSString:@"1"];
+        cell.string = self.ctDetail.type;
+        cell.model = model;
+    }else{
+        cell = [ZZTMulWordListCell  mulWordListCellWith:tableView NSString:@"2"];
+        cell.string = self.ctDetail.type;
+        cell.model = model;
+    }
     return cell;
 }
 

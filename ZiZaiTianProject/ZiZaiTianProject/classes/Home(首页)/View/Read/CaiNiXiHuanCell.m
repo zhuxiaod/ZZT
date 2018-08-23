@@ -10,6 +10,7 @@
 #import "ZZTJiuGongGeView.h"
 #import "ZZTCartonnPlayModel.h"
 #import "ZZTWordDetailViewController.h"
+#import "ZZTMulWordDetailViewController.h"
 
 static NSUInteger itemCount = 6;
 
@@ -25,15 +26,13 @@ static NSUInteger itemCount = 6;
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+
 }
-
-
 
 //设置数据
 - (void)setTopics:(NSArray *)topics {
     _topics = topics;
-    if (topics.count > 0) {
+    if (topics.count == 6) {
         //数据对应模型
         [self.items enumerateObjectsUsingBlock:^(ZZTJiuGongGeView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             //赋值
@@ -74,9 +73,20 @@ static NSUInteger itemCount = 6;
     
     NSInteger index = [[tap view] tag];
     NSLog(@"我感受到了你%ld",index);
-    ZZTWordDetailViewController *detailVC = [[ZZTWordDetailViewController alloc]init];
-    detailVC.cartoonDetail = self.topics[index];
-    detailVC.hidesBottomBarWhenPushed = YES;
-    [[self findResponderWithClass:[UINavigationController class]] pushViewController:detailVC animated:YES];
+    ZZTCarttonDetailModel *model = self.topics[index];
+    //独创
+    if([model.cartoonType isEqualToString:@"1"]){
+        ZZTWordDetailViewController *detailVC = [[ZZTWordDetailViewController alloc]init];
+        detailVC.cartoonDetail = self.topics[index];
+        detailVC.hidesBottomBarWhenPushed = YES;
+        [[self findResponderWithClass:[UINavigationController class]] pushViewController:detailVC animated:YES];
+    }else{
+        ZZTMulWordDetailViewController *detailVC = [[ZZTMulWordDetailViewController alloc]init];
+        detailVC.cartoonDetail = model;
+//        detailVC.cartoonDetail = self.topics[index];
+        detailVC.hidesBottomBarWhenPushed = YES;
+        [[self findResponderWithClass:[UINavigationController class]] pushViewController:detailVC animated:YES];
+    }
+    
 }
 @end

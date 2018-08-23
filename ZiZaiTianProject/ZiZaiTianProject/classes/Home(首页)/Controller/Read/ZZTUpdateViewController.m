@@ -33,8 +33,6 @@
 
     //设置滑动栏的样式
     [self setupStyle];
-    
-    
 }
 
 -(void)setupTitle{

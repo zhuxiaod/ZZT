@@ -75,12 +75,10 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
 -(void)loadWeiNingTuiJian{
     
     NSDictionary *dic = @{
-                          @"bookType":@"",
-                          @"cartoonType":@"2",
-                          @"pageNum":@"1",
-                          @"pageSize":@"10"
+                          @"pageNum":@"0",
+                          @"pageSize":@"6"
                           };
-    [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"cartoon/cartoonlist"] parameters:dic success:^(id responseObject) {
+    [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"cartoon/getRecommendCartoon"] parameters:dic success:^(id responseObject) {
         NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
         NSMutableArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
         self.caiNiXiHuan = array;

@@ -15,13 +15,16 @@
 @property (weak, nonatomic) IBOutlet UILabel *cartoonTitle;
 @property (weak, nonatomic) IBOutlet UILabel *heatNum;
 @property (weak, nonatomic) IBOutlet UILabel *participationNum;
-
 @property (weak, nonatomic) IBOutlet UILabel *likeNum;
 @property (weak, nonatomic) IBOutlet UILabel *commentNum;
 @property (weak, nonatomic) IBOutlet UIImageView *background;
-
+@property (weak, nonatomic) IBOutlet UILabel *topTitle;
+@property (weak, nonatomic) IBOutlet UIImageView *like;
+@property (weak, nonatomic) IBOutlet UIImageView *comment;
+@property (weak, nonatomic) IBOutlet UIView *collectView;
+@property (weak, nonatomic) IBOutlet UIButton *backBtn;
+@property (weak, nonatomic) IBOutlet UIButton *moreBtn;
 @property (strong, nonatomic) UIScrollView *scrollView;
-
 @property (nonatomic,weak) ZZTWordsDetailViewController *myVc;
 @property (nonatomic,assign) BOOL  show;
 @property (nonatomic,strong) NSMutableArray *array;
@@ -50,9 +53,11 @@ static CGFloat const spaceing   = 8.0f;
 ////拉动特效
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context {
     CGFloat offsetY = -[change[NSKeyValueChangeNewKey] CGPointValue].y;
-
-    if (offsetY < 1) return;
-
+    
+    if (offsetY < 1) {
+        return;
+    }
+    
     [self setHeight:offsetY > navHeight ? offsetY : navHeight];
     
     //正常变隐藏
@@ -61,6 +66,7 @@ static CGFloat const spaceing   = 8.0f;
         CGFloat alpha = 0.0f;
 
         alpha = (wordsDetailHeadViewHeight * 0.5)/offsetY - 0.3;
+        
         self.cartoonCover.alpha = 1 - alpha;
         self.cartoonName.alpha = 1 - alpha;
         self.cartoonTitle.alpha = 1 - alpha;
@@ -68,14 +74,11 @@ static CGFloat const spaceing   = 8.0f;
         self.participationNum.alpha = 1 - alpha;
         self.likeNum.alpha = 1 - alpha;
         self.commentNum.alpha = 1 - alpha;
-
-        self.background.alpha = alpha;
-
-        self.show = YES;
+        self.like.alpha = 1 - alpha;
+        self.comment.alpha = 1 - alpha;
+        self.collectView.alpha = 1 - alpha;
+        self.topTitle.alpha = 0;
     }else {
-        //隐藏
-        self.show = NO;
-
         self.background.alpha = 1;
         self.cartoonCover.alpha = 0;
         self.cartoonName.alpha = 0;
@@ -84,37 +87,33 @@ static CGFloat const spaceing   = 8.0f;
         self.participationNum.alpha = 0;
         self.likeNum.alpha = 0;
         self.commentNum.alpha = 0;
-
+        self.like.alpha = 0;
+        self.comment.alpha = 0;
+        self.collectView.alpha = 0;
+        self.topTitle.alpha = 1;
+        self.backBtn.alpha = 1;
+        self.moreBtn.alpha = 1;
     }
 }
-//改变标题的位置
 
-//- (void)setShow:(BOOL)show {
-//    if (_show != show) {
-//
-//        CGFloat leftConstant = spaceing;
-//        CGFloat rightContstant = 128;
-//
-//        self.leading.constant  = leftConstant;
-//        self.trailing.constant = rightContstant;
-//
-//
-//        [UIView animateWithDuration:0.25 animations:^{
-//            [self layoutIfNeeded];
-////            self.replyCount.alpha = show;
-////            self.likeCount.alpha = show;
-//        }];
-////        self.backBtn.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:show ? 0.1:0];
-//    }
-//    _show = show;
-//}
-//
 -(void)setDetailModel:(ZZTCarttonDetailModel *)detailModel
 {
     _detailModel = detailModel;
     //设置数据
+    if([detailModel.type isEqualToString:@"1"]){
+        NSString *bookName = [detailModel.bookName stringByAppendingString:@"(漫画)"];
+        NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc] initWithString:bookName];
+        [attriStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#598BE2"] range:NSMakeRange(attriStr.length - 4,4)];
+        self.cartoonName.attributedText = attriStr;
+    }else if([detailModel.type isEqualToString:@"2"]){
+        NSString *bookName = [detailModel.bookName stringByAppendingString:@"(剧本)"];
+        NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc] initWithString:bookName];
+        [attriStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#87CDBF"] range:NSMakeRange(attriStr.length - 4,4)];
+        self.cartoonName.attributedText = attriStr;
+    }
+    
     [self.cartoonCover sd_setImageWithURL:[NSURL URLWithString:detailModel.cover]];
-    self.cartoonName.text = detailModel.bookName;
+//    self.cartoonName.text = detailModel.bookName;
     NSString *bookType = [detailModel.bookType stringByReplacingOccurrencesOfString:@"," withString:@" "];
     self.cartoonTitle.text = [NSString stringWithFormat:@"标签  %@",bookType];
     //热度
@@ -129,26 +128,21 @@ static CGFloat const spaceing   = 8.0f;
 
 - (IBAction)back:(UIButton *)sender {
     [[self findResponderWithClass:[UINavigationController class]] popViewControllerAnimated:YES];
-
 }
 
 //销毁观察者
 - (void)dealloc {
     [self.scrollView removeObserver:self forKeyPath:offsetKeyPath context:nil];
 }
+
 //懒加载
 - (ZZTWordsDetailViewController *)myVc {
+    
     if (!_myVc) {
         _myVc = [self findResponderWithClass:[ZZTWordsDetailViewController class]];
     }
     return _myVc;
 }
-//
-//-(NSMutableArray *)array{
-//    if (!_array) {
-//        _array = [NSMutableArray array];
-//    }
-//    return _array;
-//}
+
 
 @end
