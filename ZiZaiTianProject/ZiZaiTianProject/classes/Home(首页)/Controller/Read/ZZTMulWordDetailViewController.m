@@ -40,6 +40,17 @@ NSString *zztMulWordListCell = @"zztMulWordListCell";
     return _wordList;
 }
 
+- (void)setStatusBarBackgroundColor:(UIColor *)color {
+    UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"]; if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+        statusBar.backgroundColor = color;
+    }
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [self setStatusBarBackgroundColor:[UIColor colorWithHexString:@"#42428E"]];
+    
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.rr_navHidden = YES;
@@ -78,7 +89,9 @@ NSString *zztMulWordListCell = @"zztMulWordListCell";
 //开始阅读
 -(void)starRead{
     ZZTCartoonDetailViewController *cartoonDetailVC = [[ZZTCartoonDetailViewController alloc] init];
+    cartoonDetailVC.type = _cartoonDetail.type;
     cartoonDetailVC.cartoonId = _cartoonDetail.id;
+    cartoonDetailVC.viewTitle = _cartoonDetail.bookName;
     cartoonDetailVC.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:cartoonDetailVC animated:YES];
 }
@@ -128,6 +141,7 @@ NSString *zztMulWordListCell = @"zztMulWordListCell";
         
     }];
 }
+
 -(void)setupTopView{
     UITableView *contenView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     contenView.backgroundColor = [UIColor whiteColor];

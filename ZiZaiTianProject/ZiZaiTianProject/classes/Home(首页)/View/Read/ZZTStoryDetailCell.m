@@ -12,10 +12,11 @@
 
 @end
 @implementation ZZTStoryDetailCell
+
 -(void)awakeFromNib{
     [super awakeFromNib];
-
 }
+
 -(void)setStr:(NSString *)str{
     _str = str;
     [self.storyContent setText:str];

@@ -11,4 +11,7 @@
 @interface ZZTCartoonDetailViewController : BaseViewController
 
 @property (nonatomic,strong) NSString *cartoonId;
+@property (nonatomic,strong) NSString *viewTitle;
+@property (nonatomic,strong) NSString *type;
+
 @end

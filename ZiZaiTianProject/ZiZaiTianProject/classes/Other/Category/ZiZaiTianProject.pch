@@ -50,6 +50,7 @@
 #import "UIView+Extension.h"
 #import "UIView+Frame.h"
 
+
 #define imageHost @"p872ue3rt.bkt.clouddn.com"
 
 #define detailViewHeaderHeight 60
@@ -65,7 +66,9 @@
 #define ZZTBGColor [UIColor colorWithHexString:@"#F5F5F5"]
 #define keyStr @"ZIZAITIAN@666666"
 #define IV @"A-16-Byte-String" 
-#define ZZTAPI @"http://192.168.0.142:8888/"
+#define ZZTAPI @"http://192.168.0.165:8888/"
+//#define ZZTAPI @"http://192.168.0.142:8888/"
+
 //本地
 //192.168.0.165
 //测试

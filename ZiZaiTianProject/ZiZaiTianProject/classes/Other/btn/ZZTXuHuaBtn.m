@@ -14,14 +14,31 @@
 @end
 
 @implementation ZZTXuHuaBtn
--(instancetype)initWithFrame:(CGRect)frame{
-    if(self = [sup])
+
++(instancetype)XuHuaBtn{
+    
+    return [[[NSBundle mainBundle] loadNibNamed:@"ZZTXuHuaBtn" owner:nil options:nil]lastObject];
+
 }
+
+-(id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    
+    if (self) {
+        NSArray *nibs=[[NSBundle mainBundle]loadNibNamed:@"ZZTXuHuaBtn" owner:nil options:nil];
+        self=[nibs objectAtIndex:0];
+        self.frame = frame;
+    }
+    return self;
+    
+}
+
 -(void)setImageUrl:(NSString *)imageUrl{
     _imageUrl = imageUrl;
-    [self.headView setImage:[UIImage imageNamed:imageUrl]];
+//    [self.headView setImage:[UIImage imageNamed:imageUrl]];
+    self.headView.backgroundColor = [UIColor redColor];
 //    [self.headView sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
-//    [self.likeNum setText:self.loveNum];
 }
 
 -(void)setLoveNum:(NSString *)loveNum{

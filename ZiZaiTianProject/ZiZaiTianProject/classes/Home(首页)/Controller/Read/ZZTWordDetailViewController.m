@@ -46,6 +46,19 @@ NSString *zztWordListCell = @"zztWordListCell";
     //设置底部View
     [self setupBottomView];
 }
+
+- (void)setStatusBarBackgroundColor:(UIColor *)color {
+    UIView *statusBar = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"]; if ([statusBar respondsToSelector:@selector(setBackgroundColor:)]) {
+        statusBar.backgroundColor = color;
+    }
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [self setStatusBarBackgroundColor:[UIColor colorWithHexString:@"#42428E"]];
+    
+}
+
 //设置底部View
 -(void)setupBottomView{
     UIView *bottom = [[UIView alloc] init];
@@ -68,12 +81,23 @@ NSString *zztWordListCell = @"zztWordListCell";
     [starRead setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [bottom addSubview:starRead];
 }
+
 //开始阅读
 -(void)starRead{
     ZZTCartoonDetailViewController *cartoonDetailVC = [[ZZTCartoonDetailViewController alloc] init];
     cartoonDetailVC.hidesBottomBarWhenPushed = YES;
+    cartoonDetailVC.type = _cartoonDetail.type;
+    cartoonDetailVC.cartoonId = self.cartoonDetail.id;
+    cartoonDetailVC.viewTitle = _cartoonDetail.bookName;
     [self.navigationController pushViewController:cartoonDetailVC animated:YES];
+    
+    //判断是剧本还是漫画
+    //是剧本的话 跳转剧本
+    //漫画跳转漫画
+    //type 1 是漫画 2是剧本
+    //传过去  判断是什么情况  基本用的cell 和漫画不同就ok了
 }
+
 //设置数据
 -(void)setCartoonDetail:(ZZTCarttonDetailModel *)cartoonDetail{
     _cartoonDetail = cartoonDetail;
@@ -106,6 +130,7 @@ NSString *zztWordListCell = @"zztWordListCell";
     }];
     [self.contentView reloadData];
 }
+
 //目录
 -(void)loadListData:(NSString *)ID{
     weakself(self);
@@ -167,7 +192,6 @@ NSString *zztWordListCell = @"zztWordListCell";
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     //字符串
     self.descHeadView.desc = self.ctDetail.intro;
-    
     return self.descHeadView.myHeight;
 }
 
@@ -194,9 +218,11 @@ NSString *zztWordListCell = @"zztWordListCell";
     }
     return _descHeadView;
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 120;
 }
+
 //详情
 -(ZZTCarttonDetailModel *)ctDetail{
     if (!_ctDetail) {

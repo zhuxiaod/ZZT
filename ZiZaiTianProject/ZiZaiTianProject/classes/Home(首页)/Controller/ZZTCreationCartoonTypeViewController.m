@@ -9,6 +9,7 @@
 #import "ZZTCreationCartoonTypeViewController.h"
 #import "ZZTBookType.h"
 #import "ZZTCreatCartoonViewController.h"
+#import "TypeButton.h"
 
 //宽度（自定义）
 #define PIC_WIDTH 40
@@ -27,15 +28,21 @@
 @property (nonatomic,strong) NSMutableArray *tagArray;
 
 //多人创作
-@property (weak, nonatomic) IBOutlet UIButton *typeOne;
+@property (weak, nonatomic) IBOutlet TypeButton *typeOne;
+
+
+@property (weak, nonatomic) IBOutlet TypeButton *typeTwo;
 //单人创作
-@property (weak, nonatomic) IBOutlet UIButton *typeTwo;
+
+
 @property (weak, nonatomic) IBOutlet UITextField *bookName;
 @property (weak, nonatomic) IBOutlet UITextView *introView;
 
 @property (assign, nonatomic)  NSInteger bookType;
 
 @property (nonatomic,strong) UILabel *placeHolderLabel;
+@property (weak, nonatomic) IBOutlet UIButton *sureBtn;
+
 @end
 
 
@@ -76,6 +83,16 @@
     self.introView.layer.borderColor = [UIColor colorWithHexString:@"#C7C8C9"].CGColor;
     
     //输入一些默认内容
+    [self.typeOne setImage:[UIImage imageNamed:@"编辑资料-图标-未选"] forState:UIControlStateNormal];
+    [self.typeOne  setImage:[UIImage imageNamed:@"编辑资料-图标-男性"] forState:UIControlStateSelected];
+    [self.typeOne setTitle:@"多人创作" forState:UIControlStateNormal];
+    [self.typeOne addTarget:self action:@selector(selectType:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.typeTwo setImage:[UIImage imageNamed:@"编辑资料-图标-未选"] forState:UIControlStateNormal];
+    [self.typeTwo  setImage:[UIImage imageNamed:@"编辑资料-图标-男性"] forState:UIControlStateSelected];
+    [self.typeTwo setTitle:@"独立创作" forState:UIControlStateNormal];
+    [self.typeTwo addTarget:self action:@selector(selectType:) forControlEvents:UIControlEventTouchUpInside];
+
     [self selectType:self.typeOne];
     
     //默认书的类型
@@ -83,6 +100,11 @@
     
     //设置简介替换字
     [self setupplaceHolderLabel];
+    
+    self.sureBtn.userInteractionEnabled = NO;
+    self.sureBtn.layer.borderColor = [UIColor blackColor].CGColor;
+    self.sureBtn.layer.borderWidth = 1.0f;
+    self.sureBtn.backgroundColor = [UIColor grayColor];
 }
 
 //设置简介替换字
@@ -178,14 +200,11 @@
     [self.tagArray removeObject:str];
 }
 //type
-- (IBAction)selectType:(UIButton *)sender {
+- (IBAction)selectType:(TypeButton *)sender {
     if([sender.titleLabel.text isEqualToString:@"多人创作"]){
         //没有选中多人创作
         if(sender.selected == NO){
             sender.selected = YES;
-            //改变样式 获得type
-            //改变一个值
-            //改变独立创作的样式
             NSLog(@"多人创作被选中了");
             self.typeTwo.selected = NO;
             self.bookType = 1;
@@ -235,6 +254,15 @@
     else
     {
         _placeHolderLabel.text = @"";
+    }
+}
+- (IBAction)bookName:(UITextField *)sender {
+    if(sender.text.length > 0){
+        self.sureBtn.userInteractionEnabled = YES;
+        self.sureBtn.backgroundColor = [UIColor colorWithHexString:@"#9694FA"];
+    }else{
+        self.sureBtn.userInteractionEnabled = NO;
+        self.sureBtn.backgroundColor = [UIColor grayColor];
     }
 }
 

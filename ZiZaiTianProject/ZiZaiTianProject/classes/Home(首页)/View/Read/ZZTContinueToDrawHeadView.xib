@@ -14,17 +14,17 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ZZTContinueToDrawHeadView">
-            <rect key="frame" x="0.0" y="0.0" width="388" height="142"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1BM-IN-7E4">
-                    <rect key="frame" x="10" y="35" width="378" height="93"/>
+                    <rect key="frame" x="10" y="35" width="310" height="101"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AqH-E0-8er">
-                            <rect key="frame" x="0.0" y="0.0" width="67.5" height="83"/>
+                            <rect key="frame" x="0.0" y="0.0" width="73.5" height="91"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="22s-kW-RAy">
-                                    <rect key="frame" x="0.0" y="0.0" width="67.5" height="67.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="73.5" height="73.5"/>
                                     <color key="backgroundColor" red="0.76470588240000004" green="0.76470588240000004" blue="0.76470588240000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="22s-kW-RAy" secondAttribute="height" multiplier="1:1" id="w5k-4n-c3x"/>
@@ -33,7 +33,7 @@
                                     <state key="normal" title="续"/>
                                 </button>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="我要续画" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7L8-sE-EXG">
-                                    <rect key="frame" x="0.0" y="67.5" width="67.5" height="15.5"/>
+                                    <rect key="frame" x="0.0" y="73.5" width="73.5" height="17.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <color key="textColor" red="0.76470588240000004" green="0.76470588240000004" blue="0.76470588240000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <nil key="highlightedColor"/>
@@ -53,7 +53,7 @@
                             </constraints>
                         </view>
                         <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OxI-GE-bjq">
-                            <rect key="frame" x="77.5" y="0.0" width="300.5" height="83"/>
+                            <rect key="frame" x="83.5" y="0.0" width="226.5" height="91"/>
                         </scrollView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -78,7 +78,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DiO-Av-nrK">
-                    <rect key="frame" x="0.0" y="138" width="388" height="4"/>
+                    <rect key="frame" x="0.0" y="146" width="320" height="4"/>
                     <color key="backgroundColor" red="0.76470588240000004" green="0.76470588240000004" blue="0.76470588240000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="4" id="NRN-Ko-WNn"/>
@@ -103,8 +103,9 @@
             <connections>
                 <outlet property="XuHuaBtn" destination="22s-kW-RAy" id="IDw-zw-KiG"/>
                 <outlet property="scrollView" destination="OxI-GE-bjq" id="5s5-rn-ER7"/>
+                <outlet property="xuHuaView" destination="AqH-E0-8er" id="UM8-m2-OVK"/>
             </connections>
-            <point key="canvasLocation" x="-219" y="19"/>
+            <point key="canvasLocation" x="-489" y="56"/>
         </view>
     </objects>
 </document>

@@ -15,10 +15,14 @@
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
+@property (weak, nonatomic) IBOutlet UIView *xuHuaView;
+
 
 @end
 
 @implementation ZZTContinueToDrawHeadView
+
+
 
 +(instancetype)ContinueToDrawHeadView{
     return [[[NSBundle mainBundle] loadNibNamed:@"ZZTContinueToDrawHeadView" owner:nil options:nil]lastObject];
@@ -28,23 +32,26 @@
     [super awakeFromNib];
     self.XuHuaBtn.layer.borderColor = [UIColor blackColor].CGColor;
     self.XuHuaBtn.layer.borderWidth = 2.0f;
+    self.scrollView.backgroundColor = [UIColor yellowColor];
 }
 
 -(void)setArray:(NSArray *)array{
     _array = array;
 
-    CGFloat titleW = 80;
-    CGFloat titleH = 105;
-    CGFloat space = 10;
-    
-    for (int i = 0; i < array.count; i++) {
-        ZZTCartoonModel *model = self.array[i];
-        
-        ZZTXuHuaBtn *btn = [[ZZTXuHuaBtn alloc] init];
+    CGFloat titleW = 50;
+    CGFloat titleH = 50;
+    CGFloat space = 50;
+    self.scrollView.contentSize = CGSizeMake(600, titleH);
+    NSLog(@"scrollView frame:%@",NSStringFromCGRect(self.scrollView.frame));
+    for (int i = 0; i < 2; i++) {
+        //数据源
+//        ZZTCartoonModel *model = self.array[i];
+        CGFloat x = (titleW + space) * i;
+        ZZTXuHuaBtn *btn = [[ZZTXuHuaBtn alloc] initWithFrame:CGRectMake(x, 0, titleW, titleH)];
         btn.imageUrl = @"peien";
         btn.loveNum = @"400";
-        CGFloat x = (titleW + space) * i;
-        btn.frame = CGRectMake(x, 0, titleW, titleH);
+        
+//        btn.frame = ;
         [self.scrollView addSubview:btn];
     }
 }

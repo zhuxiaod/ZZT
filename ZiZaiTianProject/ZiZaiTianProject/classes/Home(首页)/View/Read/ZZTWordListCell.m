@@ -33,7 +33,6 @@
     self.likeNum.textColor = [UIColor grayColor];
 
 //    self.commentNum.text = [NSString stringWithFormat:@"%ld",model.];
-
 }
 
 

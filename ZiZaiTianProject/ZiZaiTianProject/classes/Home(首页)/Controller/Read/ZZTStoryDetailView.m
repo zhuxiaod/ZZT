@@ -41,7 +41,6 @@ static const CGFloat textCellHeight = 250.0f;
         [self registerNib:[UINib nibWithNibName:@"ZZTStoryDetailCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:storyDetail];
 //        [self registerClass:[UITableViewCell class] forCellReuseIdentifier:storyDetail];
         self.showsVerticalScrollIndicator = YES;
-        
     }
     return self;
 }
@@ -49,9 +48,11 @@ static const CGFloat textCellHeight = 250.0f;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.storyDetailArray.count;
 }
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSInteger index = indexPath.section + indexPath.row;

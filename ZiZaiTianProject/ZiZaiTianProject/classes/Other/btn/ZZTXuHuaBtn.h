@@ -13,4 +13,7 @@
 @property (nonatomic,strong) NSString *imageUrl;
 
 @property (nonatomic,strong) NSString *loveNum;
+
++(instancetype)XuHuaBtn;
+
 @end

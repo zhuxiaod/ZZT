@@ -20,23 +20,33 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="246-KS-ibq">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="10" y="0.0" width="300" height="42.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ywk-zf-qkQ">
+                        <rect key="frame" x="0.0" y="42.5" width="320" height="1"/>
+                        <color key="backgroundColor" red="0.76470588240000004" green="0.76470588240000004" blue="0.76470588240000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="uzN-NN-tnp"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="246-KS-ibq" secondAttribute="bottom" id="M1b-Zl-vZC"/>
-                    <constraint firstItem="246-KS-ibq" firstAttribute="width" secondItem="H2p-sc-9uM" secondAttribute="width" id="ee6-Me-Xqx"/>
-                    <constraint firstItem="246-KS-ibq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="nTO-UV-hn1"/>
-                    <constraint firstItem="246-KS-ibq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="ugt-1q-yW0"/>
+                    <constraint firstItem="246-KS-ibq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="JNm-tK-Brk"/>
+                    <constraint firstItem="Ywk-zf-qkQ" firstAttribute="top" secondItem="246-KS-ibq" secondAttribute="bottom" id="Jje-vp-oBG"/>
+                    <constraint firstItem="246-KS-ibq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="Lq0-J7-g5s"/>
+                    <constraint firstAttribute="trailing" secondItem="246-KS-ibq" secondAttribute="trailing" constant="10" id="ScX-tz-TMV"/>
+                    <constraint firstAttribute="trailing" secondItem="Ywk-zf-qkQ" secondAttribute="trailing" id="VyF-Ys-TGp"/>
+                    <constraint firstItem="Ywk-zf-qkQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="jaY-dx-2XZ"/>
+                    <constraint firstAttribute="bottom" secondItem="Ywk-zf-qkQ" secondAttribute="bottom" id="mNW-6D-7Mj"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
                 <outlet property="storyContent" destination="246-KS-ibq" id="O0F-8r-Mqp"/>
             </connections>
-            <point key="canvasLocation" x="330" y="84"/>
+            <point key="canvasLocation" x="-115" y="6"/>
         </tableViewCell>
     </objects>
 </document>

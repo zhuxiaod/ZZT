@@ -105,7 +105,7 @@ NSString *zztComment = @"zztComment";
 -(void)loadtopData:(NSString *)ID{
     //加载用户信息
     weakself(self);
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+//    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     NSDictionary *paramDict = @{
                                 @"id":ID
                                 };
@@ -116,11 +116,11 @@ NSString *zztComment = @"zztComment";
         weakSelf.ctDetail = mode;
         weakSelf.head.detailModel = mode;
         weakSelf.isDataCome = YES;
-        [hud hideAnimated:YES];
+//        [hud hideAnimated:YES];
 
     } failure:^(NSError *error) {
         //网络请求不会失败
-        hud.label.text = NSLocalizedString(@"链接失败", @"HUD message title");
+//        hud.label.text = NSLocalizedString(@"链接失败", @"HUD message title");
 
     }];
     [self.contentView reloadData];
