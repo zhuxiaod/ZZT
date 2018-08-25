@@ -46,16 +46,17 @@ NSString *zztMulWordListCell = @"zztMulWordListCell";
     }
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    
-    [self setStatusBarBackgroundColor:[UIColor colorWithHexString:@"#42428E"]];
-    
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.rr_navHidden = YES;
 
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.rr_navHidden = YES;
+    
+    self.view.backgroundColor = [UIColor colorWithHexString:@"#823BE0"];
 
     //设置顶部页面
     [self setupTopView];
@@ -143,7 +144,7 @@ NSString *zztMulWordListCell = @"zztMulWordListCell";
 }
 
 -(void)setupTopView{
-    UITableView *contenView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
+    UITableView *contenView = [[UITableView alloc] initWithFrame:CGRectMake(0, -20, self.view.width, self.view.height) style:UITableViewStyleGrouped];
     contenView.backgroundColor = [UIColor whiteColor];
     contenView.contentInset = UIEdgeInsetsMake(wordsDetailHeadViewHeight,0,0,0);
     contenView.delegate = self;
@@ -153,7 +154,7 @@ NSString *zztMulWordListCell = @"zztMulWordListCell";
     
     [contenView  setSeparatorColor:[UIColor blueColor]];
     
-    ZZTWordsDetailHeadView *head = [ZZTWordsDetailHeadView wordsDetailHeadViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, wordsDetailHeadViewHeight) scorllView:contenView];
+    ZZTWordsDetailHeadView *head = [ZZTWordsDetailHeadView wordsDetailHeadViewWithFrame:CGRectMake(0, -20, SCREEN_WIDTH, wordsDetailHeadViewHeight) scorllView:contenView];
     self.head = head;
     //设置数据
     self.head.detailModel = self.cartoonDetail;

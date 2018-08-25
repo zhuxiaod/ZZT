@@ -73,10 +73,6 @@
                 <constraint firstAttribute="trailing" secondItem="whH-SE-kxw" secondAttribute="trailing" constant="3" id="ii0-Ix-DK4"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <connections>
-                <outlet property="headView" destination="whH-SE-kxw" id="Oql-iY-zxz"/>
-                <outlet property="likeNum" destination="lPq-Kx-R17" id="8lH-r7-kJd"/>
-            </connections>
             <point key="canvasLocation" x="-76" y="88"/>
         </view>
     </objects>

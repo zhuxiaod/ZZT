@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ZZTWordsDetailModel.h"
 #import "ZZTCarttonDetailModel.h"
+
 #define wordsDetailHeadViewHeight  300
 
 @interface ZZTWordsDetailHeadView : UIView

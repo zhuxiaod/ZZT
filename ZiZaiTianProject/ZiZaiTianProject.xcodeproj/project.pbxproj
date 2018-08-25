@@ -218,6 +218,7 @@
 		04D2AFAB213006FB008F6CCB /* ZZTStoryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D2AFAA213006FA008F6CCB /* ZZTStoryModel.m */; };
 		04D2AFAE213037AD008F6CCB /* TypeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D2AFAD213037AD008F6CCB /* TypeButton.m */; };
 		04D7D1EB20E64D46008D3969 /* EncryptionTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 04D7D1EA20E64D45008D3969 /* EncryptionTools.m */; };
+		04DC58A821312ADB00F98BFE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04DC58A721312ADB00F98BFE /* Images.xcassets */; };
 		04DE149220E46E88009DF030 /* UIBarButtonItem+Item.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DE149120E46E87009DF030 /* UIBarButtonItem+Item.m */; };
 		04DE149520E4781C009DF030 /* ZZTVIPMidView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DE149420E4781C009DF030 /* ZZTVIPMidView.m */; };
 		04DE149720E47834009DF030 /* ZZTVIPMidView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04DE149620E47834009DF030 /* ZZTVIPMidView.xib */; };
@@ -623,6 +624,7 @@
 		04D2AFAD213037AD008F6CCB /* TypeButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TypeButton.m; sourceTree = "<group>"; };
 		04D7D1E920E64D45008D3969 /* EncryptionTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionTools.h; sourceTree = "<group>"; };
 		04D7D1EA20E64D45008D3969 /* EncryptionTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptionTools.m; sourceTree = "<group>"; };
+		04DC58A721312ADB00F98BFE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		04DE149020E46E87009DF030 /* UIBarButtonItem+Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+Item.h"; sourceTree = "<group>"; };
 		04DE149120E46E87009DF030 /* UIBarButtonItem+Item.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+Item.m"; sourceTree = "<group>"; };
 		04DE149320E4781C009DF030 /* ZZTVIPMidView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTVIPMidView.h; sourceTree = "<group>"; };
@@ -1151,6 +1153,7 @@
 				F7C04BF120DF3D190055E7A8 /* LaunchScreen.storyboard */,
 				F7C04BF420DF3D190055E7A8 /* Info.plist */,
 				F7C04BF520DF3D190055E7A8 /* main.m */,
+				04DC58A721312ADB00F98BFE /* Images.xcassets */,
 			);
 			path = ZiZaiTianProject;
 			sourceTree = "<group>";
@@ -1459,6 +1462,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0434BC8E212C10D800AC43E0 /* ZZTRankCell.xib in Resources */,
+				04DC58A821312ADB00F98BFE /* Images.xcassets in Resources */,
 				046683A520F359F00095C6BC /* u=3542609435,1624381455&fm=27&gp=0.jpg in Resources */,
 				041EE0B020EB767B0012FEDF /* ZZTNoTypeCell.xib in Resources */,
 				041EE0A120EB497A0012FEDF /* ZZTSettingViewController.xib in Resources */,
@@ -1892,6 +1896,7 @@
 			baseConfigurationReference = 8E61AC85E4D70CE81268AC0F /* Pods-ZiZaiTianProject.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8ZQG82T86L;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1913,6 +1918,7 @@
 			baseConfigurationReference = 749399599CA48ED07BA87311 /* Pods-ZiZaiTianProject.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8ZQG82T86L;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

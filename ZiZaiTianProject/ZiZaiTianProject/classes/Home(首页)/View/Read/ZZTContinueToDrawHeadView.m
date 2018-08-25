@@ -17,6 +17,12 @@
 
 @property (weak, nonatomic) IBOutlet UIView *xuHuaView;
 
+@property (nonatomic,strong) UIImageView *imageView;
+@property (nonatomic,strong) UIImageView *headView;
+@property (nonatomic,strong) UIImageView *likeView;
+@property (nonatomic,strong) UILabel *likeNum;
+
+
 
 @end
 
@@ -38,19 +44,17 @@
 -(void)setArray:(NSArray *)array{
     _array = array;
 
-    CGFloat titleW = 50;
-    CGFloat titleH = 50;
-    CGFloat space = 50;
+    CGFloat titleW = self.XuHuaBtn.width;
+    CGFloat titleH = self.scrollView.height;
+    CGFloat space = 10;
     self.scrollView.contentSize = CGSizeMake(600, titleH);
     NSLog(@"scrollView frame:%@",NSStringFromCGRect(self.scrollView.frame));
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < array.count; i++) {
         //数据源
-//        ZZTCartoonModel *model = self.array[i];
-        CGFloat x = (titleW + space) * i;
+        CGFloat x = space + (titleW + space) * i;
         ZZTXuHuaBtn *btn = [[ZZTXuHuaBtn alloc] initWithFrame:CGRectMake(x, 0, titleW, titleH)];
-        btn.imageUrl = @"peien";
-        btn.loveNum = @"400";
-        
+//        btn.imageUrl = @"peien";
+//        btn.loveNum = @"400";
 //        btn.frame = ;
         [self.scrollView addSubview:btn];
     }

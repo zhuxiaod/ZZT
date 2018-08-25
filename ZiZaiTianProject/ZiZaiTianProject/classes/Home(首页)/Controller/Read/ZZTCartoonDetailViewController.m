@@ -186,6 +186,7 @@ NSString *storyDe = @"storyDe";
             
         }];
     }else{
+        //章节
         NSDictionary *paramDict = @{
                                     @"cartoonId":@"7"
                                     };
@@ -199,7 +200,7 @@ NSString *storyDe = @"storyDe";
             
         }];
     }
- 
+    //评论
     NSDictionary *Dict = @{
                             @"itemId":@"1"
                             };
@@ -228,7 +229,6 @@ NSString *storyDe = @"storyDe";
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     if(section == 0){
         ZZTAuthorHeadView *authorHead = [ZZTAuthorHeadView AuthorHeadView];
-//        authorHead.backgroundColor = [UIColor yellowColor];
         return authorHead;
     }else{
         ZZTCommentHeadView *commentHeadView = [[ZZTCommentHeadView alloc] init];
@@ -237,6 +237,7 @@ NSString *storyDe = @"storyDe";
     }
 }
 
+//续画
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section{
     if (section == 0) {
         ZZTContinueToDrawHeadView *view = [ZZTContinueToDrawHeadView ContinueToDrawHeadView];
@@ -246,6 +247,7 @@ NSString *storyDe = @"storyDe";
         return nil;
     }
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 150;
 }
