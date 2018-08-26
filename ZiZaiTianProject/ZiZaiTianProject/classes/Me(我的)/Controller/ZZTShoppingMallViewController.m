@@ -13,175 +13,71 @@
 #import "ZZTShoppingBtnCell.h"
 #import "ZZTMaterialCell.h"
 #import "ZZTShoppingHeaderView.h"
+#import <SDCycleScrollView.h>
+#import "ZXDCartoonFlexoBtn.h"
+#import "ZZTMallRecommendView.h"
 
+@interface ZZTShoppingMallViewController ()<SDCycleScrollViewDelegate,UICollectionViewDelegate>
+@property (nonatomic,assign) int i;
 
-@interface ZZTShoppingMallViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
-
-//@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
-@property (nonatomic,strong) NSArray *dataArray;
-
-@property (weak, nonatomic) IBOutlet UILabel *viewControllerTitle;
-
-@property (nonatomic,strong) UICollectionView *collectionView;
-
+@property (nonatomic,strong) UIScrollView *scrollView;
+@property (nonatomic,strong) UIView *btnView;
 @end
 
 @implementation ZZTShoppingMallViewController
 
-NSString *zztShoppingBtnCell = @"zztShoppingBtnCell";
-NSString *zzTShoppingHeader = @"zzTShoppingHeader";
-NSString *zzTShoppingBottomCell = @"zzTShoppingBottomCell";
-NSString *zzTMaterialCell = @"zzTMaterialCell";
-
-NSString *zzTShoppingHeaderView = @"zzTShoppingHeaderView";
-NSString *zzTShoppingHead = @"zzTShoppingHead";
-
-#pragma mark - lazyLoad
-- (UICollectionView *)collectionView{
-    if(!_collectionView){
-        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-        layout.headerReferenceSize = CGSizeMake(Screen_Width, 20);
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.frame = CGRectMake(0, 64, Screen_Width, Screen_Height - 64);
-        _collectionView.showsVerticalScrollIndicator = NO;
-        
-        //注册
-        [_collectionView registerNib:[UINib nibWithNibName:@"ZZTShoppingHeader" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:zzTShoppingHeader];
-        [_collectionView registerClass:[ZZTShoppingBtnCell class] forCellWithReuseIdentifier:zztShoppingBtnCell];
-        [_collectionView registerNib:[UINib nibWithNibName:@"ZZTMaterialCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:zzTMaterialCell];
-        [_collectionView registerNib:[UINib nibWithNibName:@"ZZTShoppingHeaderView" bundle:[NSBundle mainBundle]] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:zzTShoppingHeaderView];
-         [_collectionView registerNib:[UINib nibWithNibName:@"ZZTShoppingHeaderView" bundle:[NSBundle mainBundle]] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:zzTShoppingHead];
-        [self.view addSubview:_collectionView];
-    }
-    return _collectionView;
-}
-
-- (void)viewDidLoad {
+-(void)viewDidLoad{
     [super viewDidLoad];
-    //启动
-    [self setUpBase];
-    [self setViewTitle:_viewTitle];
-}
-
--(void)setViewTitle:(NSString *)viewTitle{
-    _viewTitle = viewTitle;
-    [self.viewControllerTitle setText:viewTitle];
-}
--(void)setIsShopping:(BOOL)isShopping{
-    _isShopping = isShopping;
-    if(isShopping == YES){
-        //中间数据源
-        _dataArray = @[[ZZTShoppingBtnModel initShopBtnWith:@"integral_1" ticketNumber:@"5张" BNumber:@"50币"],[ZZTShoppingBtnModel initShopBtnWith:@"integral_1" ticketNumber:@"10张" BNumber:@"100币"],[ZZTShoppingBtnModel initShopBtnWith:@"integral_1" ticketNumber:@"50张" BNumber:@"480币"],[ZZTShoppingBtnModel initShopBtnWith:@"integral_1" ticketNumber:@"100张" BNumber:@"900币"],[ZZTShoppingBtnModel initShopBtnWith:@"integral_1" ticketNumber:@"300张" BNumber:@"2500币"]];
-    }else{
-        //数据源
-        _dataArray = @[[ZZTShoppingBtnModel initShopBtnWith:@"integral_1" ticketNumber:@"5张" BNumber:@"500分"],[ZZTShoppingBtnModel initShopBtnWith:@"integral_1" ticketNumber:@"10张" BNumber:@"1000分"],[ZZTShoppingBtnModel initShopBtnWith:@"integral_1" ticketNumber:@"50张" BNumber:@"4800分"],[ZZTShoppingBtnModel initShopBtnWith:@"integral_1" ticketNumber:@"100张" BNumber:@"9000分"],[ZZTShoppingBtnModel initShopBtnWith:@"integral_1" ticketNumber:@"300张" BNumber:@"25000分"]];
-    }
-}
-#pragma mark - CollectionView
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
-    return 3;
-}
-
--(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    if (section == 0) {
-        return 1;
-    }else if (section == 1){
-        return 1;
-    }else if (section == 2){
-        return 10;
-    }else{
-        return 0;
-    }
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:zzTShoppingHeader forIndexPath:indexPath];
-    if(indexPath.section == 0){
-        ZZTShoppingHeader *cell = [collectionView dequeueReusableCellWithReuseIdentifier:zzTShoppingHeader forIndexPath:indexPath];
-        return cell;
-    }else if (indexPath.section == 1){
-        ZZTShoppingBtnCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:zztShoppingBtnCell forIndexPath:indexPath];
-        //控制
-        cell.array = self.dataArray;
-        return cell;
-    }else if (indexPath.section == 2){
-        //素材
-        ZZTMaterialCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:zzTMaterialCell forIndexPath:indexPath];
-        return cell;
-    }else{
-        return cell;
-    }
-    return cell;
-}
-
-#pragma mark - item宽高
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        return CGSizeMake(Screen_Width,175);
-    }else if (indexPath.section == 1){
-        return CGSizeMake(Screen_Width, 100);
-    }else if (indexPath.section == 2){
-        return CGSizeMake(115, 200);
-    }
-    return CGSizeZero;
-}
-
-#pragma mark - initialize
-- (void)setUpBase
-{
-    self.collectionView.backgroundColor = ZZTBGColor;
     
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-}
-//加内边距
--(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewFlowLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    _scrollView = scrollView;
+    scrollView.backgroundColor = [UIColor redColor];
+    [self.view addSubview:scrollView];
     
-    if(section == 2){
-         return UIEdgeInsetsMake(0, 5 ,0, 5);
-    }
-    return UIEdgeInsetsMake(0,0,0,0);
-}
-//返回上一页
-- (IBAction)backBtn:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
-//头视图(不用改)
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    UICollectionReusableView *reusableview = nil;
-    if(kind == UICollectionElementKindSectionHeader){
-        if(indexPath.section == 1){
-            ZZTShoppingHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:zzTShoppingHeaderView forIndexPath:indexPath];
-            headerView.viewTitle = @"阅读卷";
-            return headerView;
-        }else if (indexPath.section == 2){
-            ZZTShoppingHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:zzTShoppingHeaderView forIndexPath:indexPath];
-            headerView.viewTitle = @"素材";
-            return headerView;
-        }else{
-            ZZTShoppingHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:zzTShoppingHeaderView forIndexPath:indexPath];
-            return headerView;
-        }
-    }
-    return reusableview;
-}
-#pragma mark - head宽高
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    NSArray *imagesURLStrings = [NSArray arrayWithObjects: @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535282045025&di=b648e41d5d5a3535e5518a545459d351&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20161123%2Fbfa082e23cd94089a907a29b021946bf_th.jpeg",@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535282045025&di=d2ddcf88c11b57887d64db25c870bd4f&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20170919%2F210211af972f4e3c8c5a7fda0fda7493.jpeg", nil];
+    
+    //网络轮播图
+    SDCycleScrollView *cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 180) delegate:self placeholderImage:[UIImage imageNamed:@"peien"]];
+    //数组
+    cycleScrollView.imageURLStringsGroup = imagesURLStrings;
+    cycleScrollView.autoScrollTimeInterval = 5.;// 自动滚动时间间隔
+    [scrollView addSubview:cycleScrollView];
+    
+    //btnView
+    UIView *btnView = [[UIView alloc] initWithFrame:CGRectMake(0, cycleScrollView.y+cycleScrollView.height, SCREEN_WIDTH, 90)];
+    btnView.backgroundColor = [UIColor whiteColor];
+    self.btnView = btnView;
+    [scrollView addSubview:btnView];
+    
+    self.i = 0;
+    [self getBtnWithTitle:@"定制形象" image:@"图标-定制-形象"];
+    [self getBtnWithTitle:@"定制封面" image:@"图标-定制-封面"];
+    [self getBtnWithTitle:@"定制漫画" image:@"图标-定制-漫画"];
+    [self getBtnWithTitle:@"定制剧本" image:@"图标-定制-剧本"];
 
-    if (section == 0) {
-        return CGSizeZero;
-    }else if (section == 1){
-        return CGSizeMake(Screen_Width,20);
-    }else if (section == 2)
-    {
-        return CGSizeMake(Screen_Width,20);
-    }
-    return CGSizeZero;
+    //素材推荐
+    ZZTMallRecommendView *mallRecommendView = [[ZZTMallRecommendView alloc] initWithFrame:CGRectMake(0, btnView.y+btnView.height + 15, SCREEN_WIDTH, 200)];
+    mallRecommendView.title = @"素材推荐";
+    mallRecommendView.backgroundColor = [UIColor yellowColor];
+    [scrollView addSubview:mallRecommendView];
 }
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+
+-(void)getBtnWithTitle:(NSString *)title image:(NSString *)image
+{
+    CGFloat space = 25;
+
+    CGFloat btnW = SCREEN_WIDTH / 4 - space - (space / 4);
+    CGFloat btnH = self.btnView.height-10;
+    CGFloat x = space + (btnW + space) * self.i;
+
+    ZXDCartoonFlexoBtn *btn = [[ZXDCartoonFlexoBtn alloc] init];
+    btn.frame = CGRectMake(x, 10, btnW, btnH);
+    [btn setTitle:title forState:UIControlStateNormal];
+    [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    btn.titleLabel.font = [UIFont systemFontOfSize:12];
+    btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+    [btn setImage:[UIImage imageNamed:image] forState:UIControlStateNormal];
+    [self.btnView addSubview:btn];
+    self.i++;
 }
 @end

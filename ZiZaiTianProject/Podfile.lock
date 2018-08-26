@@ -29,6 +29,8 @@ PODS:
   - RTRootNavigationController (0.6.7):
     - RTRootNavigationController/Core (= 0.6.7)
   - RTRootNavigationController/Core (0.6.7)
+  - SDCycleScrollView (1.75):
+    - SDWebImage (>= 4.0.0)
   - SDWebImage (4.4.1):
     - SDWebImage/Core (= 4.4.1)
   - SDWebImage/Core (4.4.1)
@@ -48,6 +50,7 @@ DEPENDENCIES:
   - PYSearch
   - Qiniu
   - RTRootNavigationController
+  - SDCycleScrollView (~> 1.75)
   - SDWebImage (~> 4.0)
   - "UITableView+FDTemplateLayoutCell"
   - UMengAnalytics
@@ -67,6 +70,7 @@ SPEC REPOS:
     - PYSearch
     - Qiniu
     - RTRootNavigationController
+    - SDCycleScrollView
     - SDWebImage
     - "UITableView+FDTemplateLayoutCell"
     - UMengAnalytics
@@ -85,10 +89,11 @@ SPEC CHECKSUMS:
   PYSearch: 55175e6046e2e1b5236a90c780351988e914a015
   Qiniu: 65384bca1cdb0480a68d9b9b8f54db53418c0355
   RTRootNavigationController: d6aa6cbb78a3eaecea4f6e4df63f15dd887836b8
+  SDCycleScrollView: 884b88f0266dd4708a0e1934975c69cb971707b1
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
   UMengAnalytics: ef8d45f94c0e5771dc364cf6a5731d9d3b101da2
 
-PODFILE CHECKSUM: d9f41999cee085ebd2c07d2e61d24b1ef31a5733
+PODFILE CHECKSUM: 92118215e18e44fec10699328396d0815c3e9c10
 
 COCOAPODS: 1.5.3

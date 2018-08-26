@@ -17,6 +17,9 @@
 		040A04082100ADA1000FAE13 /* ZZTUpdateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040A04062100ADA1000FAE13 /* ZZTUpdateViewController.m */; };
 		040A04092100ADA1000FAE13 /* ZZTUpdateViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 040A04072100ADA1000FAE13 /* ZZTUpdateViewController.xib */; };
 		040A040C2100B231000FAE13 /* ZZTUpdatePageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040A040B2100B231000FAE13 /* ZZTUpdatePageViewController.m */; };
+		040D28122132AB18002A3B72 /* ZZTMallRecommendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 040D28112132AB18002A3B72 /* ZZTMallRecommendView.m */; };
+		040D28152132BF6F002A3B72 /* ZZTCartoonShowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 040D28142132BF6F002A3B72 /* ZZTCartoonShowView.m */; };
+		040D28172132BF7E002A3B72 /* ZZTCartoonShowView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 040D28162132BF7E002A3B72 /* ZZTCartoonShowView.xib */; };
 		040FD50220EF031900004C71 /* ZZTShoppingHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 040FD50120EF031900004C71 /* ZZTShoppingHeader.m */; };
 		040FD50420EF032900004C71 /* ZZTShoppingHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 040FD50320EF032900004C71 /* ZZTShoppingHeader.xib */; };
 		040FD50720EF160E00004C71 /* ZZTShoppingMidCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 040FD50620EF160E00004C71 /* ZZTShoppingMidCell.m */; };
@@ -65,7 +68,6 @@
 		043B075120EDFC6900ED3F5B /* ZZTShoppingButtomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 043B074F20EDFC6900ED3F5B /* ZZTShoppingButtomCell.m */; };
 		043B075220EDFC6900ED3F5B /* ZZTShoppingButtomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 043B075020EDFC6900ED3F5B /* ZZTShoppingButtomCell.xib */; };
 		043B075620EE11E600ED3F5B /* ZZTShoppingMallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 043B075420EE11E600ED3F5B /* ZZTShoppingMallViewController.m */; };
-		043B075720EE11E600ED3F5B /* ZZTShoppingMallViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 043B075520EE11E600ED3F5B /* ZZTShoppingMallViewController.xib */; };
 		043B075B20EE187F00ED3F5B /* ZZTShoppingMallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 043B075920EE187F00ED3F5B /* ZZTShoppingMallCell.m */; };
 		043B075C20EE187F00ED3F5B /* ZZTShoppingMallCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 043B075A20EE187F00ED3F5B /* ZZTShoppingMallCell.xib */; };
 		043B075F20EE2F1E00ED3F5B /* ZZTShoppingBtnModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 043B075E20EE2F1E00ED3F5B /* ZZTShoppingBtnModel.m */; };
@@ -204,7 +206,6 @@
 		049A99D320E32F2F00ED27C9 /* ZZTLoginRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049A99D120E32F2F00ED27C9 /* ZZTLoginRegisterViewController.m */; };
 		049A99D420E32F2F00ED27C9 /* ZZTLoginRegisterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 049A99D220E32F2F00ED27C9 /* ZZTLoginRegisterViewController.xib */; };
 		049A99DB20E3879700ED27C9 /* ZZTVIPViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049A99D920E3879700ED27C9 /* ZZTVIPViewController.m */; };
-		049A99DC20E3879700ED27C9 /* ZZTVIPViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 049A99DA20E3879700ED27C9 /* ZZTVIPViewController.xib */; };
 		049A99EA20E394BB00ED27C9 /* ZZTVIPTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 049A99E820E394BB00ED27C9 /* ZZTVIPTopView.m */; };
 		049A99EB20E394BB00ED27C9 /* ZZTVIPTopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 049A99E920E394BB00ED27C9 /* ZZTVIPTopView.xib */; };
 		04B4250321227CB600FDEE58 /* ZZTBubbleImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B4250121227CB500FDEE58 /* ZZTBubbleImageView.m */; };
@@ -268,6 +269,11 @@
 		040A04072100ADA1000FAE13 /* ZZTUpdateViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTUpdateViewController.xib; sourceTree = "<group>"; };
 		040A040A2100B231000FAE13 /* ZZTUpdatePageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTUpdatePageViewController.h; sourceTree = "<group>"; };
 		040A040B2100B231000FAE13 /* ZZTUpdatePageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTUpdatePageViewController.m; sourceTree = "<group>"; };
+		040D28102132AB18002A3B72 /* ZZTMallRecommendView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTMallRecommendView.h; sourceTree = "<group>"; };
+		040D28112132AB18002A3B72 /* ZZTMallRecommendView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTMallRecommendView.m; sourceTree = "<group>"; };
+		040D28132132BF6F002A3B72 /* ZZTCartoonShowView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTCartoonShowView.h; sourceTree = "<group>"; };
+		040D28142132BF6F002A3B72 /* ZZTCartoonShowView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTCartoonShowView.m; sourceTree = "<group>"; };
+		040D28162132BF7E002A3B72 /* ZZTCartoonShowView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTCartoonShowView.xib; sourceTree = "<group>"; };
 		040FD50020EF031900004C71 /* ZZTShoppingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTShoppingHeader.h; sourceTree = "<group>"; };
 		040FD50120EF031900004C71 /* ZZTShoppingHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTShoppingHeader.m; sourceTree = "<group>"; };
 		040FD50320EF032900004C71 /* ZZTShoppingHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTShoppingHeader.xib; sourceTree = "<group>"; };
@@ -350,7 +356,6 @@
 		043B075020EDFC6900ED3F5B /* ZZTShoppingButtomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTShoppingButtomCell.xib; sourceTree = "<group>"; };
 		043B075320EE11E600ED3F5B /* ZZTShoppingMallViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTShoppingMallViewController.h; sourceTree = "<group>"; };
 		043B075420EE11E600ED3F5B /* ZZTShoppingMallViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTShoppingMallViewController.m; sourceTree = "<group>"; };
-		043B075520EE11E600ED3F5B /* ZZTShoppingMallViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTShoppingMallViewController.xib; sourceTree = "<group>"; };
 		043B075820EE187F00ED3F5B /* ZZTShoppingMallCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTShoppingMallCell.h; sourceTree = "<group>"; };
 		043B075920EE187F00ED3F5B /* ZZTShoppingMallCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTShoppingMallCell.m; sourceTree = "<group>"; };
 		043B075A20EE187F00ED3F5B /* ZZTShoppingMallCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTShoppingMallCell.xib; sourceTree = "<group>"; };
@@ -598,7 +603,6 @@
 		049A99D220E32F2F00ED27C9 /* ZZTLoginRegisterViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTLoginRegisterViewController.xib; sourceTree = "<group>"; };
 		049A99D820E3879700ED27C9 /* ZZTVIPViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTVIPViewController.h; sourceTree = "<group>"; };
 		049A99D920E3879700ED27C9 /* ZZTVIPViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTVIPViewController.m; sourceTree = "<group>"; };
-		049A99DA20E3879700ED27C9 /* ZZTVIPViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTVIPViewController.xib; sourceTree = "<group>"; };
 		049A99E720E394BA00ED27C9 /* ZZTVIPTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTVIPTopView.h; sourceTree = "<group>"; };
 		049A99E820E394BB00ED27C9 /* ZZTVIPTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZTVIPTopView.m; sourceTree = "<group>"; };
 		049A99E920E394BB00ED27C9 /* ZZTVIPTopView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZZTVIPTopView.xib; sourceTree = "<group>"; };
@@ -1059,6 +1063,11 @@
 				04E6D49F20EC737500116085 /* ZZTMeEditButtomView.xib */,
 				043B074820EDEED800ED3F5B /* ZZTRoundRectButton.h */,
 				043B074920EDEED800ED3F5B /* ZZTRoundRectButton.m */,
+				040D28102132AB18002A3B72 /* ZZTMallRecommendView.h */,
+				040D28112132AB18002A3B72 /* ZZTMallRecommendView.m */,
+				040D28132132BF6F002A3B72 /* ZZTCartoonShowView.h */,
+				040D28142132BF6F002A3B72 /* ZZTCartoonShowView.m */,
+				040D28162132BF7E002A3B72 /* ZZTCartoonShowView.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1301,7 +1310,6 @@
 				049A99D220E32F2F00ED27C9 /* ZZTLoginRegisterViewController.xib */,
 				049A99D820E3879700ED27C9 /* ZZTVIPViewController.h */,
 				049A99D920E3879700ED27C9 /* ZZTVIPViewController.m */,
-				049A99DA20E3879700ED27C9 /* ZZTVIPViewController.xib */,
 				0442951720E5D52300D1AABF /* ZZTBrowViewController.h */,
 				0442951820E5D52300D1AABF /* ZZTBrowViewController.m */,
 				0442951920E5D52300D1AABF /* ZZTBrowViewController.xib */,
@@ -1321,7 +1329,6 @@
 				043B073D20EDCC6F00ED3F5B /* ZZTMeWalletViewController.xib */,
 				043B075320EE11E600ED3F5B /* ZZTShoppingMallViewController.h */,
 				043B075420EE11E600ED3F5B /* ZZTShoppingMallViewController.m */,
-				043B075520EE11E600ED3F5B /* ZZTShoppingMallViewController.xib */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1479,6 +1486,7 @@
 				049A99BB20E3288400ED27C9 /* ZXDLoginRegisterView.xib in Resources */,
 				0442951B20E5D52300D1AABF /* ZZTBrowViewController.xib in Resources */,
 				042BA0CA20EA0A2C003E279A /* ZZTSignInView.xib in Resources */,
+				040D28172132BF7E002A3B72 /* ZZTCartoonShowView.xib in Resources */,
 				0471A83820F5970400ABFF35 /* u=4070996148,1781906905&fm=27&gp=0.jpg in Resources */,
 				0471A85320F5E34100ABFF35 /* ZZTWordsDetailHeadView.xib in Resources */,
 				047ECF09212A8D6F008D1E82 /* ZZTCreationCartoonTypeViewController.xib in Resources */,
@@ -1490,7 +1498,6 @@
 				04E6D4A020EC737500116085 /* ZZTMeEditButtomView.xib in Resources */,
 				046FF66B2101E029005DED73 /* ZZTCreatCartoonViewController.xib in Resources */,
 				04DE149C20E4881B009DF030 /* ZZTVIPBtView.xib in Resources */,
-				049A99DC20E3879700ED27C9 /* ZZTVIPViewController.xib in Resources */,
 				047720EF2106BC6C00FC97B5 /* materialLibrary.json in Resources */,
 				041EE0B520EB8D0C0012FEDF /* ZZTExitCell.xib in Resources */,
 				04DE14AC20E4E691009DF030 /* ZZTCartoonCell.xib in Resources */,
@@ -1500,7 +1507,6 @@
 				F7C04BEE20DF3D190055E7A8 /* Main.storyboard in Resources */,
 				041EE0AB20EB66170012FEDF /* ZZTSettingSwichCell.xib in Resources */,
 				049A99B820E3288400ED27C9 /* ZXDFastLoginView.xib in Resources */,
-				043B075720EE11E600ED3F5B /* ZZTShoppingMallViewController.xib in Resources */,
 				0471A86220F65FFD00ABFF35 /* Storyboard.storyboard in Resources */,
 				0498B5D8212D8058005BD26D /* ZZTWordListCell.xib in Resources */,
 				043B074720EDEDBE00ED3F5B /* ZZTWalletCell.xib in Resources */,
@@ -1583,12 +1589,14 @@
 				0471A83B20F598DB00ABFF35 /* ZZTCreationBtnCellTableViewCell.m in Sources */,
 				042A5BE120E7623700F5BA89 /* ZZTCartonnPlayModel.m in Sources */,
 				040FD50720EF160E00004C71 /* ZZTShoppingMidCell.m in Sources */,
+				040D28152132BF6F002A3B72 /* ZZTCartoonShowView.m in Sources */,
 				040A03B620FDDAEA000FAE13 /* ZZTWritePlayViewController.m in Sources */,
 				043B075620EE11E600ED3F5B /* ZZTShoppingMallViewController.m in Sources */,
 				0484E7DA210AFC3400C39369 /* ZZTCartoonDrawView.m in Sources */,
 				04DE14A720E4C8C1009DF030 /* ZZTTableSwitchView.m in Sources */,
 				0466835620F306220095C6BC /* UIBarButtonItem+EXtension.m in Sources */,
 				048C333F20E211C100F69CE1 /* ZZTMeTopView.m in Sources */,
+				040D28122132AB18002A3B72 /* ZZTMallRecommendView.m in Sources */,
 				0466837520F3096A0095C6BC /* DCPicItemConfiguration.m in Sources */,
 				049A99CA20E32AF600ED27C9 /* UIView+Frame.m in Sources */,
 				043B075120EDFC6900ED3F5B /* ZZTShoppingButtomCell.m in Sources */,

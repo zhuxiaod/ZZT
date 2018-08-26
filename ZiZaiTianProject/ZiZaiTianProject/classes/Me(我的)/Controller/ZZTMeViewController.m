@@ -209,17 +209,27 @@ NSString *bannerID = @"MeCell";
 //选中cell
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if (indexPath.section == 0) {
-//        if(indexPath.row == 0){
-////            ZZTVIPViewController *VIPView = [[ZZTVIPViewController alloc]init];
-////            VIPView.hidesBottomBarWhenPushed = YES;
-////            [self.navigationController pushViewController:VIPView animated:YES];
-//        }else if(indexPath.row == 1){
-//            ZZTMeWalletViewController *walletVC = [[ZZTMeWalletViewController alloc] init];
-//            walletVC.hidesBottomBarWhenPushed = YES;
-//            [self.navigationController pushViewController:walletVC animated:YES];
-//        }
-//        else if (indexPath.row == 2){
+    if (indexPath.section == 0) {
+        //我的空间
+        
+    }
+    else if (indexPath.section == 1){
+        if(indexPath.row == 0){
+            //VIP
+            ZZTVIPViewController *VIPView = [[ZZTVIPViewController alloc]init];
+            VIPView.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:VIPView animated:YES];
+        }
+    }else if(indexPath.section == 2){
+        if(indexPath.row == 0){
+            //自在商城
+            ZZTShoppingMallViewController *shoppingMallVC = [[ZZTShoppingMallViewController alloc] init];
+            shoppingMallVC.hidesBottomBarWhenPushed = YES;
+            shoppingMallVC.isShopping = YES;
+            shoppingMallVC.viewTitle = @"自在商城";
+            [self.navigationController pushViewController:shoppingMallVC animated:YES];
+        }
+    }
 //            ZZTBrowViewController *myAttentionVC = [[ZZTBrowViewController alloc] initWithNibName:@"ZZTBrowViewController" bundle:nil];
 //            myAttentionVC.viewTitle = @"我的关注";
 //            myAttentionVC.hidesBottomBarWhenPushed = YES;

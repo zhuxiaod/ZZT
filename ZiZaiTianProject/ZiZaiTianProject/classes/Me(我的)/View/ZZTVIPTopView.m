@@ -9,10 +9,10 @@
 #import "ZZTVIPTopView.h"
 @interface ZZTVIPTopView ()
 
-@property (weak, nonatomic) IBOutlet UILabel *userName;
-@property (weak, nonatomic) IBOutlet UIButton *headButton;
-@property (weak, nonatomic) IBOutlet UILabel *topTitle;
-@property (weak, nonatomic) IBOutlet UILabel *topContent;
+@property (weak, nonatomic) IBOutlet UIImageView *VIPImage;
+
+@property (weak, nonatomic) IBOutlet UILabel *VIPTiTle;
+@property (weak, nonatomic) IBOutlet UILabel *VIPDate;
 
 @end
 
@@ -25,21 +25,10 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
-    [self.headButton setImage:[UIImage imageNamed:@"peien"] forState:UIControlStateNormal];
-    self.headButton.layer.masksToBounds = YES;//隐藏裁剪掉的部分
-    self.headButton.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.headButton.layer.borderWidth = 1.0f;
-    self.userName.text = @"佩恩";
-}
-
--(void)layoutSubviews
-{
-    self.headButton.layer.cornerRadius = self.headButton.bounds.size.width/2;
 }
 
 -(void)setUser:(ZZTUserShoppingModel *)user{
     _user = user;
-    _topTitle.text = user.topTitle;
-    _topContent.text = user.topContent;
+
 }
 @end

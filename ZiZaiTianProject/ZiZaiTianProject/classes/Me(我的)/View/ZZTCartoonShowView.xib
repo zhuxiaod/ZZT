@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ZZTCartoonShowView">
+            <rect key="frame" x="0.0" y="0.0" width="120" height="200"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="peien" translatesAutoresizingMaskIntoConstraints="NO" id="q6X-we-JIU">
+                    <rect key="frame" x="0.0" y="0.0" width="120" height="160"/>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="美女" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wYZ-lk-jXY">
+                    <rect key="frame" x="10" y="160" width="110" height="20"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="角色 - 女" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pJM-e5-lcE">
+                    <rect key="frame" x="10" y="180" width="110" height="20"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.68235294120000001" green="0.68235294120000001" blue="0.68235294120000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="pJM-e5-lcE" firstAttribute="height" secondItem="wYZ-lk-jXY" secondAttribute="height" id="0EZ-DE-kSq"/>
+                <constraint firstItem="wYZ-lk-jXY" firstAttribute="top" secondItem="q6X-we-JIU" secondAttribute="bottom" id="0qw-F8-JhA"/>
+                <constraint firstItem="wYZ-lk-jXY" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="0.1" id="4sV-Ef-5a9"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="wYZ-lk-jXY" secondAttribute="trailing" id="Wcu-De-g4w"/>
+                <constraint firstAttribute="trailing" secondItem="q6X-we-JIU" secondAttribute="trailing" id="fSd-Yg-Bhe"/>
+                <constraint firstItem="pJM-e5-lcE" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="hvB-Zw-Sq8"/>
+                <constraint firstItem="wYZ-lk-jXY" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="kA6-Sv-Htq"/>
+                <constraint firstItem="pJM-e5-lcE" firstAttribute="top" secondItem="wYZ-lk-jXY" secondAttribute="bottom" id="nT5-tt-vYk"/>
+                <constraint firstItem="pJM-e5-lcE" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="o4a-VV-zS4"/>
+                <constraint firstItem="q6X-we-JIU" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="oYY-lh-vrY"/>
+                <constraint firstItem="q6X-we-JIU" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" multiplier="0.8" id="oaz-AQ-lKW"/>
+                <constraint firstItem="q6X-we-JIU" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="sl3-Xr-zFl"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="cartoonImg" destination="q6X-we-JIU" id="SWF-YT-XrB"/>
+                <outlet property="cartoonName" destination="wYZ-lk-jXY" id="Adp-xX-AbW"/>
+                <outlet property="cartoonType" destination="pJM-e5-lcE" id="Okr-Ai-cK0"/>
+            </connections>
+            <point key="canvasLocation" x="-115" y="87"/>
+        </view>
+        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="axa-Ww-Ijn">
+            <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+            <nil key="textColor"/>
+            <nil key="highlightedColor"/>
+            <point key="canvasLocation" x="-79" y="177"/>
+        </label>
+    </objects>
+    <resources>
+        <image name="peien" width="1334" height="750"/>
+    </resources>
+</document>

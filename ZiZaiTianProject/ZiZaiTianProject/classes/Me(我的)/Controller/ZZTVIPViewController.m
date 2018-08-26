@@ -12,9 +12,6 @@
 #import "ZZTVIPBtView.h"
 
 @interface ZZTVIPViewController ()
-@property (weak, nonatomic) IBOutlet UIView *top;
-@property (weak, nonatomic) IBOutlet UIView *mid;
-@property (weak, nonatomic) IBOutlet UIView *buttom;
 
 @end
 
@@ -23,29 +20,30 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.rr_navHidden = YES;
-    self.rr_backActionDisAble = YES;
-//    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    self.navigationItem.title = @"VIP";
     
-    ZZTVIPTopView *topView = [ZZTVIPTopView VIPTopView];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    scrollView.backgroundColor = [UIColor colorWithHexString:@"#EEEEEE"];
+    [self.view addSubview:scrollView];
+    
+    //头部
+    ZZTVIPTopView *VIPTopView = [ZZTVIPTopView VIPTopView];
+    VIPTopView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 100);
+    [scrollView addSubview:VIPTopView];
 
-    [_top addSubview:topView];
-    
+    //充值服务
     ZZTVIPMidView *midView = [ZZTVIPMidView VIPMidView];
-    [_mid addSubview:midView];
+    midView.frame = CGRectMake(0,VIPTopView.y+VIPTopView.height +15, SCREEN_WIDTH, 280);
+    [scrollView addSubview:midView];
     
+    //VIP特权
     ZZTVIPBtView *btView = [ZZTVIPBtView VIPBtView];
-    [_buttom addSubview:btView];
+    btView.frame = CGRectMake(0, midView.y+midView.height+15, SCREEN_WIDTH, 280);
+    [scrollView addSubview:btView];
+    
+    scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, btView.y+btView.height);
 
 }
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-- (IBAction)backBtn:(UIButton *)sender {
-    
-    [self.navigationController popViewControllerAnimated:YES];
-    
-}
+
 
 @end
