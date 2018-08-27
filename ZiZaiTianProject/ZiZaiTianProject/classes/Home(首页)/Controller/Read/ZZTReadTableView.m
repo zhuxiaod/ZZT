@@ -82,6 +82,7 @@ static NSString *caiNiXiHuan = @"caiNiXiHuan";
         NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
         NSMutableArray *array = [ZZTCarttonDetailModel mj_objectArrayWithKeyValuesArray:dic];
         self.caiNiXiHuan = array;
+        [self reloadData];
     } failure:^(NSError *error) {
         
     }];

@@ -20,7 +20,10 @@
 #import "ZZTMeEditViewController.h"
 #import "ZZTMeWalletViewController.h"
 #import "ZZTShoppingMallViewController.h"
+#import "ZZTCartoonViewController.h"
+
 @interface ZZTMeViewController ()<UITableViewDataSource,UITableViewDelegate,ZZTSignInViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property(nonatomic,strong) UITableView *tableView;
 //cell数据
@@ -89,64 +92,22 @@ NSString *bannerID = @"MeCell";
     ZZTMeTopView *top = [ZZTMeTopView meTopView];
     top.frame = CGRectMake(0, 0, ScreenW, 120);
     _tableView.tableHeaderView = top;
+    top.buttonAction = ^(UIButton *sender) {
+        if(sender.tag == 0){
+            ZZTMeEditViewController *editVC = [[ZZTMeEditViewController alloc] init];
+            editVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:editVC animated:YES];
+        }
+    };
 
     [self.view addSubview:_tableView];
     //注册cell
     [self.tableView registerClass:[ZZTMeCell class] forCellReuseIdentifier:bannerID];
-    top.buttonAction = ^(UIButton *sender) {
-        [self buttonClick:sender];
-    };
+  
 }
-#pragma mark - headView
--(void)buttonClick:(UIButton *)button{
-//    if (button.tag == 0) {
-//        NSLog(@"我是z币");
-//    }else if(button.tag == 1){
-//        NSLog(@"我是积分");
-//    }else if(button.tag == 2){
-//        NSLog(@"我是票");
-//    }
-//    else if(button.tag == 3){
-//        NSLog(@"我是消息");
-//    }
-//    else if(button.tag == 4){
-//        ZZTMeEditViewController *meEditVC = [[ZZTMeEditViewController alloc]initWithNibName:@"ZZTMeEditViewController" bundle:nil];
-//        [self.navigationController pushViewController:meEditVC animated:YES];
-//    }else{
-//        //确定已签到的次数
-//        NSInteger signCount = _userData.signCount;
-//        //判断当天是不是应该签到
-//        NSInteger ifsigin = _userData.ifsign;
-//
-//        NSLog(@"signCount:%ld",_userData.signCount);
-//        NSLog(@"ifsigin:%ld",(long)_userData.ifsign);
-//
-//        //添加签到页面
-//        _signView = [ZZTSignInView SignView];
-//        _signView.frame = CGRectMake(0, 0, Screen_Width, Screen_Height);
-//        [_signView isget:signCount isSign:ifsigin];
-//        [self.view addSubview:_signView];
-//        _signView.delegate = self;
-//    }
-}
-#pragma mark - ZZTSignInViewDelegate
--(void)signViewDidClickSignBtn:(ZZTSignButton *)btn
-{
-    NSDictionary *paramDict = @{
-                                @"userId":@"23"
-                                };
-    [self.manager POST:@"http://120.79.178.191/record/userSign" parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [self loadUserData];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求失败 -- %@",error);
-    }];
-}
-//取消签到
--(void)signViewDidClickapGesture{
-    
-    [_signView removeFromSuperview];
-    
-}
+
+
+
 
 #pragma mark - tableView
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -219,6 +180,11 @@ NSString *bannerID = @"MeCell";
             ZZTVIPViewController *VIPView = [[ZZTVIPViewController alloc]init];
             VIPView.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:VIPView animated:YES];
+        }else if(indexPath.row == 1){
+            //钱包
+            ZZTMeWalletViewController *walletVC = [[ZZTMeWalletViewController alloc] init];
+            walletVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:walletVC animated:YES];
         }
     }else if(indexPath.section == 2){
         if(indexPath.row == 0){
@@ -229,6 +195,23 @@ NSString *bannerID = @"MeCell";
             shoppingMallVC.viewTitle = @"自在商城";
             [self.navigationController pushViewController:shoppingMallVC animated:YES];
         }
+    }else if (indexPath.section == 3){
+        if(indexPath.row == 1){
+            //书柜
+            ZZTCartoonViewController *bookVC = [[ZZTCartoonViewController alloc] init];
+            bookVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:bookVC animated:YES];
+        }else if(indexPath.row == 3){
+            //浏览历史
+            ZZTHistoryViewController *historyVC = [[ZZTHistoryViewController alloc] init];
+            historyVC.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:historyVC animated:YES];
+        }
+    }else if(indexPath.section == 4){
+        //设置
+        ZZTSettingViewController *settingVC = [[ZZTSettingViewController alloc] init];
+        settingVC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:settingVC animated:YES];
     }
 //            ZZTBrowViewController *myAttentionVC = [[ZZTBrowViewController alloc] initWithNibName:@"ZZTBrowViewController" bundle:nil];
 //            myAttentionVC.viewTitle = @"我的关注";

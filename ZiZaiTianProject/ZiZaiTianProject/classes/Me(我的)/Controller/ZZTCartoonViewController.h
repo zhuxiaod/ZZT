@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZZTCartoonViewController : UIViewController
+@interface ZZTCartoonViewController : BaseViewController
 
 @property(nonatomic,strong)NSString *dataIndex;
 

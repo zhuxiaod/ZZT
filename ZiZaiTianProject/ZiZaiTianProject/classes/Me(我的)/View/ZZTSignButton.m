@@ -12,18 +12,18 @@
 
 -(void)awakeFromNib{
     [super awakeFromNib];
-    self.layer.borderWidth = 1;
-    self.layer.borderColor = [UIColor blackColor].CGColor;
+//    self.layer.borderWidth = 1;
+//    self.layer.borderColor = [UIColor blackColor].CGColor;
     
 }
 -(void)setIsGet:(BOOL)isGet{
     _isGet = isGet;
     if(isGet == NO){
-        self.backgroundColor = [UIColor grayColor];
+        [self setBackgroundImage:[UIImage imageNamed:@"我的-签到-领取-已领（未领）"] forState:UIControlStateNormal];
         [self setTitle:@"领取" forState:UIControlStateNormal];
         [self setEnabled:NO];
     }else{
-        self.backgroundColor = [UIColor grayColor];
+        [self setBackgroundImage:[UIImage imageNamed:@"我的-签到-领取-已领（未领）"] forState:UIControlStateNormal];
         [self setTitle:@"已领" forState:UIControlStateNormal];
         [self setEnabled:NO];
     }
@@ -31,21 +31,20 @@
 -(void)setIfSign:(BOOL)ifSign{
     _ifSign = ifSign;
     if(ifSign == NO){
-        self.backgroundColor = [UIColor colorWithHexString:@"#FDB12E"];
+        [self setBackgroundImage:[UIImage imageNamed:@"我的-签到-领取-可领取"] forState:UIControlStateNormal];
         [self setTitle:@"领取" forState:UIControlStateNormal];
         [self setEnabled:YES];
 
     }else{
-        [self setBackgroundColor:[UIColor grayColor]];
+        [self setBackgroundImage:[UIImage imageNamed:@"我的-签到-领取-已领（未领）"] forState:UIControlStateNormal];
         [self setTitle:@"已领" forState:UIControlStateNormal];
         [self setEnabled:NO];
     }
 }
 -(void)setIsNo:(BOOL)isNo{
     _isNo = isNo;
-    [self setBackgroundColor:[UIColor grayColor]];
+    [self setBackgroundImage:[UIImage imageNamed:@"我的-签到-领取-已领（未领）"] forState:UIControlStateNormal];
     [self setTitle:@"领取" forState:UIControlStateNormal];
     [self setEnabled:NO];
-
 }
 @end

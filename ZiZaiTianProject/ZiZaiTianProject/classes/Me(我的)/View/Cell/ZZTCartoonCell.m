@@ -26,8 +26,19 @@
     NSString *title = [cartoon.bookType stringByReplacingOccurrencesOfString:@"," withString:@" "];
 
     [self.titleView setText:title];
-    //没有添加类型
-    self.cartoonName.text = cartoon.bookName;
+    
+    if([cartoon.type isEqualToString:@"1"]){
+        NSString *bookName = [cartoon.bookName stringByAppendingString:@"(漫画)"];
+        NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc] initWithString:bookName];
+        [attriStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#8E82AA"] range:NSMakeRange(attriStr.length - 4,4)];
+        self.cartoonName.attributedText = attriStr;
+    }else if([cartoon.type isEqualToString:@"2"]){
+        NSString *bookName = [cartoon.bookName stringByAppendingString:@"(剧本)"];
+        NSMutableAttributedString * attriStr = [[NSMutableAttributedString alloc] initWithString:bookName];
+        [attriStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithHexString:@"#779793"] range:NSMakeRange(attriStr.length - 4,4)];
+        self.cartoonName.attributedText = attriStr;
+    }
+
 }
 
 @end

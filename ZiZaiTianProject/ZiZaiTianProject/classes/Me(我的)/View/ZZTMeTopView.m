@@ -7,6 +7,8 @@
 //
 
 #import "ZZTMeTopView.h"
+#import "ZZTSignInViewController.h"
+
 @interface ZZTMeTopView ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *headImage;
@@ -36,15 +38,25 @@
     [_signInBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
     _VIPBtn.layer.cornerRadius = 10.0f;
     _signInBtn.layer.cornerRadius = 10.0f;
+    _headBtn.tag = 0;
+    [_headBtn addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
 }
-
 
 - (void)buttonClick:(UIButton *)button{
     // 判断下这个block在控制其中有没有被实现
     if (self.buttonAction) {
         // 调用block传入参数
-        self.buttonAction(button);
+    self.buttonAction(button);
     }
+}
+
+//跳转签到界面
+- (IBAction)pushSignInView:(id)sender {
+    
+    ZZTSignInViewController *signInVC = [[ZZTSignInViewController alloc] init];
+    signInVC.hidesBottomBarWhenPushed = YES;
+    [[self myViewController].navigationController pushViewController:signInVC animated:YES];
+
 }
 
 @end

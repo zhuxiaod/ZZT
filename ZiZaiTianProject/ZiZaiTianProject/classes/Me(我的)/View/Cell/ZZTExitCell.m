@@ -7,11 +7,17 @@
 //
 
 #import "ZZTExitCell.h"
+@interface ZZTExitCell ()
 
+@property (weak, nonatomic) IBOutlet UIButton *exitBtn;
+
+@end
 @implementation ZZTExitCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    
+    self.exitBtn.layer.cornerRadius = 10.0f;
 
 }
 

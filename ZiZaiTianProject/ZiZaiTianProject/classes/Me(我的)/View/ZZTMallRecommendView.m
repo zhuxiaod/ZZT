@@ -120,10 +120,11 @@
     _showView3 = showView3;
     [self.contentView addSubview:showView3];
     
+    //这个地方 三个VIew宽是0 哪三个view  不是存在吗  我要
     self.showView1.frame = CGRectMake(0, 0, 375/3, self.contentView.height);
     self.showView2.frame = CGRectMake(self.contentView.width/3, 0, 375/3, self.contentView.height);
     self.showView3.frame = CGRectMake(self.contentView.width/3 * 2, 0, 375/3, self.contentView.height);
-
+    
 }
 
 

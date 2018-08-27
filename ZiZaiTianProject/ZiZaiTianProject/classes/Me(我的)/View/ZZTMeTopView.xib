@@ -120,6 +120,9 @@
                             <state key="normal" title="签到">
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
+                            <connections>
+                                <action selector="pushSignInView:" destination="iN0-l3-epB" eventType="touchUpInside" id="EYs-ud-eQl"/>
+                            </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1000Z币" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DSd-Fz-iiT">
                             <rect key="frame" x="20" y="50" width="67" height="25"/>

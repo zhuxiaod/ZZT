@@ -11,6 +11,9 @@
 #import "ZZTWalletCell.h"
 #import "ZZTFreeBiModel.h"
 #import "ZZTShoppingButtomCell.h"
+#import "ZZTWalletTopView.h"
+#import "ZZTTopUpView.h"
+#import "ZZTVIPBtView.h"
 
 @interface ZZTMeWalletViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -35,80 +38,47 @@ NSString *zzTShoppingButtomCell = @"ZZTShoppingButtomCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //创建tableView
-    [self setupTableView];
+    self.navigationItem.title = @"钱包";
     
-    ZZTVIPTopView *vipView = [ZZTVIPTopView VIPTopView];
-    ZZTUserShoppingModel *userShopping = [ZZTUserShoppingModel initWith:@"自在币" content:@"1百万"];
-//    vipView.frame = CGRectMake(0, 0, Screen_Width, 300);
-    vipView.user = userShopping;
-    _tableView.tableHeaderView = vipView;
-
-    ZZTShoppingButtomCell *shoppingButtom = [ZZTShoppingButtomCell ZZTShoppingButtom];
-    _tableView.tableFooterView = shoppingButtom;
+    //scrollView
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    scrollView.backgroundColor = [UIColor colorWithHexString:@"#EEEEEE"];
+    [self.view addSubview:scrollView];
     
-    //注册Cell
-    [self registerCell];
+    //top
+    ZZTWalletTopView *topView = [ZZTWalletTopView WalletTopView];
+    topView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 140);
+    [scrollView addSubview:topView];
+    
+    //midView
+    ZZTTopUpView *midView = [ZZTTopUpView TopUpView];
+    midView.frame = CGRectMake(0, topView.y + topView.height+15, SCREEN_WIDTH, 300);
+    [scrollView addSubview:midView];
+    
+    //bottom
+    ZZTVIPBtView *bottomView = [ZZTVIPBtView VIPBtView];
+    bottomView.frame = CGRectMake(0, midView.y + midView.height+15, SCREEN_WIDTH, 300);
+    bottomView.title = @"Z币用途";
+    bottomView.textViewStr = @"1 .购买订阅章节 2 .打赏作者 3 .购买素材 ";
+    [scrollView addSubview:bottomView];
+    
+    scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, bottomView.y + bottomView.height);
+    
     //创建数据源
     [self setupArray];
+    
+    UIButton *leftbutton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 20)];
+    
+    [leftbutton setImage:[UIImage imageNamed:@"我的-注释"] forState:UIControlStateNormal];
+    leftbutton.contentEdgeInsets = UIEdgeInsetsMake(2, 2, 2, 2);
+    UIBarButtonItem *rightitem = [[UIBarButtonItem alloc]initWithCustomView:leftbutton];
+    
+    self.navigationItem.rightBarButtonItem = rightitem;
 }
 
 #pragma mark - 设置数据源
 -(void)setupArray{
     self.dataArray = @[[ZZTFreeBiModel initZZTFreeBiWith:@"600自在币" ZZTBSpend:@"1阅读卷" btnType:@"￥6"],[ZZTFreeBiModel initZZTFreeBiWith:@"3000自在币" ZZTBSpend:@"7阅读卷" btnType:@"￥30"],[ZZTFreeBiModel initZZTFreeBiWith:@"5000自在币" ZZTBSpend:@"15阅读卷" btnType:@"￥50"],[ZZTFreeBiModel initZZTFreeBiWith:@"9800自在币" ZZTBSpend:@"38阅读卷" btnType:@"￥98"],[ZZTFreeBiModel initZZTFreeBiWith:@"19800自在币" ZZTBSpend:@"98阅读卷" btnType:@"￥198"],[ZZTFreeBiModel initZZTFreeBiWith:@"38800自在币" ZZTBSpend:@"238阅读卷" btnType:@"￥388"]];
 }
-#pragma mark - tableView
--(void)setupTableView{
-    _tableView.dataSource = self;
-    _tableView.delegate = self;
-    _tableView.sectionHeaderHeight = 0;
-    _tableView.sectionFooterHeight = 10;
-    
-    //隐藏滚动条
-    _tableView.showsVerticalScrollIndicator = NO;
-}
 
-#pragma mark - 注册cell
--(void)registerCell{
-    //注册cell
-    [self.tableView registerNib:[UINib nibWithNibName:@"ZZTWalletCell" bundle:nil] forCellReuseIdentifier:zztWalletCell];
-    [self.tableView registerNib:[UINib nibWithNibName:@"ZZTShoppingButtomCell" bundle:nil] forCellReuseIdentifier:zzTShoppingButtomCell];
-
-//    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:ZZTcellq];
-//    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:ZZTcell11];
-//    [self.tableView registerNib:[UINib nibWithNibName:@"ZZTNoTypeCell" bundle:nil] forCellReuseIdentifier:NoTypeCell];
-//    [self.tableView registerNib:[UINib nibWithNibName:@"ZZTExitCell" bundle:nil] forCellReuseIdentifier:ExitCell];
-}
-
-#pragma mark - tableView
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-
-    return self.dataArray.count;
-
-
-}
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-        ZZTWalletCell *cell = [tableView dequeueReusableCellWithIdentifier:zztWalletCell];
-        cell.freeBiModel = self.dataArray[indexPath.row];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return cell;
-}
-
-- (IBAction)backBtn:(UIButton *)sender {
-    
-    [self.navigationController popViewControllerAnimated:YES];
-
-}
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
 @end

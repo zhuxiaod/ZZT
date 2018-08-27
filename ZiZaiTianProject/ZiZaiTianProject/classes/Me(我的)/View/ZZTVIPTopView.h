@@ -12,6 +12,11 @@
 
 @property (nonatomic,strong) ZZTUserShoppingModel *user;
 
+@property (nonatomic,strong) UIImage *viewImage;
+
+@property (nonatomic,strong) NSString *viewTitle;
+
+@property (nonatomic,strong) NSString *viewDetail;
 
 +(instancetype)VIPTopView;
 

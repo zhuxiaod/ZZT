@@ -11,6 +11,8 @@
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 
+@property (weak, nonatomic) IBOutlet UILabel *viewTitle;
+
 @end
 
 @implementation ZZTVIPBtView
@@ -19,6 +21,16 @@
     return [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass(self) owner:nil options:nil] firstObject];
 }
 
+
+-(void)setTitle:(NSString *)title{
+    _title = title;
+    [_viewTitle setText:title];
+}
+
+-(void)setTextViewStr:(NSString *)textViewStr{
+    _textViewStr = textViewStr;
+    [_textView setText:textViewStr];
+}
 -(void)awakeFromNib{
     [super awakeFromNib];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];

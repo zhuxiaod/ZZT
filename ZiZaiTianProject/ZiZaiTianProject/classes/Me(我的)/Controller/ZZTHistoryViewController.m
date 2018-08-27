@@ -7,95 +7,117 @@
 //
 
 #import "ZZTHistoryViewController.h"
-#import "ZZTCartoonViewController.h"
+#import "ZZTCartoonHistoryCell.h"
 
-@interface ZZTHistoryViewController ()
-@property (weak, nonatomic) IBOutlet UIView *topBar;
-@property (weak, nonatomic) IBOutlet UILabel *viewControllerTitle;
-@property (strong,nonatomic) AFHTTPSessionManager *manager;
+@interface ZZTHistoryViewController ()<UICollectionViewDataSource,UICollectionViewDelegate>
+
+@property (nonatomic,strong) NSArray *cartoons;
+
+@property (nonatomic,strong) UICollectionView *collectionView;
+
 
 @end
 
+static NSString *collectionID = @"collectionID";
+
 @implementation ZZTHistoryViewController
+
 #pragma mark - 懒加载
-- (AFHTTPSessionManager *)manager
-{
-    if (!_manager) {
-        _manager = [AFHTTPSessionManager manager];
+- (NSArray *)cartoons{
+    if (!_cartoons) {
+        _cartoons = [NSArray array];
     }
-    return _manager;
+    return _cartoons;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setupTitle];
+    //viewTitle
+    self.navigationItem.title = @"浏览历史";
+    //右边
+    UIButton *leftbutton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 20)];
+    
+    [leftbutton setTitle:@"清空" forState:UIControlStateNormal];
+    
+    UIBarButtonItem *rightitem = [[UIBarButtonItem alloc]initWithCustomView:leftbutton];
+    
+    self.navigationItem.rightBarButtonItem = rightitem;
+    
     
     self.automaticallyAdjustsScrollViewInsets = NO;
 
-    //添加子页
-    [self setUpAllChildViewController];
+    self.view.backgroundColor = [UIColor whiteColor];
+
+    //流水布局
+    UICollectionViewFlowLayout *layout = [self setupCollectionViewFlowLayout];
     
-    //设置滑动栏的样式
-    [self setupStyle];
+    //创建UICollectionView：黑色
+    [self setupCollectionView:layout];
     
+    [self loadData];
 }
 
--(void)setupTitle{
-    [_viewControllerTitle setText:@"浏览历史"];
-}
-
-#pragma mark - 设置样式
--(void)setupStyle{
-    [self setUpDisplayStyle:^(UIColor *__autoreleasing *titleScrollViewBgColor, UIColor *__autoreleasing *norColor, UIColor *__autoreleasing *selColor, UIColor *__autoreleasing *proColor, UIFont *__autoreleasing *titleFont, CGFloat *titleButtonWidth, BOOL *isShowPregressView, BOOL *isOpenStretch, BOOL *isOpenShade) {
-        *titleScrollViewBgColor = [UIColor whiteColor]; //标题View背景色（默认标题背景色为白色）
-        *norColor = [UIColor darkGrayColor];            //标题未选中颜色（默认未选中状态下字体颜色为黑色）
-        *selColor = [UIColor purpleColor];              //标题选中颜色（默认选中状态下字体颜色为红色）
-        *proColor = [UIColor purpleColor];              //滚动条颜色（默认为标题选中颜色）
-        *titleFont = [UIFont systemFontOfSize:16];      //字体尺寸 (默认fontSize为15)
-        *isShowPregressView = YES;                      //是否开启标题下部Pregress指示器
-        *isOpenStretch = YES;                           //是否开启指示器拉伸效果
-        *isOpenShade = YES;                             //是否开启字体渐变
+-(void)loadData{
+    //请求参数
+    NSDictionary *paramDict = @{
+                                @"userId":@"1",
+                                };
+    [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"great/userCollect"] parameters:paramDict success:^(id responseObject) {
+        
+        NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+        NSArray *array = [ZZTCartonnPlayModel mj_objectArrayWithKeyValuesArray:dic];
+        self.cartoons = array;
+        [self.collectionView reloadData];
+        
+    } failure:^(NSError *error) {
+        
     }];
-
-    [self setUpTopTitleViewAttribute:^(CGFloat *topDistance, CGFloat *titleViewHeight, CGFloat *bottomDistance) {
-        *topDistance = 64;
-    }];
-
 }
-#pragma mark - 添加所有子控制器
-- (void)setUpAllChildViewController
+
+#pragma mark - 创建流水布局
+-(UICollectionViewFlowLayout *)setupCollectionViewFlowLayout{
+    
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+    //修改尺寸(控制)
+    layout.itemSize = CGSizeMake(ScreenW,100);
+    
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    //行距
+    layout.minimumLineSpacing = 0;
+    layout.minimumInteritemSpacing = 5;
+    
+    return layout;
+}
+
+#pragma mark - 创建CollectionView
+-(void)setupCollectionView:(UICollectionViewFlowLayout *)layout
 {
-    //index1
-    ZZTCartoonViewController *carttonVC = [[ZZTCartoonViewController alloc] init];
-    carttonVC.title = [self.dic objectForKey:@"index1"];
-    carttonVC.dataIndex = @"1";
-    carttonVC.cellType = [self.dic objectForKey:@"cellType"];
-    carttonVC.view.backgroundColor = [UIColor redColor];
-    [self addChildViewController:carttonVC];
-    //index2
-    ZZTCartoonViewController *playVC = [[ZZTCartoonViewController alloc] init];
-    playVC.title = [self.dic objectForKey:@"index2"];
-    playVC.dataIndex = @"2";
-    playVC.cellType = [self.dic objectForKey:@"cellType"];
-    playVC.view.backgroundColor = [UIColor yellowColor];
-    [self addChildViewController:playVC];
-    //index3
-    ZZTCartoonViewController *findVC = [[ZZTCartoonViewController alloc] init];
-    findVC.title = [self.dic objectForKey:@"index3"];
-    findVC.dataIndex = @"2";
-    findVC.cellType = [self.dic objectForKey:@"cellType"];
-    findVC.view.backgroundColor = [UIColor yellowColor];
-    [self addChildViewController:findVC];
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height) collectionViewLayout:layout];
+    collectionView.backgroundColor = [UIColor whiteColor];
+    self.collectionView = collectionView;
+    [self.view addSubview:self.collectionView];
+    collectionView.dataSource = self;
+    collectionView.delegate = self;
+    [collectionView registerNib:[UINib nibWithNibName:@"ZZTCartoonHistoryCell" bundle:nil] forCellWithReuseIdentifier:collectionID];
 }
-//返回上一页
-- (IBAction)clickBackBtn:(UIButton *)sender {
-    
-    [self.navigationController popViewControllerAnimated:YES];
 
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.cartoons.count;
 }
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    ZZTCartoonHistoryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:collectionID forIndexPath:indexPath];
+    ZZTCartonnPlayModel *car = self.cartoons[indexPath.row];
+    if (car) {
+        cell.model = car;
+    }
+    return cell;
 }
+
+
+
 @end

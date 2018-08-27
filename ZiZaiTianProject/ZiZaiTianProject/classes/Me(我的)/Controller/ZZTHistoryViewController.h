@@ -9,7 +9,7 @@
 #import "DCPagerController.h"
 
 
-@interface ZZTHistoryViewController : DCPagerController
+@interface ZZTHistoryViewController : BaseViewController
 @property(nonatomic,strong)NSString *viewTitle;
 @property(nonatomic,strong)NSDictionary *dic;
 @end

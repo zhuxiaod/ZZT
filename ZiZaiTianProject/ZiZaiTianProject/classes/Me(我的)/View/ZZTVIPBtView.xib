@@ -71,6 +71,7 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="textView" destination="cik-Gt-Vn0" id="WSN-Da-cnG"/>
+                <outlet property="viewTitle" destination="sZs-I5-gj0" id="296-zK-W9Z"/>
             </connections>
             <point key="canvasLocation" x="-157.5" y="79"/>
         </view>

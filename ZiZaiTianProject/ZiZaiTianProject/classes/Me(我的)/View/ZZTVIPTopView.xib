@@ -84,7 +84,7 @@
                 <outlet property="VIPImage" destination="08I-3D-7bu" id="2Ng-u4-R3r"/>
                 <outlet property="VIPTiTle" destination="xhq-CI-eNH" id="mDu-0J-6FS"/>
             </connections>
-            <point key="canvasLocation" x="-258.5" y="-217"/>
+            <point key="canvasLocation" x="-443" y="-217"/>
         </view>
     </objects>
     <resources>

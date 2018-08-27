@@ -63,13 +63,9 @@
 -(void)clickSignBtn:(ZZTSignButton *)btn{
     NSLog(@"我是button:%@",btn.titleLabel.text);
     [btn setIfSign:YES];
-    if ([self.delegate respondsToSelector:@selector(signViewDidClickSignBtn:)]) {
-        [self.delegate signViewDidClickSignBtn:btn];
-    }
 }
 
 //btn状态
-// 
 -(void)isget:(NSInteger)signCount isSign:(NSInteger)isSign{
     //连续打卡
     //如果状态是1 那么连续打卡少一个  如果状态是0 就是正常的

@@ -10,6 +10,11 @@
 
 @interface ZZTVIPBtView : UIView
 
+@property (nonatomic,strong) NSString *title;
+
+@property (nonatomic,strong) NSString *textViewStr;
+
+
 +(instancetype)VIPBtView;
 
 @end

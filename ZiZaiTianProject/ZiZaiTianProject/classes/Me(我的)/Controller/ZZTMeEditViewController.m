@@ -9,11 +9,9 @@
 #import "ZZTMeEditViewController.h"
 #import "ZZTMeEditTopView.h"
 #import "ZZTMeEditButtomView.h"
-
+#import "TypeButton.h"
 @interface ZZTMeEditViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
-@property (weak, nonatomic) IBOutlet UIView *topView;
 
-@property (weak, nonatomic) IBOutlet UIView *buttomView;
 
 @property (nonatomic,assign) NSInteger btnTag;
 
@@ -26,6 +24,7 @@
 @property (nonatomic,strong) UIButton *doneButton;
 
 @property(nonatomic, strong) BAKit_PickerView *pickView;
+@property(nonatomic, strong) ZZTMeEditTopView *topView;
 
 @end
 
@@ -34,58 +33,72 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.navigationItem.title = @"编辑资料";
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    
+    [self.view addSubview:scrollView];
+    
+    
     //添加topView
     ZZTMeEditTopView *topView = [ZZTMeEditTopView ZZTMeEditTopView];
+    _topView = topView;
+    topView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 300);
     topView.buttonAction = ^(UIButton *sender) {
         [self clickBtn:sender];
     };
-    [self.topView addSubview:topView];
-    
+    [scrollView addSubview:topView];
+
     //添加buttomView
     __block ZZTMeEditViewController *  blockSelf = self;
-    _meButtomView = [ZZTMeEditButtomView ZZTMeEditButtomView];
+    ZZTMeEditButtomView *meButtomView = [ZZTMeEditButtomView ZZTMeEditButtomView];
+    _meButtomView = meButtomView;
     _meButtomView.TextChange = ^(UITextField *texyField) {
-        [blockSelf textChange:texyField];
+//        [blockSelf textChange:texyField];
     };
+    meButtomView.frame = CGRectMake(0, 300, SCREEN_WIDTH, 400);
+
     _meButtomView.BtnInside = ^(UIButton *btn) {
         [blockSelf clickPickBtn:btn];
     };
-    [self.buttomView addSubview:_meButtomView];
-    
+    [scrollView addSubview:_meButtomView];
+
     //初始化图像选择控制器
     _picker = [[UIImagePickerController alloc]init];
     _picker.allowsEditing = YES;  //重点是这两句
-    
+
     //遵守代理
     _picker.delegate =self;
-    
-    //注册观察键盘的变化
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transformView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 
+//    //注册观察键盘的变化
+//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transformView:) name:UIKeyboardWillChangeFrameNotification object:nil];
 }
-//走了
--(void)textChange:(UITextField *)tf{
-  
-}
+////走了
+//-(void)textChange:(UITextField *)tf{
+//
+//}
 
 -(void)clickPickBtn:(UIButton *)btn{
+    //男
     if(btn.tag == 1){
         [self pickView2:btn];
+        //生日
     }else if(btn.tag == 3){
         [self pickView4:btn];
+    }else if(btn.tag == 4){
+        [self pickView2:btn];
     }
 }
+
 #pragma mark - topView
 -(void)clickBtn:(UIButton *)btn{
-    if (btn.tag == 0) {
-        //取消
-        [self.navigationController popViewControllerAnimated:YES];
-    }else if (btn.tag == 1){
-        //保存
+    //背景
+    if (btn.tag == 1) {
+         [self pushPhotoAlbum:btn];
     }else if (btn.tag == 2){
-        //背景
-        [self alert:btn];
-    }else if (btn.tag == 3){
         //头像
         [self alert:btn];
     }
@@ -96,14 +109,13 @@
     NSLog(@"%@",info);
     UIButton *button = (UIButton *)[self.view viewWithTag:_btnTag];
     UIImage *resultImage = [info objectForKey:@"UIImagePickerControllerEditedImage"];
+    if(_btnTag == 1){
+        _topView.backImage = resultImage;
+    }else{
+        _topView.headImage = resultImage;
+    }
     [button setImage:[resultImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-}
-    
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 //调用相册
@@ -119,11 +131,11 @@
     //选择完成图片或者点击取消按钮都是通过代理来操作我们所需要的逻辑过程
 //    _picker.delegate = self;
     [self.navigationController presentViewController:_picker animated:YES completion:^{
-        
+
     }];
 }
 
-//调用相册
+//调用相机
 -(void)pushCamera:(UIButton *)btn{
     //告诉是哪一个btn
     _btnTag = btn.tag;
@@ -158,7 +170,7 @@
     UIAlertAction * photo = [UIAlertAction actionWithTitle:@"相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self pushPhotoAlbum:btn];
     }];
-    
+
     //取消按钮
     UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -171,52 +183,47 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-//移动UIView
--(void)transformView:(NSNotification *)aNSNotification
-{
-    //获取键盘弹出前的Rect
-    NSValue *keyBoardBeginBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameBeginUserInfoKey];
-    CGRect beginRect=[keyBoardBeginBounds CGRectValue];
-    
-    //获取键盘弹出后的Rect
-    NSValue *keyBoardEndBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameEndUserInfoKey];
-    CGRect  endRect=[keyBoardEndBounds CGRectValue];
-    
-    //获取键盘位置变化前后纵坐标Y的变化值
-    CGFloat deltaY=endRect.origin.y-beginRect.origin.y;
-//    NSLog(@"看看这个变化的Y值:%f",deltaY);
-    
-    //在0.25s内完成self.view的Frame的变化，等于是给self.view添加一个向上移动deltaY的动画
-    [UIView animateWithDuration:0.25f animations:^{
-        [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y+deltaY, self.view.frame.size.width, self.view.frame.size.height)];
-    }];
-}
-- (void)pickView2:(UIButton *)tf
-{
-    NSArray *array = @[@"男", @"女"];
-    NSArray *array1 = @[@"男"];
-    BAKit_WeakSelf
-    [BAKit_PickerView ba_creatCustomPickerViewWithDataArray:array configuration:^(BAKit_PickerView *tempView) {
-        BAKit_StrongSelf
-        // 可以自由定制 toolBar 和 pickView 的背景颜色
-        tempView.ba_backgroundColor_toolBar = [UIColor colorWithHexString:@"#58006E"];
-        tempView.ba_backgroundColor_pickView = [UIColor whiteColor];
-        tempView.animationType = BAKit_PickerViewAnimationTypeBottom;
-        tempView.ba_pickViewTitleColor = [UIColor whiteColor];
-        // 自定义 pickview title 的字体
-        tempView.ba_pickViewTitleFont = [UIFont boldSystemFontOfSize:15];
-        // 可以自由定制按钮颜色
-        tempView.ba_buttonTitleColor_sure = [UIColor whiteColor];
-        tempView.ba_buttonTitleColor_cancle = [UIColor whiteColor];
-        tempView.multipleTitleArray = array1;
-        tempView.isShowTitle = NO;
+////移动UIView
+//-(void)transformView:(NSNotification *)aNSNotification
+//{
+//    //获取键盘弹出前的Rect
+//    NSValue *keyBoardBeginBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameBeginUserInfoKey];
+//    CGRect beginRect=[keyBoardBeginBounds CGRectValue];
+//
+//    //获取键盘弹出后的Rect
+//    NSValue *keyBoardEndBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameEndUserInfoKey];
+//    CGRect  endRect=[keyBoardEndBounds CGRectValue];
+//
+//    //获取键盘位置变化前后纵坐标Y的变化值
+//    CGFloat deltaY=endRect.origin.y-beginRect.origin.y;
+////    NSLog(@"看看这个变化的Y值:%f",deltaY);
+//
+//    //在0.25s内完成self.view的Frame的变化，等于是给self.view添加一个向上移动deltaY的动画
+//    [UIView animateWithDuration:0.25f animations:^{
+//        [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y+deltaY, self.view.frame.size.width, self.view.frame.size.height)];
+//    }];
+//}
 
-        self.pickView = tempView;
-    } block:^(NSString *resultString) {
-        BAKit_StrongSelf
-        tf.titleLabel.text = [NSString stringWithFormat:@"%@",resultString];
-        [tf setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    }];
+- (void)pickView2:(TypeButton *)btn
+{
+    //如果是男生
+    if(btn.tag == 1){
+        if(btn.selected == NO){
+            btn.selected = YES;
+            //设置值
+            TypeButton *button = (TypeButton *)[self.meButtomView viewWithTag:4];
+            button.selected = NO;
+        }
+    }else{
+        //如果是女生
+        if(btn.selected == NO){
+            btn.selected = YES;
+            //设置值
+            TypeButton *button = (TypeButton *)[self.meButtomView viewWithTag:1];
+            button.selected = NO;
+        }
+        //图片七牛云上传
+    }
 }
 
 - (void)pickView4:(UIButton *)tf
@@ -228,16 +235,16 @@
         NSDateFormatter *format = [NSDateFormatter ba_setupDateFormatterWithYMD];
         NSDate *today = [[NSDate alloc]init];
         [format setDateFormat:@"yyyy-MM-dd"];
-        
+
         // 最小时间，当前时间
         mindDate = [format dateFromString:[format stringFromDate:today]];
-        
+
         NSTimeInterval oneDay = 24 * 60 * 60;
         // 最大时间，当前时间+180天
         NSDate *theDay = [today initWithTimeIntervalSinceNow:oneDay * 180];
         maxdDate = [format dateFromString:[format stringFromDate:theDay]];
         tempView.isShowBackgroundYearLabel = YES;
-        
+
         // 自定义 pickview title 的字体颜色
         tempView.ba_pickViewTitleColor = [UIColor whiteColor];
         // 自定义 pickview title 的字体
@@ -245,16 +252,16 @@
         // 自定义 pickview背景 title 的字体颜色
         // 自定义：动画样式
         tempView.animationType = BAKit_PickerViewAnimationTypeBottom;
- 
+
         // 自定义：pickView 文字颜色
         tempView.ba_pickViewTextColor = [UIColor blackColor];
         // 自定义：pickView 文字字体
         tempView.ba_pickViewFont = [UIFont systemFontOfSize:13];
-        
+
         // 可以自由定制按钮颜色
         tempView.ba_buttonTitleColor_sure = [UIColor whiteColor];
         tempView.ba_buttonTitleColor_cancle = [UIColor whiteColor];
-        
+
         // 可以自由定制 toolBar 和 pickView 的背景颜色
         tempView.ba_backgroundColor_toolBar = [UIColor colorWithHexString:@"#58006E"];
     } block:^(NSString *resultString) {

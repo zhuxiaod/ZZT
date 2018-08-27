@@ -29,12 +29,6 @@
 @implementation ZZTCartoonViewController
 
 #pragma mark - 懒加载
-- (EncryptionTools *)encryptionManager{
-    if(!_encryptionManager){
-        _encryptionManager = [EncryptionTools sharedEncryptionTools];
-    }
-    return _encryptionManager;
-}
 
 - (NSArray *)cartoons{
     if (!_cartoons) {
@@ -50,14 +44,12 @@
     return _books;
 }
 
-- (AFHTTPSessionManager *)manager
-{
-    if (!_manager) {
+-(AFHTTPSessionManager *)manager{
+    if(!_manager){
         _manager = [AFHTTPSessionManager manager];
     }
     return _manager;
 }
-
 //cell注册(控制)
 static NSString *collectionID = @"collectionID";
 static NSString *AttentionCell = @"AttentionCell";
@@ -74,69 +66,56 @@ static NSString *circleCell = @"circleCell";
 
     //注册cell
     [self registerCell];
+    
+    self.navigationItem.title = @"书柜";
+    
+    UIButton *leftbutton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 20)];
+    
+    //[leftbutton setBackgroundColor:[UIColor blackColor]];
+    
+    [leftbutton setTitle:@"清空" forState:UIControlStateNormal];
+    
+    UIBarButtonItem *rightitem = [[UIBarButtonItem alloc]initWithCustomView:leftbutton];
+    
+    self.navigationItem.rightBarButtonItem = rightitem;
 }
 
 #pragma mark 注册Cell(控制)
 -(void)registerCell{
     UINib *nib1= [UINib nibWithNibName:@"ZZTCartoonCell" bundle:[NSBundle mainBundle]];
     [self.collectionView registerNib:nib1 forCellWithReuseIdentifier:collectionID];
-    
-    UINib *nib2= [UINib nibWithNibName:@"ZZTAttentionCell" bundle:[NSBundle mainBundle]];
-    [self.collectionView registerNib:nib2 forCellWithReuseIdentifier:AttentionCell];
-    
-    UINib *nib3= [UINib nibWithNibName:@"ZZTMyCircleCellCollectionViewCell" bundle:[NSBundle mainBundle]];
-    [self.collectionView registerNib:nib3 forCellWithReuseIdentifier:circleCell];
+//
+//    UINib *nib2= [UINib nibWithNibName:@"ZZTAttentionCell" bundle:[NSBundle mainBundle]];
+//    [self.collectionView registerNib:nib2 forCellWithReuseIdentifier:AttentionCell];
+//
+//    UINib *nib3= [UINib nibWithNibName:@"ZZTMyCircleCellCollectionViewCell" bundle:[NSBundle mainBundle]];
+//    [self.collectionView registerNib:nib3 forCellWithReuseIdentifier:circleCell];
 }
 
 -(void)loadData{
     //请求参数
-    NSLog(@"dataIndex:%@",self.dataIndex);
     NSDictionary *paramDict = @{
                                 @"userId":@"1",
-                                @"type":self.dataIndex
                                 };
-    NSLog(@"index:%@",self.dataIndex);
-    [self.manager POST:@"http://192.168.0.165:8888/great/userCollect" parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSLog(@"%@---%@",[responseObject class],responseObject);
-        self.getData = responseObject[@"result"];
-        //成功运行的方法
-        [self decry];
+    
+    [self.manager POST:[ZZTAPI stringByAppendingString:@"great/userCollect"] parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+        NSArray *array = [ZZTCartonnPlayModel mj_objectArrayWithKeyValuesArray:dic];
+        self.cartoons = array;
+        [self.collectionView reloadData];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败 -- %@",error);
-        [self failure];
     }];
 }
 
-//请求到数据了
--(void)decry{
-    //解密
-    NSString *data = [self.encryptionManager decryptString:self.getData keyString:@"ZIZAITIAN@666666" iv:[@"A-16-Byte-String" dataUsingEncoding:kCFStringEncodingUTF8]];
-    NSData *jsonData = [data dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
-    NSLog(@"data:%@",data);
-    //转模型
-    self.books = [ZZTCartonnPlayModel mj_objectArrayWithKeyValuesArray:dic];
-    
-    self.cartoons = self.books;
-    //刷新
-    [self.collectionView reloadData];
-}
-//没有请求到
--(void)failure{
-    self.cartoons = nil;
-}
 #pragma mark - 创建流水布局
 -(UICollectionViewFlowLayout *)setupCollectionViewFlowLayout{
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
     //修改尺寸(控制)
-    if([self.cellType isEqualToString:@"collection"]){
-        layout.itemSize = CGSizeMake(120,200);
-    }else if ([self.cellType isEqualToString:@"tableView1"]){
-        layout.itemSize = CGSizeMake(Screen_Width,100);
-    }else if ([self.cellType isEqualToString:@"tableView2"]){
-        layout.itemSize = CGSizeMake(Screen_Width,100);
-    }
+    layout.itemSize = CGSizeMake(120,200);
+
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     //行距
     layout.minimumLineSpacing = 0;
@@ -163,30 +142,11 @@ static NSString *circleCell = @"circleCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    //cell类型改变
-    //model改变(控制)
-    UICollectionViewCell *cell = [[UICollectionViewCell alloc] init];
-    if([self.cellType isEqualToString:@"collection"]){
-        ZZTCartoonCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:collectionID forIndexPath:indexPath];
-        ZZTCartonnPlayModel *car = self.cartoons[indexPath.row];
-        if (car) {
-            cell.cartoon = car;
-        }
-        return cell;
-    }else if ([self.cellType isEqualToString:@"tableView2"]){
-        ZZTAttentionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:AttentionCell forIndexPath:indexPath];
-        ZZTCartonnPlayModel *car = self.cartoons[indexPath.row];
-        if (car) {
-            cell.cartoon = car;
-        }
-        return cell;
-    }else if ([self.cellType isEqualToString:@"tableView1"]){
-        ZZTMyCircleCellCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:circleCell forIndexPath:indexPath];
-        ZZTCartonnPlayModel *car = self.cartoons[indexPath.row];
-        if (car) {
-            cell.cartoon = car;
-        }
-        return cell;
+
+    ZZTCartoonCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:collectionID forIndexPath:indexPath];
+    ZZTCartonnPlayModel *car = self.cartoons[indexPath.row];
+    if (car) {
+        cell.cartoon = car;
     }
     return cell;
 }
@@ -194,6 +154,6 @@ static NSString *circleCell = @"circleCell";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self loadData];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+//    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 @end

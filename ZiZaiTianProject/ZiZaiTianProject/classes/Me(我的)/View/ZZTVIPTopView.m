@@ -29,6 +29,17 @@
 
 -(void)setUser:(ZZTUserShoppingModel *)user{
     _user = user;
-
+}
+-(void)setViewImage:(UIImage *)viewImage{
+    _viewImage = viewImage;
+    self.VIPImage.image = viewImage;
+}
+-(void)setViewTitle:(NSString *)viewTitle{
+    _viewTitle = viewTitle;
+    self.VIPTiTle.text = viewTitle;
+}
+-(void)setViewDetail:(NSString *)viewDetail{
+    _viewDetail = viewDetail;
+    self.VIPDate.text = viewDetail;
 }
 @end

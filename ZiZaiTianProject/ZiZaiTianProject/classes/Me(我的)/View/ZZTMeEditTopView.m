@@ -8,11 +8,11 @@
 
 #import "ZZTMeEditTopView.h"
 @interface ZZTMeEditTopView()
-@property (weak, nonatomic) IBOutlet UIButton *cannelBrn;
-@property (weak, nonatomic) IBOutlet UIButton *saveBtn;
-@property (weak, nonatomic) IBOutlet UIButton *backgroundBtn;
-@property (weak, nonatomic) IBOutlet UIButton *userHead;
-@property (weak, nonatomic) IBOutlet UILabel *VIP;
+
+@property (weak, nonatomic) IBOutlet UIImageView *backImageView;
+@property (weak, nonatomic) IBOutlet UIButton *imageBtn;
+@property (weak, nonatomic) IBOutlet UIImageView *headView;
+@property (weak, nonatomic) IBOutlet UIButton *headBtn;
 
 @end
 @implementation ZZTMeEditTopView
@@ -22,21 +22,20 @@
 }
 
 -(void)awakeFromNib{
-    self.userHead.layer.cornerRadius = self.userHead.frame.size.width/2;
-    self.userHead.layer.masksToBounds=YES;//隐藏裁剪掉的部分
-    self.userHead.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.userHead.layer.borderWidth = 2.0f;
-    //添加点击事件
-    [_cannelBrn addTarget:self action:@selector(clickBrn:) forControlEvents:UIControlEventTouchUpInside];
-    [_saveBtn addTarget:self action:@selector(clickBrn:) forControlEvents:UIControlEventTouchUpInside];
-    [_backgroundBtn addTarget:self action:@selector(clickBrn:) forControlEvents:UIControlEventTouchUpInside];
-    [_userHead addTarget:self action:@selector(clickBrn:) forControlEvents:UIControlEventTouchUpInside];
+    _imageBtn.tag = 1;
+    [_imageBtn addTarget:self action:@selector(clickBrn:) forControlEvents:UIControlEventTouchUpInside];
+    _headBtn.tag = 2;
+    [_headBtn addTarget:self action:@selector(clickBrn:) forControlEvents:UIControlEventTouchUpInside];
+}
 
-    //button索引
-    _cannelBrn.tag = 0;
-    _saveBtn.tag = 1;
-    _backgroundBtn.tag = 2;
-    _userHead.tag = 3;
+-(void)setBackImage:(UIImage *)backImage{
+    _backImage = backImage;
+    self.backImageView.image = backImage;
+}
+
+-(void)setHeadImage:(UIImage *)headImage{
+    _headImage = headImage;
+    self.headView.image = headImage;
 }
 
 -(void)clickBrn:(UIButton *)btn{

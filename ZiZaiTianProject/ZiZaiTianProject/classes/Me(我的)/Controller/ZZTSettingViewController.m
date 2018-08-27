@@ -13,9 +13,9 @@
 #import "ZZTSettingModel.h"
 
 @interface ZZTSettingViewController ()<UITableViewDelegate,UITableViewDataSource>
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic)  UITableView *tableView;
 
-@property (weak, nonatomic) IBOutlet UIButton *backBtn;
+//@property (weak, nonatomic) IBOutlet UIButton *backBtn;
 
 @property (nonatomic,strong)NSMutableArray *array1;
 
@@ -67,6 +67,10 @@ NSString *ExitCell = @"ExitCell";
 }
 #pragma mark - tableView
 -(void)setupTableView{
+    
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT) style:UITableViewStyleGrouped];
+    [self.view addSubview:_tableView];
+    
     _tableView.dataSource = self;
     _tableView.delegate = self;
     _tableView.sectionHeaderHeight = 0;
@@ -86,14 +90,14 @@ NSString *ExitCell = @"ExitCell";
 }
 #pragma mark - title数据
 -(void)titleData{
-    _array1 = [NSMutableArray arrayWithObjects:[ZZTSettingModel initSettingModelWith:@"低流量模式" detail:@"非WIFI环境下加载低质量图片,可为您节省70%流量"],[ZZTSettingModel initSettingModelWith:@"回复推送" detail:@"开启后及时收到别人的评论"],[ZZTSettingModel initSettingModelWith:@"更新提示" detail:@"关注作品更新后会及时提醒"],[ZZTSettingModel initSettingModelWith:@"夜间模式" detail:@"开启后,夜间阅读不伤眼睛"], nil];
+    _array1 = [NSMutableArray arrayWithObjects:[ZZTSettingModel initSettingModelWith:@"低流量模式" detail:@"非WIFI环境下加载低质量图片,可为您节省70%流量"],[ZZTSettingModel initSettingModelWith:@"回复推送" detail:@"开启后及时收到别人的评论"],[ZZTSettingModel initSettingModelWith:@"更新提示" detail:@"关注作品更新后会及时提醒"],
+//               [ZZTSettingModel initSettingModelWith:@"夜间模式" detail:@"开启后,夜间阅读不伤眼睛"],
+               nil];
     _array2 = [NSArray arrayWithObjects:@"赏个好评",@"意见反馈",@"推荐给好友", nil];
     _array3 = [NSArray arrayWithObjects:@"缓存清理",@"帮助中心",@"关于我们",@"用户协议", nil];
 }
 
-- (IBAction)clickBackBtn:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
+
 
 #pragma mark - tableView
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -117,7 +121,6 @@ NSString *ExitCell = @"ExitCell";
     if(indexPath.section == 0){
         ZZTSettingSwichCell *cell = [tableView
                                      dequeueReusableCellWithIdentifier:ZZTsetting];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         ZZTSettingModel *model = self.array1[indexPath.row];
         cell.settingModel = model;
@@ -168,7 +171,6 @@ NSString *ExitCell = @"ExitCell";
             cell.textLabel.text = self.array3[indexPath.row];
             
         }
-        
         return cell;
     }
 }
@@ -176,6 +178,6 @@ NSString *ExitCell = @"ExitCell";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+//    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 @end
