@@ -12,9 +12,9 @@ typedef void(^ButtonClick)(UIButton * sender);
 
 @interface ZZTMeEditTopView : UIView
 
-@property (nonatomic,strong) UIImage *backImage;
+@property (nonatomic,strong) NSString *backImage;
 
-@property (nonatomic,strong) UIImage *headImage;
+@property (nonatomic,strong) NSString *headImage;
 
 
 @property (nonatomic,copy) ButtonClick buttonAction;

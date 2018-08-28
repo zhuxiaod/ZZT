@@ -58,6 +58,8 @@ NSString *ExitCell = @"ExitCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.title = @"设置";
+    
     //创建tableView
     [self setupTableView];
     //注册Cell

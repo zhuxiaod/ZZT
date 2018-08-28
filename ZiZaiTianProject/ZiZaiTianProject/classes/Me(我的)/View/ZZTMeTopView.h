@@ -8,11 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@class ZZTUserModel;
+
 @interface  ZZTMeTopView : UIView
 
 typedef void(^ButtonClick)(UIButton * sender);
 
 @property (nonatomic,copy) ButtonClick buttonAction;
+
+@property (nonatomic,strong) ZZTUserModel *userModel;
 
 //-(void)addTapBlock:(void(^)(UIButton *btn))block;
 

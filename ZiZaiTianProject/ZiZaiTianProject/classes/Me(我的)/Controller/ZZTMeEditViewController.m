@@ -24,7 +24,27 @@
 @property (nonatomic,strong) UIButton *doneButton;
 
 @property(nonatomic, strong) BAKit_PickerView *pickView;
+
 @property(nonatomic, strong) ZZTMeEditTopView *topView;
+
+
+//背景图
+@property (nonatomic,strong) NSString *backImg;
+@property (nonatomic,strong) UIImage *backImage;
+//头像图
+@property (nonatomic,strong) NSString *headImg;
+@property (nonatomic,strong) UIImage *headImage;
+//昵称
+@property (nonatomic,strong) NSString *userName;
+
+//性别
+@property (nonatomic,assign) NSString *sex;
+
+//生日
+@property (nonatomic,strong) NSString *birthday;
+
+//签名
+@property (nonatomic,strong) NSString *signature;
 
 @end
 
@@ -33,6 +53,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //进来的时候要有资料  有资料的话  赋值一波
+    //头像
+    //昵称
     
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -46,6 +69,10 @@
     //添加topView
     ZZTMeEditTopView *topView = [ZZTMeEditTopView ZZTMeEditTopView];
     _topView = topView;
+    //假如现在有数据  添加进去
+    topView.backImage = self.backImg;
+    topView.headImage = self.headImg;
+    
     topView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 300);
     topView.buttonAction = ^(UIButton *sender) {
         [self clickBtn:sender];
@@ -56,8 +83,9 @@
     __block ZZTMeEditViewController *  blockSelf = self;
     ZZTMeEditButtomView *meButtomView = [ZZTMeEditButtomView ZZTMeEditButtomView];
     _meButtomView = meButtomView;
+    meButtomView.model = self.model;
     _meButtomView.TextChange = ^(UITextField *texyField) {
-//        [blockSelf textChange:texyField];
+        [blockSelf textChange:texyField];
     };
     meButtomView.frame = CGRectMake(0, 300, SCREEN_WIDTH, 400);
 
@@ -73,13 +101,84 @@
     //遵守代理
     _picker.delegate =self;
 
-//    //注册观察键盘的变化
-//    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transformView:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    //注册观察键盘的变化
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(transformView:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    
+    //保存按钮
+    UIButton *leftbutton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 20)];
+    [leftbutton setTitle:@"保存" forState:UIControlStateNormal];
+    [leftbutton addTarget:self action:@selector(save) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightitem = [[UIBarButtonItem alloc]initWithCustomView:leftbutton];
+    self.navigationItem.rightBarButtonItem = rightitem;
+    
 }
-////走了
-//-(void)textChange:(UITextField *)tf{
-//
-//}
+//保存
+-(void)save{
+    //将七牛云上传头像
+    if(self.headImage){
+        //文件名
+        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = [formatter stringFromDate:[NSDate date]];
+        NSString *imgName = [formatter stringFromDate:[NSDate date]];
+        NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        NSMutableString *randomString = [NSMutableString stringWithCapacity:32];
+        for (NSInteger i = 0; i < 32; i++) {
+            [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform((uint32_t)letters.length)]];
+        }
+        imgName = [NSString stringWithFormat:@"%@%@.png",imgName,randomString];
+        //写入本地
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:imgName];
+        BOOL result = [UIImagePNGRepresentation(self.headImage) writeToFile:filePath atomically:YES];
+        
+        if (result == YES) {
+            NSLog(@"保存成功");
+            
+            AFNHttpTool *tool = [[AFNHttpTool alloc] init];
+            NSString *toke = [tool makeToken:ZZTAccessKey secretKey:ZZTSecretKey];
+            
+            [AFNHttpTool putImagePath:filePath key:imgName token:toke complete:^(id objc) {
+                NSLog(@"%@",objc); //  上传成功并获取七牛云的图片地址
+                self.headImg = objc;
+                [self successUp];
+            }];
+            
+        }else{
+            NSLog(@"保存失败");
+        }
+    }else{
+        self.headImg = @"";
+        [self successUp];
+    }
+    //判断不为空
+   
+}
+-(void)successUp{
+    NSDictionary *dic = @{
+                          @"userId":self.model.userId,
+                          @"nickName":self.userName,
+                          @"intro":self.signature,
+                          @"sex":self.sex,
+                          @"birthday":self.birthday,
+                          @"headimg":self.headImg
+                          };
+    
+    [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"login/upUser"] parameters:dic success:^(id responseObject) {
+        NSLog(@"ok");
+    } failure:^(NSError *error) {
+        
+    }];
+}
+//走了
+-(void)textChange:(UITextField *)tf{
+    if(tf.tag == 0){
+        //名字
+        self.userName = tf.text;
+    }else if(tf.tag == 2){
+        //签名
+        self.signature = tf.text;
+    }
+}
 
 -(void)clickPickBtn:(UIButton *)btn{
     //男
@@ -109,10 +208,11 @@
     NSLog(@"%@",info);
     UIButton *button = (UIButton *)[self.view viewWithTag:_btnTag];
     UIImage *resultImage = [info objectForKey:@"UIImagePickerControllerEditedImage"];
+    //改变后的图片
     if(_btnTag == 1){
-        _topView.backImage = resultImage;
+        _backImage = resultImage;
     }else{
-        _topView.headImage = resultImage;
+        _headImage = resultImage;
     }
     [button setImage:[resultImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
@@ -183,26 +283,26 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-////移动UIView
-//-(void)transformView:(NSNotification *)aNSNotification
-//{
-//    //获取键盘弹出前的Rect
-//    NSValue *keyBoardBeginBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameBeginUserInfoKey];
-//    CGRect beginRect=[keyBoardBeginBounds CGRectValue];
-//
-//    //获取键盘弹出后的Rect
-//    NSValue *keyBoardEndBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameEndUserInfoKey];
-//    CGRect  endRect=[keyBoardEndBounds CGRectValue];
-//
-//    //获取键盘位置变化前后纵坐标Y的变化值
-//    CGFloat deltaY=endRect.origin.y-beginRect.origin.y;
-////    NSLog(@"看看这个变化的Y值:%f",deltaY);
-//
-//    //在0.25s内完成self.view的Frame的变化，等于是给self.view添加一个向上移动deltaY的动画
-//    [UIView animateWithDuration:0.25f animations:^{
-//        [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y+deltaY, self.view.frame.size.width, self.view.frame.size.height)];
-//    }];
-//}
+//移动UIView
+-(void)transformView:(NSNotification *)aNSNotification
+{
+    //获取键盘弹出前的Rect
+    NSValue *keyBoardBeginBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameBeginUserInfoKey];
+    CGRect beginRect=[keyBoardBeginBounds CGRectValue];
+
+    //获取键盘弹出后的Rect
+    NSValue *keyBoardEndBounds=[[aNSNotification userInfo]objectForKey:UIKeyboardFrameEndUserInfoKey];
+    CGRect  endRect=[keyBoardEndBounds CGRectValue];
+
+    //获取键盘位置变化前后纵坐标Y的变化值
+    CGFloat deltaY=endRect.origin.y-beginRect.origin.y;
+//    NSLog(@"看看这个变化的Y值:%f",deltaY);
+
+    //在0.25s内完成self.view的Frame的变化，等于是给self.view添加一个向上移动deltaY的动画
+    [UIView animateWithDuration:0.25f animations:^{
+        [self.view setFrame:CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y+deltaY, self.view.frame.size.width, self.view.frame.size.height)];
+    }];
+}
 
 - (void)pickView2:(TypeButton *)btn
 {
@@ -213,6 +313,7 @@
             //设置值
             TypeButton *button = (TypeButton *)[self.meButtomView viewWithTag:4];
             button.selected = NO;
+            self.sex = @"1";
         }
     }else{
         //如果是女生
@@ -221,6 +322,7 @@
             //设置值
             TypeButton *button = (TypeButton *)[self.meButtomView viewWithTag:1];
             button.selected = NO;
+            self.sex = @"2";
         }
         //图片七牛云上传
     }
@@ -228,7 +330,6 @@
 
 - (void)pickView4:(UIButton *)tf
 {
-    BAKit_WeakSelf
     [BAKit_DatePicker ba_creatPickerViewWithType:BAKit_CustomDatePickerDateTypeYMD configuration:^(BAKit_DatePicker *tempView) {
         NSDate *maxdDate;
         NSDate *mindDate;
@@ -265,12 +366,30 @@
         // 可以自由定制 toolBar 和 pickView 的背景颜色
         tempView.ba_backgroundColor_toolBar = [UIColor colorWithHexString:@"#58006E"];
     } block:^(NSString *resultString) {
-        BAKit_StrongSelf
         [tf setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [tf setTitle:[NSString stringWithFormat:@"%@",resultString] forState:UIControlStateNormal];
+        self.birthday = resultString;
     }];
-
 }
 
+-(void)setModel:(ZZTUserModel *)model{
+    _model = model;
+    //背景图
+    self.backImg = model.cover;
+
+    //头像
+    self.headImg = model.headimg;
+    
+    self.userName = model.nickName;
+    
+    self.signature = model.intro;
+    
+    self.sex = model.sex;
+    
+    self.birthday = [NSString timeWithStr:model.birthday];
+    
+    self.headImg = model.headimg;
+    
+}
 
 @end

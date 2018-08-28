@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface ZZTShoppingMallViewController : UIViewController
+
 @property (nonatomic,assign)BOOL isShopping;
+
 @property (nonatomic,strong)NSString *viewTitle;
 
 @end

@@ -8,9 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class ZZTUserModel;
+
 @interface ZZTCartoonViewController : BaseViewController
 
-@property(nonatomic,strong)NSString *dataIndex;
+@property(nonatomic,strong)ZZTUserModel *user;
 
-@property(nonatomic,strong)NSString *cellType;
+@property(nonatomic,strong)NSString *viewTitle;
+
+@property(nonatomic,strong)NSString *viewType;
+
 @end

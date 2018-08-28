@@ -21,10 +21,10 @@
 #import "ZZTMeWalletViewController.h"
 #import "ZZTShoppingMallViewController.h"
 #import "ZZTCartoonViewController.h"
+#import "ZZTMeAttentionViewController.h"
 
 @interface ZZTMeViewController ()<UITableViewDataSource,UITableViewDelegate,ZZTSignInViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *topView;
 @property(nonatomic,strong) UITableView *tableView;
 //cell数据
 @property (nonatomic,strong) NSArray *cellData;
@@ -32,13 +32,13 @@
 @property (nonatomic,strong) AFHTTPSessionManager *manager;
 
 //获得数据
-@property (nonatomic,strong) NSString *getData;
-
 @property (nonatomic,strong) EncryptionTools *encryptionManager;
 
 @property (nonatomic,strong) ZZTUserModel *userData;
 
 @property (nonatomic,strong) ZZTSignInView *signView;
+
+@property (nonatomic,strong) ZZTMeTopView *topView;
 @end
 
 @implementation ZZTMeViewController
@@ -53,6 +53,7 @@ NSString *bannerID = @"MeCell";
     }
     return _encryptionManager;
 }
+
 -(ZZTUserModel *)userData{
     if (!_userData) {
         _userData = [[ZZTUserModel alloc] init];
@@ -69,9 +70,16 @@ NSString *bannerID = @"MeCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithHexString:@"#474764"];
     self.rr_navHidden = YES;
+    UINavigationBar *nab = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[UIView class]]];
+
+    [nab setBackgroundImage:[UIImage createImageWithColor:[UIColor blackColor]] forBarMetrics:UIBarMetricsDefault];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    [UINavigationBar appearance].translucent=NO;
+    
     //请求数据
-    [self getData];
+//    [self getData];
     //设置table
     [self setupTab];
 }
@@ -80,7 +88,7 @@ NSString *bannerID = @"MeCell";
 #pragma mark - 设置tableView
 -(void)setupTab
 {
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) style:UITableViewStyleGrouped];
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 20 , self.view.bounds.size.width, self.view.bounds.size.height) style:UITableViewStyleGrouped];
     _tableView.sectionHeaderHeight = 10;
     _tableView.sectionFooterHeight = 0;
     _tableView.dataSource = self;
@@ -88,27 +96,30 @@ NSString *bannerID = @"MeCell";
 
     //隐藏滚动条
     _tableView.showsVerticalScrollIndicator = NO;
+    
     //添加头视图
     ZZTMeTopView *top = [ZZTMeTopView meTopView];
     top.frame = CGRectMake(0, 0, ScreenW, 120);
     _tableView.tableHeaderView = top;
+    _topView = top;
     top.buttonAction = ^(UIButton *sender) {
         if(sender.tag == 0){
             ZZTMeEditViewController *editVC = [[ZZTMeEditViewController alloc] init];
             editVC.hidesBottomBarWhenPushed = YES;
+            editVC.model = self.userData;
             [self.navigationController pushViewController:editVC animated:YES];
         }
     };
-
+    
     [self.view addSubview:_tableView];
     //注册cell
     [self.tableView registerClass:[ZZTMeCell class] forCellReuseIdentifier:bannerID];
   
 }
 
-
-
-
+-(void)setupTopView{
+    self.topView.userModel = self.userData;
+}
 #pragma mark - tableView
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -194,13 +205,36 @@ NSString *bannerID = @"MeCell";
             shoppingMallVC.isShopping = YES;
             shoppingMallVC.viewTitle = @"自在商城";
             [self.navigationController pushViewController:shoppingMallVC animated:YES];
+        }else if(indexPath.row == 1){
+            //积分兑换
+            ZZTShoppingMallViewController *shoppingMallVC = [[ZZTShoppingMallViewController alloc] init];
+            shoppingMallVC.hidesBottomBarWhenPushed = YES;
+            shoppingMallVC.isShopping = YES;
+            shoppingMallVC.viewTitle = @"积分兑换";
+            [self.navigationController pushViewController:shoppingMallVC animated:YES];
         }
     }else if (indexPath.section == 3){
-        if(indexPath.row == 1){
+        if(indexPath.row == 0){
+            ZZTCartoonViewController *bookVC = [[ZZTCartoonViewController alloc] init];
+            bookVC.hidesBottomBarWhenPushed = YES;
+            bookVC.viewTitle = @"参与作品";
+            bookVC.viewType = @"1";
+            bookVC.user = self.userData;
+            [self.navigationController pushViewController:bookVC animated:YES];
+        }else if(indexPath.row == 1){
             //书柜
             ZZTCartoonViewController *bookVC = [[ZZTCartoonViewController alloc] init];
             bookVC.hidesBottomBarWhenPushed = YES;
+            bookVC.viewTitle = @"书柜";
+            bookVC.viewType = @"2";
+            bookVC.user = self.userData;
             [self.navigationController pushViewController:bookVC animated:YES];
+        }else if(indexPath.row == 2){
+            //关注
+            ZZTMeAttentionViewController *meAttentionVC = [[ZZTMeAttentionViewController alloc] init];
+            meAttentionVC.hidesBottomBarWhenPushed = YES;
+            meAttentionVC.user = self.userData;
+            [self.navigationController pushViewController:meAttentionVC animated:YES];
         }else if(indexPath.row == 3){
             //浏览历史
             ZZTHistoryViewController *historyVC = [[ZZTHistoryViewController alloc] init];
@@ -291,12 +325,14 @@ NSString *bannerID = @"MeCell";
 }
 -(void)loadUserData{
     NSDictionary *paramDict = @{
-                                @"userId":@"23"
+                                @"userId":@"1"
                                 };
-    [self.manager POST:@"http://192.168.0.165:8888/login/usersInfo" parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        self.getData = responseObject[@"result"];
-        
-        
+    [self.manager POST:[ZZTAPI stringByAppendingString:@"login/usersInfo"] parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+        NSArray *array = [ZZTUserModel mj_objectArrayWithKeyValuesArray:dic];
+        ZZTUserModel *model = array[0];
+        self.userData = model;
+        [self setupTopView];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DCPagerController.h"
 
 @interface ZZTFindViewController : UIViewController
 

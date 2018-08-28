@@ -180,5 +180,14 @@
 + (NSString *)timeWithTimeStamp:(NSUInteger)timeStamp {
     return [[DateManager share] timeWithTimeStamp:timeStamp];
 }
-
++(NSString *)timeWithStr:(NSString *)string{
+    NSString *time = string;
+    //时间字符串
+    NSTimeInterval interval =[time doubleValue] / 1000.0;
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:interval];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *dateString = [formatter stringFromDate: date];
+    return dateString;
+}
 @end

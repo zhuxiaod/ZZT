@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZZTMeEditViewController : UIViewController
+@class ZZTUserModel;
+
+@interface ZZTMeEditViewController : BaseViewController
+
+@property (nonatomic,strong) ZZTUserModel *model;
 
 @end

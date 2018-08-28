@@ -11,7 +11,11 @@
 typedef void(^TextChange)(UITextField * texyField);
 typedef void(^BtnInside)(UIButton * btn);
 
+@class ZZTUserModel;
+
 @interface ZZTMeEditButtomView : UIView
+
+@property (nonatomic,strong) ZZTUserModel *model;
 
 @property (nonatomic,copy) TextChange TextChange;
 @property (nonatomic,copy) BtnInside BtnInside;

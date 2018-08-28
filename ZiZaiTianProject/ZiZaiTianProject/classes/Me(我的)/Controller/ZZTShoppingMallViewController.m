@@ -28,10 +28,11 @@
 
 -(void)viewDidLoad{
     [super viewDidLoad];
+    self.navigationItem.title = self.viewTitle;
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
     _scrollView = scrollView;
-    scrollView.backgroundColor = [UIColor redColor];
+    scrollView.backgroundColor = [UIColor colorWithHexString:@"#EEEEEE"];
     [self.view addSubview:scrollView];
     
     NSArray *imagesURLStrings = [NSArray arrayWithObjects: @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535282045025&di=b648e41d5d5a3535e5518a545459d351&imgtype=0&src=http%3A%2F%2Fimg.mp.itc.cn%2Fupload%2F20161123%2Fbfa082e23cd94089a907a29b021946bf_th.jpeg",@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535282045025&di=d2ddcf88c11b57887d64db25c870bd4f&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20170919%2F210211af972f4e3c8c5a7fda0fda7493.jpeg", nil];
@@ -60,6 +61,14 @@
     mallRecommendView.title = @"素材推荐";
     mallRecommendView.backgroundColor = [UIColor yellowColor];
     [scrollView addSubview:mallRecommendView];
+    
+    //漫画推荐
+    ZZTMallRecommendView *cartoonRecommendView = [[ZZTMallRecommendView alloc] initWithFrame:CGRectMake(0, mallRecommendView.y+mallRecommendView.height + 15, SCREEN_WIDTH, 200)];
+    cartoonRecommendView.title = @"素材推荐";
+    cartoonRecommendView.backgroundColor = [UIColor yellowColor];
+    [scrollView addSubview:cartoonRecommendView];
+    
+    scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, cartoonRecommendView.y + cartoonRecommendView.height+100);
 }
 
 -(void)getBtnWithTitle:(NSString *)title image:(NSString *)image

@@ -25,6 +25,17 @@
 
 @implementation ZZTMeTopView 
 
+-(void)setUserModel:(ZZTUserModel *)userModel{
+    _userModel = userModel;
+    [self.headImage sd_setImageWithURL:[NSURL URLWithString:userModel.headimg]];
+    [self.userName setText:userModel.nickName];
+    if([userModel.userType isEqualToString:@"1"]){
+        self.VIPBtn.hidden = YES;
+    }
+//    _ZBLab setText:userModel.
+    [self.jiFenLab setText:[NSString stringWithFormat:@"%ld积分",(long)userModel.integralNum]];
+//    self.followNum setText:[NSString stringWithFormat:@"%ld粉丝",userModel.]
+}
 +(instancetype)meTopView{
     return [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass(self) owner:nil options:nil] firstObject];
 }

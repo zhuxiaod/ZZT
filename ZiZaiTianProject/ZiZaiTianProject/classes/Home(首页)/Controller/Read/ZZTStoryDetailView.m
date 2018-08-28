@@ -93,7 +93,6 @@ static const CGFloat textCellHeight = 250.0f;
     foot.likeUpBtnClick = ^(UIButton *btn) {
         NSLog(@"1111");
 //        //先测试下  后期后台联合 重新写需求
-     
     };
     return foot;
 }

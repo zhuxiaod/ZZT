@@ -45,7 +45,7 @@
 //签名+
 @property (nonatomic,strong)NSString *intro;
 //生日+
-@property (nonatomic,strong)NSDate *birthday;
+@property (nonatomic,strong)NSString *birthday;
 //个人封面+
 @property (nonatomic,strong)NSString *cover;
 //今天是否签到   0表示没签到，1表示签到+

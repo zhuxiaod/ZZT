@@ -26,5 +26,6 @@
 
 + (NSString *)timeStampWithDate:(NSDate *)date;
 + (NSString *)timeWithTimeStamp:(NSUInteger)timeStamp;
++ (NSString *)timeWithStr:(NSString *)string;
 
 @end

@@ -88,21 +88,21 @@
 #pragma mark - 添加所有子控制器
 - (void)setUpAllChildViewController
 {
-    //传个参数 知道是什么类型的  切换CELL 模型 
-    //index1
-    ZZTCartoonViewController *carttonVC = [[ZZTCartoonViewController alloc] init];
-    carttonVC.title = [self.dic objectForKey:@"index1"];
-    carttonVC.dataIndex = @"1";
-    carttonVC.cellType = [self.dic objectForKey:@"cellType"];
-    carttonVC.view.backgroundColor = [UIColor redColor];
-    [self addChildViewController:carttonVC];
-    //index2
-    ZZTCartoonViewController *playVC = [[ZZTCartoonViewController alloc] init];
-    playVC.title = [self.dic objectForKey:@"index2"];
-    playVC.dataIndex = @"2";
-    playVC.cellType = [self.dic objectForKey:@"cellType"];
-    playVC.view.backgroundColor = [UIColor yellowColor];
-    [self addChildViewController:playVC];
+//    //传个参数 知道是什么类型的  切换CELL 模型 
+//    //index1
+//    ZZTCartoonViewController *carttonVC = [[ZZTCartoonViewController alloc] init];
+//    carttonVC.title = [self.dic objectForKey:@"index1"];
+//    carttonVC.dataIndex = @"1";
+//    carttonVC.cellType = [self.dic objectForKey:@"cellType"];
+//    carttonVC.view.backgroundColor = [UIColor redColor];
+//    [self addChildViewController:carttonVC];
+//    //index2
+//    ZZTCartoonViewController *playVC = [[ZZTCartoonViewController alloc] init];
+//    playVC.title = [self.dic objectForKey:@"index2"];
+//    playVC.dataIndex = @"2";
+//    playVC.cellType = [self.dic objectForKey:@"cellType"];
+//    playVC.view.backgroundColor = [UIColor yellowColor];
+//    [self addChildViewController:playVC];
 }
 //返回上一页
 - (IBAction)disMis:(UIButton *)sender {

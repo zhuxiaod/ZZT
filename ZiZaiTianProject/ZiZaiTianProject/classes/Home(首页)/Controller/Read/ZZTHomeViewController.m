@@ -44,6 +44,9 @@ NSString *SuggestionView = @"SuggestionView";
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    UINavigationBar *nab = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[UIView class]]];
+//    
+//    [nab setBackgroundImage:[UIImage createImageWithColor:[UIColor colorWithHexString:@""]] forBarMetrics:UIBarMetricsDefault];
     
     self.view.backgroundColor = [UIColor colorWithHexString:@"#58006E"];
     

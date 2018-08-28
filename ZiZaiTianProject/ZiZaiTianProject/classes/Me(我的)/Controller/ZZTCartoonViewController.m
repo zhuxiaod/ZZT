@@ -67,7 +67,7 @@ static NSString *circleCell = @"circleCell";
     //注册cell
     [self registerCell];
     
-    self.navigationItem.title = @"书柜";
+    self.navigationItem.title = self.viewTitle;
     
     UIButton *leftbutton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 40, 20)];
     
@@ -84,29 +84,41 @@ static NSString *circleCell = @"circleCell";
 -(void)registerCell{
     UINib *nib1= [UINib nibWithNibName:@"ZZTCartoonCell" bundle:[NSBundle mainBundle]];
     [self.collectionView registerNib:nib1 forCellWithReuseIdentifier:collectionID];
-//
-//    UINib *nib2= [UINib nibWithNibName:@"ZZTAttentionCell" bundle:[NSBundle mainBundle]];
-//    [self.collectionView registerNib:nib2 forCellWithReuseIdentifier:AttentionCell];
-//
-//    UINib *nib3= [UINib nibWithNibName:@"ZZTMyCircleCellCollectionViewCell" bundle:[NSBundle mainBundle]];
-//    [self.collectionView registerNib:nib3 forCellWithReuseIdentifier:circleCell];
+
 }
 
 -(void)loadData{
-    //请求参数
-    NSDictionary *paramDict = @{
-                                @"userId":@"1",
-                                };
-    
-    [self.manager POST:[ZZTAPI stringByAppendingString:@"great/userCollect"] parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    if([self.viewType isEqualToString:@"1"]){
+        //请求参数
+        NSDictionary *paramDict = @{
+                                    @"userId":self.user.userId,
+                                    };
+        [self.manager POST:[ZZTAPI stringByAppendingString:@"great/userCollect"] parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            
+            NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+            NSArray *array = [ZZTCartonnPlayModel mj_objectArrayWithKeyValuesArray:dic];
+            self.cartoons = array;
+            [self.collectionView reloadData];
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"请求失败 -- %@",error);
+        }];
+    }else{
+        //请求参数
+        NSDictionary *paramDict = @{
+                                    @"userId":self.user.userId
+                                    };
         
-        NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
-        NSArray *array = [ZZTCartonnPlayModel mj_objectArrayWithKeyValuesArray:dic];
-        self.cartoons = array;
-        [self.collectionView reloadData];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        NSLog(@"请求失败 -- %@",error);
-    }];
+        [self.manager POST:[ZZTAPI stringByAppendingString:@"great/userCollect"] parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            
+            NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+            NSArray *array = [ZZTCartonnPlayModel mj_objectArrayWithKeyValuesArray:dic];
+            self.cartoons = array;
+            [self.collectionView reloadData];
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"请求失败 -- %@",error);
+        }];
+    }
+   
 }
 
 #pragma mark - 创建流水布局
@@ -154,6 +166,5 @@ static NSString *circleCell = @"circleCell";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self loadData];
-//    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 @end

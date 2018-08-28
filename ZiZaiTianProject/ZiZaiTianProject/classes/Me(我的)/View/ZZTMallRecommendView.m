@@ -32,7 +32,7 @@
 -(void)setupUI{
     //头标题
     UIView *headView = [[UIView alloc] init];
-    headView.backgroundColor = [UIColor yellowColor];
+    headView.backgroundColor = [UIColor whiteColor];
     _headView = headView;
     [self addSubview:headView];
     //推荐
@@ -48,9 +48,24 @@
     [headView addSubview:moreBtn];
     
     UIView *contentView = [[UIView alloc] init];
-    contentView.backgroundColor = [UIColor blueColor];
+    contentView.backgroundColor = [UIColor whiteColor];
     _contentView = contentView;
     [self addSubview:contentView];
+    
+    //3个推荐
+    ZZTCartoonShowView *showView1 = [ZZTCartoonShowView CartoonShowView];
+    _showView1 = showView1;
+    CGFloat w = self.contentView.width / 3;
+    
+    [self.contentView addSubview:showView1];
+    
+    ZZTCartoonShowView *showView2 = [ZZTCartoonShowView CartoonShowView];
+    _showView2 = showView2;
+    [self.contentView addSubview:showView2];
+    
+    ZZTCartoonShowView *showView3 = [ZZTCartoonShowView CartoonShowView];
+    _showView3 = showView3;
+    [self.contentView addSubview:showView3];
     
    
 }
@@ -85,46 +100,19 @@
         make.left.equalTo(self).offset(0);
     }];
 
-    CGFloat w = self.contentView.width / 3;
 
-//    self.showView1.frame = CGRectMake(0, 0, self.contentView.width/3, self.contentView.height);
-//    self.showView2.frame = CGRectMake(self.contentView.width/3, 0, self.contentView.width/3, self.contentView.height);
-//    self.showView3.frame = CGRectMake(self.contentView.width/3 * 2, 0, self.contentView.width/3, self.contentView.height);
-
-//    [self.showView1 mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(self.contentView).offset(0);
-//        make.left.equalTo(self.contentView).offset(0);
-//        make.bottom.equalTo(self.contentView).offset(0);
-//        make.width.equalTo(self.contentView).offset(SCREEN_WIDTH/3);
-//    }];
-
+    [self layoutIfNeeded];
+    CGFloat viewW = (SCREEN_WIDTH - 10)/3;
+    
+    //这个地方 三个VIew宽是0 哪三个view  不是存在吗  我要
+    self.showView1.frame = CGRectMake(0, 0, viewW, self.contentView.height);
+    self.showView2.frame = CGRectMake(viewW + 5, 0, viewW, self.contentView.height);
+    self.showView3.frame = CGRectMake(viewW * 2 + 10, 0, viewW, self.contentView.height);
 }
-
-
 
 -(void)setTitle:(NSString *)title{
     _title = title;
     [self.headLab setText:title];
-    //3个推荐
-    ZZTCartoonShowView *showView1 = [ZZTCartoonShowView CartoonShowView];
-    _showView1 = showView1;
-    CGFloat w = self.contentView.width / 3;
-    
-    [self.contentView addSubview:showView1];
-    
-    ZZTCartoonShowView *showView2 = [ZZTCartoonShowView CartoonShowView];
-    _showView2 = showView2;
-    [self.contentView addSubview:showView2];
-    
-    ZZTCartoonShowView *showView3 = [ZZTCartoonShowView CartoonShowView];
-    _showView3 = showView3;
-    [self.contentView addSubview:showView3];
-    
-    //这个地方 三个VIew宽是0 哪三个view  不是存在吗  我要
-    self.showView1.frame = CGRectMake(0, 0, 375/3, self.contentView.height);
-    self.showView2.frame = CGRectMake(self.contentView.width/3, 0, 375/3, self.contentView.height);
-    self.showView3.frame = CGRectMake(self.contentView.width/3 * 2, 0, 375/3, self.contentView.height);
-    
 }
 
 

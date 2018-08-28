@@ -8,8 +8,14 @@
 
 #import <UIKit/UIKit.h>
 @class ZZTCartonnPlayModel;
+@class ZZTAttentionCell;
+
+typedef void (^AttentionCancelBlock) (ZZTAttentionCell *cell);
+
 @interface ZZTAttentionCell : UICollectionViewCell
 
-@property (nonatomic,strong)ZZTCartonnPlayModel *cartoon;
+@property (nonatomic,strong)ZZTUserModel *attemtion;
+
+@property(nonatomic, copy) AttentionCancelBlock attentionCancelBlock;
 
 @end

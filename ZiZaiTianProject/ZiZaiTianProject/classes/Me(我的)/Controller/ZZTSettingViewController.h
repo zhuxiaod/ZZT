@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZZTSettingViewController : UIViewController
+@interface ZZTSettingViewController : BaseViewController
 
 @end

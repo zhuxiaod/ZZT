@@ -28,14 +28,16 @@
     [_headBtn addTarget:self action:@selector(clickBrn:) forControlEvents:UIControlEventTouchUpInside];
 }
 
--(void)setBackImage:(UIImage *)backImage{
+-(void)setBackImage:(NSString *)backImage{
     _backImage = backImage;
-    self.backImageView.image = backImage;
+    [self.backImageView sd_setImageWithURL:[NSURL URLWithString:backImage]];
+    [self.imageBtn setTitle:@"" forState:UIControlStateNormal];
 }
 
--(void)setHeadImage:(UIImage *)headImage{
+
+-(void)setHeadImage:(NSString *)headImage{
     _headImage = headImage;
-    self.headView.image = headImage;
+    [self.headView sd_setImageWithURL:[NSURL URLWithString:headImage]];
 }
 
 -(void)clickBrn:(UIButton *)btn{

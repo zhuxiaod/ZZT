@@ -31,6 +31,8 @@
     
     [self.userName addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
     [self.userBirthday addTarget:self action:@selector(textFieldDidBegin:) forControlEvents:UIControlEventTouchUpInside];
+    [self.userDetail addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
+
     _userName.tag = 0;
     _userDetail.tag = 2;
     _userBirthday.tag = 3;
@@ -66,4 +68,22 @@
     }
 }
 
+-(void)setModel:(ZZTUserModel *)model{
+    _model = model;
+    self.userName.text = model.nickName;
+    if([model.sex isEqualToString:@"0"]){
+        //男
+        self.manBtn.selected = YES;
+        self.womanBtn.selected = NO;
+    }else{
+        //女
+        self.womanBtn.selected = YES;
+        self.manBtn.selected = NO;
+    }
+    NSString *time = [NSString timeWithStr:model.birthday];
+    
+    [self.userBirthday setTitle:time forState:UIControlStateNormal];
+    [self.userBirthday setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    self.userDetail.text = model.intro;
+}
 @end
