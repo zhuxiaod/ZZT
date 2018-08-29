@@ -132,24 +132,42 @@
 #pragma mark - viewDidLoad
 -(void)viewDidLoad {
     [super viewDidLoad];
-    //初始化tag值
-    [self setBOOL];
-   
-    //测试数据
-    ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:self.view.height - 88 isSelect:YES];
-    [self.cartoonEditArray addObject:cell];
-    
-    //注册移除image的通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeEdit:) name:@"remove" object:NULL];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeRectangleView:) name:@"removeRectangleView" object:NULL];
-
-    //UICollectionView
-    [self setupCollectionView];
-    
-    ColorInButton *btn = [ColorInButton ColorInButtonView];
-    btn.viewColor = [UIColor yellowColor];
-    self.coloInBtn = btn;
-    
+    self.rr_navHidden = YES;
+    //手写模拟器
+    //上
+    UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
+    topview.backgroundColor = [UIColor yellowColor];
+    [self.view addSubview:topview];
+    //下
+    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, Screen_Height - 60 , SCREEN_WIDTH, 60)];
+    bottomView.backgroundColor = [UIColor redColor];
+    [self.view addSubview:bottomView];
+    //左
+    UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(topview.frame), 30, Screen_Height - topview.height - bottomView.height)];
+    leftView.backgroundColor = [UIColor brownColor];
+    [self.view addSubview:leftView];
+    //中
+    UIView *midView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(topview.frame), CGRectGetMaxY(topview.frame), SCREEN_WIDTH - leftView.width, Screen_Height - topview.height - bottomView.height)];
+    midView.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:midView];
+//    //初始化tag值
+//    [self setBOOL];
+//
+//    //测试数据
+//    ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:self.view.height - 88 isSelect:YES];
+//    [self.cartoonEditArray addObject:cell];
+//
+//    //注册移除image的通知
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeEdit:) name:@"remove" object:NULL];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeRectangleView:) name:@"removeRectangleView" object:NULL];
+//
+//    //UICollectionView
+//    [self setupCollectionView];
+//
+//    ColorInButton *btn = [ColorInButton ColorInButtonView];
+//    btn.viewColor = [UIColor yellowColor];
+//    self.coloInBtn = btn;
+//
 }
 
 #pragma 定义初始变量
@@ -1442,4 +1460,5 @@
     [self.view addSubview:_materialLibraryView];
 
 }
+
 @end

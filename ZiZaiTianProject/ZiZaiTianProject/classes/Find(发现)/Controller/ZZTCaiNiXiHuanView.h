@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^restartBtnBlock) (UIButton *sender);
+
 @interface ZZTCaiNiXiHuanView : UIView
+
+@property (nonatomic,copy) restartBtnBlock buttonAction;
+
+@property (weak, nonatomic) IBOutlet UIView *mainView;
 
 +(instancetype)CaiNiXiHuanView;
 

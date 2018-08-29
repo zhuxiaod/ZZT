@@ -10,7 +10,7 @@
 #import "ZZTBookType.h"
 #import "ZZTCreatCartoonViewController.h"
 #import "TypeButton.h"
-
+#import "ZZTWritePlayViewController.h"
 //宽度（自定义）
 #define PIC_WIDTH 40
 
@@ -239,9 +239,16 @@
     } failure:^(NSError *error) {
         
     }];
-    ZZTCreatCartoonViewController *cartoonVC = [[ZZTCreatCartoonViewController alloc] init];
-    self.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:cartoonVC animated:YES];
+    if([self.type isEqualToString:@"1"]){
+        ZZTCreatCartoonViewController *cartoonVC = [[ZZTCreatCartoonViewController alloc] init];
+        self.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:cartoonVC animated:YES];
+    }else{
+        ZZTWritePlayViewController *writeVC = [[ZZTWritePlayViewController alloc] init];
+        self.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:writeVC animated:YES];
+    }
+    
 }
 
 //取消占位

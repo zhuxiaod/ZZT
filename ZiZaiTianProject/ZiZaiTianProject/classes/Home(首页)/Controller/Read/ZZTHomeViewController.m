@@ -131,6 +131,7 @@ NSString *SuggestionView = @"SuggestionView";
     
     //创作页
     ZZTCreationTableView *creationVC = [[ZZTCreationTableView alloc] init];
+//    ZZTCreationTableView *creationVC = [[ZZTCreationTableView alloc]initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     self.CreationView = creationVC;
     creationVC.backgroundColor = [UIColor whiteColor];
     [self.mainView addSubview:creationVC];

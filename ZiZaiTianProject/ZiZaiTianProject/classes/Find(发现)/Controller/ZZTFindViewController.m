@@ -14,6 +14,8 @@
 @interface ZZTFindViewController ()
 
 @property (nonatomic, weak) UIViewController *currentVC;
+@property (nonatomic,strong) UIButton *leftBtn;
+@property (nonatomic,strong) UIButton *rightBtn;
 
 @end
 
@@ -21,15 +23,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     UIView *titleScrollView = [[UIView alloc] initWithFrame:CGRectMake(ScreenW/2-100, 0, 200, 50)];
     
     UIButton *leftBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     [leftBtn addTarget:self action:@selector(clickMenu:) forControlEvents:UIControlEventTouchUpInside];
     leftBtn.tag = 0;
+    _leftBtn = leftBtn;
     [leftBtn setTitle:@"世界" forState:UIControlStateNormal];
     [titleScrollView addSubview:leftBtn];
     
     UIButton *rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(titleScrollView.width - 50, 0, 50, 50)];
+    _rightBtn = rightBtn;
     [rightBtn setTitle:@"关注" forState:UIControlStateNormal];
     rightBtn.tag = 1;
     [rightBtn addTarget:self action:@selector(clickMenu:) forControlEvents:UIControlEventTouchUpInside];
@@ -47,6 +52,19 @@
 }
 
 -(void)clickMenu:(UIButton *)btn{
+    //设置btn的样式
+    if(btn.tag == 0){
+        btn.titleLabel.font = [UIFont systemFontOfSize:16];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        self.rightBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+        [self.rightBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    }else if (btn.tag == 1){
+        btn.titleLabel.font = [UIFont systemFontOfSize:16];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        self.leftBtn.titleLabel.font = [UIFont systemFontOfSize:14];
+        [self.leftBtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+
+    }
     // 取出选中的这个控制器
     UIViewController *vc = self.childViewControllers[btn.tag];
     // 设置尺寸位置

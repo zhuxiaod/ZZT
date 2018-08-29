@@ -9,6 +9,7 @@
 #import "ZZTCreationButtonView.h"
 #import "ZXDCartoonFlexoBtn.h"
 #import "ZZTCreationCartoonTypeViewController.h"
+#import "ZZTWritingSequelViewController.h"
 
 @interface ZZTCreationButtonView ()
 @property (nonatomic,strong) ZXDCartoonFlexoBtn *cartoon;
@@ -17,9 +18,8 @@
 @property (nonatomic,strong) UIView *botttomView;
 @property (nonatomic,strong) UIView *btnView;
 
-
-
 @end
+
 @implementation ZZTCreationButtonView
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -88,14 +88,14 @@
     [[self myViewController].navigationController pushViewController:cartoonVC animated:YES];
     [self myViewController].hidesBottomBarWhenPushed = NO;
 }
+
 - (void)didContinuation{
-    ZZTCreationCartoonTypeViewController *cartoonVC = [[ZZTCreationCartoonTypeViewController alloc] init];
-    cartoonVC.viewTitle = @"作品续作";
-    cartoonVC.type = @"3";
+    ZZTWritingSequelViewController *cartoonVC = [[ZZTWritingSequelViewController alloc] init];
     [self myViewController].hidesBottomBarWhenPushed = YES;
     [[self myViewController].navigationController pushViewController:cartoonVC animated:YES];
     [self myViewController].hidesBottomBarWhenPushed = NO;
 }
+
 -(void)layoutSubviews{
     [super layoutSubviews];
     

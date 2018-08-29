@@ -64,7 +64,7 @@
     
     //漫画推荐
     ZZTMallRecommendView *cartoonRecommendView = [[ZZTMallRecommendView alloc] initWithFrame:CGRectMake(0, mallRecommendView.y+mallRecommendView.height + 15, SCREEN_WIDTH, 200)];
-    cartoonRecommendView.title = @"素材推荐";
+    cartoonRecommendView.title = @"漫画推荐";
     cartoonRecommendView.backgroundColor = [UIColor yellowColor];
     [scrollView addSubview:cartoonRecommendView];
     

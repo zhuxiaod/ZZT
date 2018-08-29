@@ -11,7 +11,6 @@
 		040A03B120FD8706000FAE13 /* ZZTStoryDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 040A03AF20FD8706000FAE13 /* ZZTStoryDetailCell.m */; };
 		040A03B220FD8706000FAE13 /* ZZTStoryDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 040A03B020FD8706000FAE13 /* ZZTStoryDetailCell.xib */; };
 		040A03B620FDDAEA000FAE13 /* ZZTWritePlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040A03B420FDDAEA000FAE13 /* ZZTWritePlayViewController.m */; };
-		040A03B720FDDAEA000FAE13 /* ZZTWritePlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 040A03B520FDDAEA000FAE13 /* ZZTWritePlayViewController.xib */; };
 		040A03BA20FDECC0000FAE13 /* ZZTSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040A03B920FDECC0000FAE13 /* ZZTSearchViewController.m */; };
 		040A03BD2100201B000FAE13 /* ZZTMoreViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040A03BC2100201B000FAE13 /* ZZTMoreViewController.m */; };
 		040A04082100ADA1000FAE13 /* ZZTUpdateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 040A04062100ADA1000FAE13 /* ZZTUpdateViewController.m */; };
@@ -125,7 +124,6 @@
 		046FF6592101797B005DED73 /* MainTabbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 046FF6572101797B005DED73 /* MainTabbar.m */; };
 		046FF65F21018706005DED73 /* ZZTCollectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 046FF65E21018706005DED73 /* ZZTCollectView.m */; };
 		046FF66A2101E029005DED73 /* ZZTCreatCartoonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046FF6682101E029005DED73 /* ZZTCreatCartoonViewController.m */; };
-		046FF66B2101E029005DED73 /* ZZTCreatCartoonViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 046FF6692101E029005DED73 /* ZZTCreatCartoonViewController.xib */; };
 		046FF66E2101E0D5005DED73 /* ZZTCreationEntranceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 046FF66D2101E0D5005DED73 /* ZZTCreationEntranceModel.m */; };
 		046FF6712101EB25005DED73 /* ZZTCreatPlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046FF6702101EB25005DED73 /* ZZTCreatPlayViewController.m */; };
 		0471A83120F5926A00ABFF35 /* ZZTCreationTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0471A83020F5926A00ABFF35 /* ZZTCreationTableView.m */; };
@@ -220,6 +218,9 @@
 		049A99EB20E394BB00ED27C9 /* ZZTVIPTopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 049A99E920E394BB00ED27C9 /* ZZTVIPTopView.xib */; };
 		04B4250321227CB600FDEE58 /* ZZTBubbleImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B4250121227CB500FDEE58 /* ZZTBubbleImageView.m */; };
 		04B9FF4120E506FC007CC582 /* ZZTChildCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04B9FF3F20E506FB007CC582 /* ZZTChildCollectionView.m */; };
+		04C39F4E2136493900F4CB4A /* ZZTFindCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C39F4C2136493900F4CB4A /* ZZTFindCommentCell.m */; };
+		04C39F4F2136493900F4CB4A /* ZZTFindCommentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04C39F4D2136493900F4CB4A /* ZZTFindCommentCell.xib */; };
+		04C39F522136C47A00F4CB4A /* ZZTWritingSequelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C39F512136C47A00F4CB4A /* ZZTWritingSequelViewController.m */; };
 		04CF25942105AACA0026EC8F /* ZZTMaterialLibraryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF25932105AACA0026EC8F /* ZZTMaterialLibraryView.m */; };
 		04CF25972105B0AB0026EC8F /* ZZTMaterialKindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF25962105B0AB0026EC8F /* ZZTMaterialKindView.m */; };
 		04CF259A2105BB540026EC8F /* ZZTMaterialKindModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF25992105BB540026EC8F /* ZZTMaterialKindModel.m */; };
@@ -268,7 +269,6 @@
 		040A03B020FD8706000FAE13 /* ZZTStoryDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTStoryDetailCell.xib; sourceTree = "<group>"; };
 		040A03B320FDDAEA000FAE13 /* ZZTWritePlayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTWritePlayViewController.h; sourceTree = "<group>"; };
 		040A03B420FDDAEA000FAE13 /* ZZTWritePlayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTWritePlayViewController.m; sourceTree = "<group>"; };
-		040A03B520FDDAEA000FAE13 /* ZZTWritePlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTWritePlayViewController.xib; sourceTree = "<group>"; };
 		040A03B820FDECC0000FAE13 /* ZZTSearchViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTSearchViewController.h; sourceTree = "<group>"; };
 		040A03B920FDECC0000FAE13 /* ZZTSearchViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTSearchViewController.m; sourceTree = "<group>"; };
 		040A03BB2100201B000FAE13 /* ZZTMoreViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTMoreViewController.h; sourceTree = "<group>"; };
@@ -473,7 +473,6 @@
 		046FF65E21018706005DED73 /* ZZTCollectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTCollectView.m; sourceTree = "<group>"; };
 		046FF6672101E029005DED73 /* ZZTCreatCartoonViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTCreatCartoonViewController.h; sourceTree = "<group>"; };
 		046FF6682101E029005DED73 /* ZZTCreatCartoonViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTCreatCartoonViewController.m; sourceTree = "<group>"; };
-		046FF6692101E029005DED73 /* ZZTCreatCartoonViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTCreatCartoonViewController.xib; sourceTree = "<group>"; };
 		046FF66C2101E0D5005DED73 /* ZZTCreationEntranceModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ZZTCreationEntranceModel.h; path = "ZiZaiTianProject/classes/Home(首页)/Controller/ZZTCreationEntranceModel.h"; sourceTree = SOURCE_ROOT; };
 		046FF66D2101E0D5005DED73 /* ZZTCreationEntranceModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ZZTCreationEntranceModel.m; path = "ZiZaiTianProject/classes/Home(首页)/Controller/ZZTCreationEntranceModel.m"; sourceTree = SOURCE_ROOT; };
 		046FF66F2101EB25005DED73 /* ZZTCreatPlayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTCreatPlayViewController.h; sourceTree = "<group>"; };
@@ -637,6 +636,11 @@
 		04B4250221227CB600FDEE58 /* ZZTBubbleImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZTBubbleImageView.h; sourceTree = "<group>"; };
 		04B9FF3F20E506FB007CC582 /* ZZTChildCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZZTChildCollectionView.m; path = "ZiZaiTianProject/classes/Me(我的)/View/ZZTChildCollectionView.m"; sourceTree = SOURCE_ROOT; };
 		04B9FF4020E506FC007CC582 /* ZZTChildCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZZTChildCollectionView.h; path = "ZiZaiTianProject/classes/Me(我的)/View/ZZTChildCollectionView.h"; sourceTree = SOURCE_ROOT; };
+		04C39F4B2136493900F4CB4A /* ZZTFindCommentCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ZZTFindCommentCell.h; path = "ZiZaiTianProject/classes/Find(发现)/Controller/ZZTFindCommentCell.h"; sourceTree = SOURCE_ROOT; };
+		04C39F4C2136493900F4CB4A /* ZZTFindCommentCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ZZTFindCommentCell.m; path = "ZiZaiTianProject/classes/Find(发现)/Controller/ZZTFindCommentCell.m"; sourceTree = SOURCE_ROOT; };
+		04C39F4D2136493900F4CB4A /* ZZTFindCommentCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ZZTFindCommentCell.xib; path = "ZiZaiTianProject/classes/Find(发现)/Controller/ZZTFindCommentCell.xib"; sourceTree = SOURCE_ROOT; };
+		04C39F502136C47A00F4CB4A /* ZZTWritingSequelViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTWritingSequelViewController.h; sourceTree = "<group>"; };
+		04C39F512136C47A00F4CB4A /* ZZTWritingSequelViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTWritingSequelViewController.m; sourceTree = "<group>"; };
 		04CF25922105AACA0026EC8F /* ZZTMaterialLibraryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTMaterialLibraryView.h; sourceTree = "<group>"; };
 		04CF25932105AACA0026EC8F /* ZZTMaterialLibraryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTMaterialLibraryView.m; sourceTree = "<group>"; };
 		04CF25952105B0AB0026EC8F /* ZZTMaterialKindView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTMaterialKindView.h; sourceTree = "<group>"; };
@@ -932,7 +936,6 @@
 				040A03AC20FD8406000FAE13 /* ZZTStoryDetailView.m */,
 				040A03B320FDDAEA000FAE13 /* ZZTWritePlayViewController.h */,
 				040A03B420FDDAEA000FAE13 /* ZZTWritePlayViewController.m */,
-				040A03B520FDDAEA000FAE13 /* ZZTWritePlayViewController.xib */,
 				040A03B820FDECC0000FAE13 /* ZZTSearchViewController.h */,
 				040A03B920FDECC0000FAE13 /* ZZTSearchViewController.m */,
 				040A03BB2100201B000FAE13 /* ZZTMoreViewController.h */,
@@ -954,6 +957,8 @@
 				0498B5DA212E46B0005BD26D /* ZZTCartoonDetailViewController.m */,
 				0498B5DC212E6123005BD26D /* ZZTMulWordDetailViewController.h */,
 				0498B5DD212E6123005BD26D /* ZZTMulWordDetailViewController.m */,
+				04C39F502136C47A00F4CB4A /* ZZTWritingSequelViewController.h */,
+				04C39F512136C47A00F4CB4A /* ZZTWritingSequelViewController.m */,
 			);
 			path = Read;
 			sourceTree = "<group>";
@@ -1251,6 +1256,9 @@
 				0450E2452135869900AE924B /* ZZTCaiNiXiHuanView.h */,
 				0450E2462135869900AE924B /* ZZTCaiNiXiHuanView.m */,
 				0450E248213586A400AE924B /* ZZTCaiNiXiHuanView.xib */,
+				04C39F4B2136493900F4CB4A /* ZZTFindCommentCell.h */,
+				04C39F4C2136493900F4CB4A /* ZZTFindCommentCell.m */,
+				04C39F4D2136493900F4CB4A /* ZZTFindCommentCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1272,7 +1280,6 @@
 				0471A83220F596F600ABFF35 /* imgae */,
 				046FF6672101E029005DED73 /* ZZTCreatCartoonViewController.h */,
 				046FF6682101E029005DED73 /* ZZTCreatCartoonViewController.m */,
-				046FF6692101E029005DED73 /* ZZTCreatCartoonViewController.xib */,
 				046FF66F2101EB25005DED73 /* ZZTCreatPlayViewController.h */,
 				046FF6702101EB25005DED73 /* ZZTCreatPlayViewController.m */,
 				047ECF05212A8D6F008D1E82 /* ZZTCreationCartoonTypeViewController.h */,
@@ -1532,13 +1539,11 @@
 				0471A85320F5E34100ABFF35 /* ZZTWordsDetailHeadView.xib in Resources */,
 				047ECF09212A8D6F008D1E82 /* ZZTCreationCartoonTypeViewController.xib in Resources */,
 				0471A88320F84E6A00ABFF35 /* ZZTCommentCell.xib in Resources */,
-				040A03B720FDDAEA000FAE13 /* ZZTWritePlayViewController.xib in Resources */,
 				046683A420F359F00095C6BC /* u=346672913,3176690417&fm=27&gp=0.jpg in Resources */,
 				0471A84820F59BE600ABFF35 /* ZZTSecondCell.xib in Resources */,
 				0471A89420F89C8E00ABFF35 /* ZZTReaderViewController.xib in Resources */,
 				040D282E2133F044002A3B72 /* ZZTCartoonHistoryCell.xib in Resources */,
 				04E6D4A020EC737500116085 /* ZZTMeEditButtomView.xib in Resources */,
-				046FF66B2101E029005DED73 /* ZZTCreatCartoonViewController.xib in Resources */,
 				04DE149C20E4881B009DF030 /* ZZTVIPBtView.xib in Resources */,
 				047720EF2106BC6C00FC97B5 /* materialLibrary.json in Resources */,
 				041EE0B520EB8D0C0012FEDF /* ZZTExitCell.xib in Resources */,
@@ -1554,6 +1559,7 @@
 				043B074720EDEDBE00ED3F5B /* ZZTWalletCell.xib in Resources */,
 				043B075220EDFC6900ED3F5B /* ZZTShoppingButtomCell.xib in Resources */,
 				049A99D420E32F2F00ED27C9 /* ZZTLoginRegisterViewController.xib in Resources */,
+				04C39F4F2136493900F4CB4A /* ZZTFindCommentCell.xib in Resources */,
 				040A03B220FD8706000FAE13 /* ZZTStoryDetailCell.xib in Resources */,
 				0498B5F4212ED35E005BD26D /* ZZTXuHuaBtn.xib in Resources */,
 				0471A86C20F72FB700ABFF35 /* ZZTWordCell.xib in Resources */,
@@ -1648,6 +1654,7 @@
 				0450E2472135869900AE924B /* ZZTCaiNiXiHuanView.m in Sources */,
 				0498B5D7212D8058005BD26D /* ZZTWordListCell.m in Sources */,
 				0484E7D6210ABBFD00C39369 /* ZZTEditImageViewModel.m in Sources */,
+				04C39F522136C47A00F4CB4A /* ZZTWritingSequelViewController.m in Sources */,
 				04CF259D2105CDE20026EC8F /* ZZTMaterialTypeView.m in Sources */,
 				0466839620F314A00095C6BC /* NSString+Extension.m in Sources */,
 				0466837B20F3096A0095C6BC /* navBarTitleView.m in Sources */,
@@ -1784,6 +1791,7 @@
 				0466839220F314860095C6BC /* NetWorkManager.m in Sources */,
 				042BA0B720E9BF2F003E279A /* ZZTAttentionCell.m in Sources */,
 				0466837C20F3096A0095C6BC /* ProgressHUD.m in Sources */,
+				04C39F4E2136493900F4CB4A /* ZZTFindCommentCell.m in Sources */,
 				042BA0BB20E9C75B003E279A /* ZZTCircleImage.m in Sources */,
 				0466839920F32F8F0095C6BC /* ZZTReadTableView.m in Sources */,
 				04CF259A2105BB540026EC8F /* ZZTMaterialKindModel.m in Sources */,
