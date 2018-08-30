@@ -71,6 +71,7 @@
         [self.collectionView reloadData];
     });
 }
+
 //分三层 如何分层 我要写一个 低配版的
 - (instancetype)initWithFrame:(CGRect)frame{
     if(self = [super initWithFrame:frame]){

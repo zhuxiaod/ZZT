@@ -21,8 +21,24 @@
 #import "ZZTBubbleImageView.h"
 #import "ZZTChapterlistModel.h"
 #import "ColorInButton.h"
+#import "ToolBtn.h"
+
 #define MainOperationView self.currentCell.operationView
 @interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate,RectangleViewDelegate,UIGestureRecognizerDelegate,ZZTBubbleImageViewDelegate>
+
+//工具栏
+@property (weak, nonatomic) IBOutlet ToolBtn *upBtn;
+@property (weak, nonatomic) IBOutlet ToolBtn *downBtn;
+@property (weak, nonatomic) IBOutlet ToolBtn *coloringBtn;
+@property (weak, nonatomic) IBOutlet ToolBtn *paletteBtn;
+@property (weak, nonatomic) IBOutlet ToolBtn *collectBtn;
+@property (weak, nonatomic) IBOutlet ToolBtn *meBtn;
+@property (weak, nonatomic) IBOutlet ToolBtn *deletBtn;
+@property (weak, nonatomic) IBOutlet ToolBtn *emptyBtn;
+@property (weak, nonatomic) IBOutlet ToolBtn *previewBtn;
+@property (weak, nonatomic) IBOutlet ToolBtn *flipBtn;
+@property (weak, nonatomic) IBOutlet ToolBtn *uploadBtn;
+
 //舞台
 @property (weak, nonatomic) IBOutlet UIView *midView;
 
@@ -75,9 +91,6 @@
 //图片地址数组
 @property (nonatomic,strong) NSMutableArray *imageUrlArr;
 
-@property (weak, nonatomic) IBOutlet UIToolbar *toolBar;
-
-@property (weak, nonatomic) IBOutlet UIButton *commitBtn;
 //一章的卡通内容
 @property (strong,nonatomic) NSMutableArray *cartoonArray;
 //记录现在正在那一页面
@@ -87,6 +100,7 @@
 
 @property (weak, nonatomic) IBOutlet ColorInButton *coloInBtn;
 
+@property (nonatomic,strong) UIImageView *imageView;
 @end
 
 @implementation ZZTCreatCartoonViewController
@@ -132,43 +146,69 @@
 #pragma mark - viewDidLoad
 -(void)viewDidLoad {
     [super viewDidLoad];
+    
     self.rr_navHidden = YES;
-    //手写模拟器
-    //上
-    UIView *topview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 30)];
-    topview.backgroundColor = [UIColor yellowColor];
-    [self.view addSubview:topview];
-    //下
-    UIView *bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, Screen_Height - 60 , SCREEN_WIDTH, 60)];
-    bottomView.backgroundColor = [UIColor redColor];
-    [self.view addSubview:bottomView];
-    //左
-    UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(topview.frame), 30, Screen_Height - topview.height - bottomView.height)];
-    leftView.backgroundColor = [UIColor brownColor];
-    [self.view addSubview:leftView];
-    //中
-    UIView *midView = [[UIView alloc] initWithFrame:CGRectMake(CGRectGetMaxX(topview.frame), CGRectGetMaxY(topview.frame), SCREEN_WIDTH - leftView.width, Screen_Height - topview.height - bottomView.height)];
-    midView.backgroundColor = [UIColor grayColor];
-    [self.view addSubview:midView];
-//    //初始化tag值
-//    [self setBOOL];
-//
-//    //测试数据
-//    ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:self.view.height - 88 isSelect:YES];
-//    [self.cartoonEditArray addObject:cell];
-//
-//    //注册移除image的通知
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeEdit:) name:@"remove" object:NULL];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeRectangleView:) name:@"removeRectangleView" object:NULL];
-//
-//    //UICollectionView
-//    [self setupCollectionView];
-//
+    
+    //设置工具栏样式
+    [self setupToolBtnStyle];
+ 
+    //初始化tag值
+    [self setBOOL];
+
+    //测试数据
+    ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:SCREEN_HEIGHT - 80 isSelect:YES];
+    [self.cartoonEditArray addObject:cell];
+
+//    注册移除image的通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeEdit:) name:@"remove" object:NULL];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeRectangleView:) name:@"removeRectangleView" object:NULL];
+
+    //UICollectionView
+    [self setupCollectionView];
+
 //    ColorInButton *btn = [ColorInButton ColorInButtonView];
 //    btn.viewColor = [UIColor yellowColor];
 //    self.coloInBtn = btn;
-//
 }
+
+
+#pragma mark 设置工具栏按钮样式
+-(void)setupToolBtnStyle{
+    [self.upBtn setImage:[UIImage imageNamed:@"编辑器图标-上移一层"] forState:UIControlStateNormal];
+    [self.upBtn setTitle:@"往上" forState:UIControlStateNormal];
+    
+    [self.downBtn setImage:[UIImage imageNamed:@"编辑器图标-下移一层"] forState:UIControlStateNormal];
+    [self.downBtn setTitle:@"往下" forState:UIControlStateNormal];
+    
+    [self.coloringBtn setImage:[UIImage imageNamed:@"WechatIMG293"] forState:UIControlStateNormal];
+    self.coloringBtn.imageView.backgroundColor = [UIColor whiteColor];
+    [self.coloringBtn setTitle:@"填色" forState:UIControlStateNormal];
+    
+    [self.paletteBtn setImage:[UIImage imageNamed:@"编辑器图标-调色"] forState:UIControlStateNormal];
+    [self.paletteBtn setTitle:@"调色" forState:UIControlStateNormal];
+    
+    [self.collectBtn setImage:[UIImage imageNamed:@"编辑器图标-收藏"] forState:UIControlStateNormal];
+    [self.collectBtn setTitle:@"收藏" forState:UIControlStateNormal];
+    
+    [self.meBtn setImage:[UIImage imageNamed:@"编辑器图标-我的素材"] forState:UIControlStateNormal];
+    [self.meBtn setTitle:@"我的" forState:UIControlStateNormal];
+    
+    [self.deletBtn setImage:[UIImage imageNamed:@"编辑器图标-删除"] forState:UIControlStateNormal];
+    [self.deletBtn setTitle:@"删除" forState:UIControlStateNormal];
+    
+    [self.emptyBtn setImage:[UIImage imageNamed:@"编辑器图标-清空"] forState:UIControlStateNormal];
+    [self.emptyBtn setTitle:@"清空" forState:UIControlStateNormal];
+    
+    [self.previewBtn setImage:[UIImage imageNamed:@"编辑器图标-预览"] forState:UIControlStateNormal];
+    [self.previewBtn setTitle:@"预览" forState:UIControlStateNormal];
+    
+    [self.flipBtn setImage:[UIImage imageNamed:@"WechatIMG294"] forState:UIControlStateNormal];
+    [self.flipBtn setTitle:@"翻转" forState:UIControlStateNormal];
+    
+    [self.uploadBtn setImage:[UIImage imageNamed:@"WechatIMG320"] forState:UIControlStateNormal];
+    [self.uploadBtn setTitle:@"本地" forState:UIControlStateNormal];
+}
+
 
 #pragma 定义初始变量
 -(void)setBOOL{
@@ -205,7 +245,7 @@
     //足的长
     flowLayout.footerReferenceSize =CGSizeMake(SCREEN_WIDTH, 40);
     
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0,self.midView.width, self.midView.height) collectionViewLayout:flowLayout];
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0,SCREEN_WIDTH - 40, SCREEN_HEIGHT - 100) collectionViewLayout:flowLayout];
     collectionView.backgroundColor = [UIColor  grayColor];
     collectionView.delegate = self;
     collectionView.dataSource = self;
@@ -217,12 +257,12 @@
 
 #pragma mark - collectionViewDelegate
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.cartoonEditArray.count;
+    return self.cartoonEditArray.count;//1
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     //不重用
-    NSString *identifier=[NSString stringWithFormat:@"%ld%ld",(long)indexPath.section,(long)indexPath.row];
+    NSString *identifier = [NSString stringWithFormat:@"%ld%ld",(long)indexPath.section,(long)indexPath.row];
     //注册cell
     [collectionView registerNib:[UINib nibWithNibName:@"ZZTCartoonDrawView" bundle:nil] forCellWithReuseIdentifier:identifier];
     
@@ -267,23 +307,13 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     //动态定义cell的大小
     ZZTDIYCellModel *cell = self.cartoonEditArray[indexPath.row];
-    return CGSizeMake(self.midView.bounds.size.width,cell.height);
+    return CGSizeMake(SCREEN_WIDTH - 40,SCREEN_HEIGHT - 100);
 }
 
 #pragma mark 漫画信息
 -(void)setModel:(ZZTCreationEntranceModel *)model{
     _model = model;
     NSLog(@"%@",model);
-}
-
-#pragma mark 定义每个UICollectionView的横向间距
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return 0;
-}
-
-#pragma mark 定义每个UICollectionView的纵向间距
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return 0;
 }
 
 //数据要用model来装才行
@@ -334,6 +364,7 @@
     self.mainView = MainOperationView;
     for (int i = 0; i < MainOperationView.subviews.count; i++) {
         if([NSStringFromClass([MainOperationView.subviews[i] class]) isEqualToString:@"RectangleView"]){
+            //取消所有方框的被选中状态
             if (MainOperationView.subviews[i] != self.mainView) {
                 RectangleView *rectangleView = MainOperationView.subviews[i];
                 rectangleView.mainView.backgroundColor = [UIColor whiteColor];
@@ -347,64 +378,67 @@
     return YES;
 }
 
-//足视图创建
--(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-    if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
-        //注册
-        ZZTAddLengthFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"footerView"forIndexPath:indexPath];
-        //加长btn事件
-        footerView.addLengthBtnClick = ^(UIButton *btn) {
-            
-        };
-        //加页cell
-        footerView.addCellBtnClick = ^(UIButton *btn) {
-            //cell的属性
-            ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:self.view.height - 88   isSelect:NO];
-            //更新cell的数据源
-            NSMutableArray *array = self.cartoonEditArray;
-            [array addObject:cell];
-            self.cartoonEditArray = array;
-            
-            [self.collectionView reloadData];
-        };
-        return footerView;
-    }
-    return nil;
-}
+////足视图创建
+//-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+//{
+//    if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+//        //注册
+//        ZZTAddLengthFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"footerView"forIndexPath:indexPath];
+//        //加长btn事件
+//        footerView.addLengthBtnClick = ^(UIButton *btn) {
+//
+//        };
+//        //加页cell
+//        footerView.addCellBtnClick = ^(UIButton *btn) {
+//            //cell的属性
+//            ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:self.view.height - 88   isSelect:NO];
+//            //更新cell的数据源
+//            NSMutableArray *array = self.cartoonEditArray;
+//            [array addObject:cell];
+//            self.cartoonEditArray = array;
+//
+//            [self.collectionView reloadData];
+//        };
+//        return footerView;
+//    }
+//    return nil;
+//}
 
 #pragma mark 功能块
 //返回
-- (IBAction)back:(UIBarButtonItem *)sender {
+- (IBAction)back:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 //保存（未解决）
-- (IBAction)save:(UIBarButtonItem *)sender {
+- (IBAction)save:(UIButton *)sender {
     [self imageThumb];
 }
 
 #pragma mark 遍历显示
 -(void)restoreAtIndex{
     [self.collectionView reloadData];
+    //获得当前行的数据  但是只有一页  那么应该是死的
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
     //获取上一页的内容
     ZZTDIYCellModel *indexModel = self.cartoonArray[self.currentIndex];
-    //遍历这一页的内容
+    //遍历这一页 第一层数据
     for (int i = 0; i < indexModel.imageArray.count; i++) {
          self.mainView = MainOperationView;
         //如果是第一层的素材
         if([NSStringFromClass([indexModel.imageArray[i] class])isEqualToString:@"ZZTEditImageViewModel"]){
-            //设置添加视图
+            //获取素材模型
             ZZTEditImageViewModel *model = (ZZTEditImageViewModel *)indexModel.imageArray[i];
             //如果是普通的素材
             if(model.viewType == 1){
+                //根据属性快速创建
                 EditImageView *imageView = [self speedInitImageView:model];
-                //素材Model
+                //重新记录数据
                 ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad];
                 //不是方框可直接添加素材到cell之中
                 [cellModel.imageArray addObject:imageModel];
             }else{
+                //文字框
                 ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
                 //素材Model
                 ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 scale:model.scale rad:model.rad];
@@ -416,6 +450,7 @@
             self.mainView = MainOperationView;
             //通过上一页的数据重新加载了View 却没有上床数据
             ZZTFangKuangModel *mode = (ZZTFangKuangModel *)indexModel.imageArray[i];
+            //恢复方框
             RectangleView *rectangView = [self createFuangKuangViewWithModel:mode];
             //添加方框model
             ZZTFangKuangModel *fangKuangModel = [self addFangKuangModelWithView:rectangView];
@@ -450,6 +485,7 @@
         }
     }
 }
+
 #pragma mark 添加当前cell
 -(void)seveCurrentView{
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
@@ -462,6 +498,7 @@
         
     }
 }
+
 #pragma mark 替换当前数据
 -(void)replaceCurrentView{
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
@@ -474,6 +511,7 @@
         [view removeFromSuperview];
     }
 }
+
 #pragma mark 上一页
 - (IBAction)previousPage:(id)sender {
     //安全操作
@@ -523,6 +561,7 @@
 #pragma mark 恢复文字框
 -(ZZTBubbleImageView *)createBubbleImageViewWithModel:(ZZTEditImageViewModel *)model{
     //文字没有保存
+    //恢复数据
     ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:model.imageViewFrame text:@"请点击输入内容"];
     imageView.bubbleDelegate = self;
     imageView.superViewName = NSStringFromClass([self.mainView class]);
@@ -705,7 +744,7 @@
 }
 #pragma mark 交换
 -(void)exchangeViewUpIndex:(NSInteger)integer{
-    
+    //得到cell上的所有View
     NSArray *array = MainOperationView.subviews;
     
     NSInteger index = [self viewIndexFromArray:array integer:integer];
@@ -716,9 +755,10 @@
 -(NSInteger)viewIndexFromArray:(NSArray *)array integer:(NSInteger)integer{
     NSInteger index = 0;
     if(integer == 1){
+        //框外
         index = [self getCurrentViewIndex:array];
-        
     }else{
+        //框内
         index = [self getFangKuangViewIndex:array];
     }
     return index;
@@ -747,6 +787,8 @@
         }
     }
 }
+//数据没有交换
+
 //方框中下一层
 -(void)exchangeFangKuangViewDownIndex{
     NSArray *array = self.mainView.subviews;
@@ -791,13 +833,16 @@
     for (int i = 0; i < array.count; i++) {
         if([NSStringFromClass([array[i] class]) isEqualToString:@"EditImageView"]){
             EditImageView *imageView = array[i];
-            if(imageView.tagNum == self.currentView.tag){
+            EditImageView *currentView = (EditImageView *)self.currentView;
+            if(imageView.tagNum == currentView.tagNum){
+                NSLog(@"%ld",imageView.tagNum);
                 index = i;
                 break;
             }
         }else if ([NSStringFromClass([array[i] class]) isEqualToString:@"ZZTBubbleImageView"]){
             ZZTBubbleImageView *imageView = array[i];
-            if(imageView.tagNum == self.currentView.tag){
+            ZZTBubbleImageView *currentView = (ZZTBubbleImageView *)self.currentView;
+            if(imageView.tagNum == currentView.tagNum){
                 index = i;
                 break;
             }
@@ -863,7 +908,7 @@
     rectangView.isClick = YES;
     rectangView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
-    
+#warning 这个代理是干什么的？？
     [self checkRectangleView:rectangView];
     
     [MainOperationView addSubview:rectangView];
@@ -1002,6 +1047,10 @@
 //改变cell的颜色
 -(void)changeColor{
     self.mainView.backgroundColor = self.choiceColor;
+    self.coloringBtn.imageView.backgroundColor = self.choiceColor;
+    
+    //点击时 获取方框的背景图
+    
 }
 
 #pragma mark 取色板代理方法
@@ -1152,58 +1201,17 @@
     }
     return model;
 }
-#pragma mark 隐藏其他View的状态
--(void)exceptCurrentViewHiddenOtherView:(UIView *)view{
-    self.currentView = view;
-    self.collectionView.scrollEnabled = NO;
-    
-    RectangleView *rectangleView = [self rectangleViewFromMainOperationView];
-    //遍历方框
-    for (int i = 0; i < rectangleView.mainView.subviews.count; i++) {
-        //如果不是当前素材 便隐藏内容
-        if(rectangleView.mainView.subviews[i] != view){
-            //如果方框中的类容是素材
-            if ([NSStringFromClass([rectangleView.mainView.subviews[i] class])isEqualToString:@"EditImageView"]) {
-                EditImageView *imageView = rectangleView.mainView.subviews[i];
-                imageView.isHide = YES;
-            }
-            //如果是聊天框
-            else if ([NSStringFromClass([rectangleView.mainView.subviews[i] class])isEqualToString:@"ZZTBubbleImageView"] && rectangleView.mainView.subviews[i] != view){
-                ZZTBubbleImageView *BubbleImageView = rectangleView.mainView.subviews[i];
-                BubbleImageView.isHide = YES;
-            }
-        }
-    }
-    for (int i = 0; i < MainOperationView.subviews.count; i++) {
-        //如果不是当前素材 便隐藏内容
-        if([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"EditImageView"] && MainOperationView.subviews[i] != view){
-            EditImageView *imageView = MainOperationView.subviews[i];
-            imageView.isHide = YES;
-        }//如果是聊天框
-        else if ([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"ZZTBubbleImageView"] && MainOperationView.subviews[i] != view){
-            ZZTBubbleImageView *BubbleImageView = MainOperationView.subviews[i];
-            BubbleImageView.isHide = YES;
-        }else if ([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"RectangleView"]){
-            //如果是方框
-            RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
-            if(rectangleView.mainView == self.mainView){
-                rectangleView.isHide = NO;
-            }else{
-                rectangleView.isHide = YES;
-            }
-        }
-    }
-}
+
 #pragma mark 恢复绘图素材
 -(EditImageView *)speedInitImageView:(ZZTEditImageViewModel *)model{
-
+    //位置
     EditImageView *imageView = [[EditImageView alloc] initWithFrame:model.imageViewFrame];
     imageView.delegate = self;
     //记录父类的名字
     imageView.superViewName = NSStringFromClass([self.mainView class]);
     [imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
     }];
-    
+    //旋转 和 放大数据
     if(model.scale || model.rad){
         imageView.transform = CGAffineTransformMakeScale(model.scale, model.scale);
         imageView.transform = CGAffineTransformRotate(imageView.transform,model.rad);
@@ -1230,8 +1238,9 @@
 
 //添加到图层之中去
 -(void)addEditImageView:(EditImageView *)imageView{
-    
+    //添加素材
     [self.mainView addSubview:imageView];
+    //隐藏除了View 以外的其他视图
     [self exceptCurrentViewHiddenOtherView:imageView];
 }
 
@@ -1356,11 +1365,10 @@
     NSMutableArray *imageArray = [NSMutableArray array];
    
     //循环截图
-    //多少个cell 截图多少次
+    //多少个cell 截图多少次   更新了 要变换才行
     for(int i = 0;i < self.cartoonEditArray.count;i++){
         //数据管理cell  数据错误
         ZZTCartoonDrawView *cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        cell.alpha = 1;
         //开启
         UIGraphicsBeginImageContextWithOptions(cell.bounds.size, NO, [UIScreen mainScreen].scale);
         
@@ -1449,6 +1457,7 @@
     [self setupMaterialLibraryView:@"文字"];
 }
 
+//弹出底部View
 -(void)setupMaterialLibraryView:(NSString *)str{
     [_materialLibraryView removeFromSuperview];
     CGFloat viewHeight = (SCREEN_HEIGHT - 88)/3;
@@ -1460,5 +1469,75 @@
     [self.view addSubview:_materialLibraryView];
 
 }
+#pragma mark 隐藏其他View的状态
+-(void)exceptCurrentViewHiddenOtherView:(UIView *)view{
+    self.currentView = view;
+    self.collectionView.scrollEnabled = NO;
+    
+    RectangleView *rectangleView = [self rectangleViewFromMainOperationView];
+    //遍历方框
+    for (int i = 0; i < rectangleView.mainView.subviews.count; i++) {
+        //如果不是当前素材 便隐藏内容
+        if(rectangleView.mainView.subviews[i] != view){
+            //如果方框中的类容是素材
+            if ([NSStringFromClass([rectangleView.mainView.subviews[i] class])isEqualToString:@"EditImageView"]) {
+                EditImageView *imageView = rectangleView.mainView.subviews[i];
+                imageView.isHide = YES;
+            }
+            //如果是聊天框
+            else if ([NSStringFromClass([rectangleView.mainView.subviews[i] class])isEqualToString:@"ZZTBubbleImageView"] && rectangleView.mainView.subviews[i] != view){
+                ZZTBubbleImageView *BubbleImageView = rectangleView.mainView.subviews[i];
+                BubbleImageView.isHide = YES;
+            }
+        }
+    }
+    for (int i = 0; i < MainOperationView.subviews.count; i++) {
+        //如果不是当前素材 便隐藏内容
+        if([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"EditImageView"] && MainOperationView.subviews[i] != view){
+            EditImageView *imageView = MainOperationView.subviews[i];
+            imageView.isHide = YES;
+        }//如果是聊天框
+        else if ([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"ZZTBubbleImageView"] && MainOperationView.subviews[i] != view){
+            ZZTBubbleImageView *BubbleImageView = MainOperationView.subviews[i];
+            BubbleImageView.isHide = YES;
+        }else if ([NSStringFromClass([MainOperationView.subviews[i] class])isEqualToString:@"RectangleView"]){
+            //如果是方框
+            RectangleView *rectangleView = self.currentCell.operationView.subviews[i];
+            if(rectangleView.mainView == self.mainView){
+                rectangleView.isHide = NO;
+            }else{
+                rectangleView.isHide = YES;
+            }
+        }
+    }
+}
+- (IBAction)previewTarget:(ToolBtn *)sender {
+    //预览
+    //截屏
+    //开启
+    UIGraphicsBeginImageContextWithOptions(_midView.bounds.size, NO, [UIScreen mainScreen].scale);
+    
+    UIImage *resultingImage = [[UIImage alloc] init];
+    [resultingImage drawInRect:CGRectMake(0, 0,_midView.bounds.size.width, _midView.bounds.size.height)];
+    
+    [_midView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    //放在一个view上
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    imageView.image = resultingImage;
+    _imageView = imageView;
+    [self.view addSubview:imageView];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeImageView)];
+    tap.numberOfTapsRequired = 1;
+    [imageView addGestureRecognizer:tap];
+}
 
+-(void)removeImageView{
+    [self.imageView removeFromSuperview];
+}
 @end

@@ -76,6 +76,8 @@
     //获得tag
     [self getBookType];
     
+    self.bookName.text = @"1";
+    
     //设置简介
     _introView.delegate = self;
     _introView.textColor = [UIColor blackColor];

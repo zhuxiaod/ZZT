@@ -24,13 +24,13 @@
     self.imageView.y = 0;
     self.imageView.centerX = self.width * 0.5;
 //    self.imageView.width = self.width - 2;
-    self.imageView.height = self.height * 0.7;
+    self.imageView.height = self.height * 0.6;
     
     //调整文字的位置和尺寸
     self.titleLabel.x = 0;
     self.titleLabel.y = self.imageView.height+5;
     self.titleLabel.width = self.width;
-    self.titleLabel.height = self.height * 0.2;
+    self.titleLabel.height = self.height * 0.3;
     
     self.adjustsImageWhenHighlighted = NO;
 }
