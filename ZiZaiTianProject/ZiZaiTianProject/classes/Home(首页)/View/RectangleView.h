@@ -41,4 +41,6 @@
 
 -(void)tapGestureTarget:(UITapGestureRecognizer *)gesture;
 
+-(void)removeGestureRecognizer;
+
 @end

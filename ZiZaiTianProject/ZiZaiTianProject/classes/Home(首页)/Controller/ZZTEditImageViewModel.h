@@ -29,5 +29,8 @@
 
 @property (nonatomic,assign) CGFloat rad;
 
-+(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl tagNum:(NSInteger )tagNum viewType:(NSInteger)viewType scale:(CGFloat)scale rad:(CGFloat)rad;
+@property (nonatomic,strong) UIImage *localResource;
+
++(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl tagNum:(NSInteger )tagNum viewType:(NSInteger)viewType scale:(CGFloat)scale rad:(CGFloat)rad localResource:(UIImage *)localResource;
+
 @end

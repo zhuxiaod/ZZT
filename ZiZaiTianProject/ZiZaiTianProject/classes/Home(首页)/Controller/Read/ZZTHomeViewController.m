@@ -122,7 +122,6 @@ NSString *SuggestionView = @"SuggestionView";
 
 #pragma mark - 设置添加滚动子页
 -(void)setupChildView{
-
     //阅读页
     ZZTReadTableView *readVC = [[ZZTReadTableView alloc] init];
     readVC.backgroundColor = [UIColor whiteColor];

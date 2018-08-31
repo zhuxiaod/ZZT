@@ -385,14 +385,14 @@ CGPoint legend_point;
 
     self.layer.masksToBounds = YES;
     
-    //删除
-    UITapGestureRecognizer *removeGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeGestureRecognizer:)];
+//    //删除
+    UITapGestureRecognizer *removeGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:nil];
     removeGestureRecognizer.numberOfTapsRequired = 3;
     [self addGestureRecognizer:removeGestureRecognizer];
 }
 
 #pragma mark - 删除事件
--(void)removeGestureRecognizer:(UITapGestureRecognizer *)gesture{
+-(void)removeGestureRecognizer{
     self.hidden = YES;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"removeRectangleView" object:self];
 }

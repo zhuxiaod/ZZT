@@ -56,7 +56,7 @@
 #define detailViewHeaderHeight 60
 #define ZZTAccessKey @"otsMMnYSaZw9UgT-OUFSc46m3UOVaqr-ysR07Dwq"
 #define ZZTSecretKey @"cJqacuOHqDq_zR4R4m2LUdFMRFMGUf8HC-1owpAw"
-#define ZZTBucket image
+#define ZZTBucket zztian
 #define MyLog(...) NSLog(__VA_ARGS__);
 /** 屏幕尺寸 */
 #define SCREEN_BOUNDS [UIScreen mainScreen].bounds
@@ -67,9 +67,9 @@
 #define keyStr @"ZIZAITIAN@666666"
 #define IV @"A-16-Byte-String"
 //本地
-//#define ZZTAPI @"http://192.168.0.165:8888/"
+#define ZZTAPI @"http://192.168.0.165:8888/"
 //测试
-#define ZZTAPI @"http://192.168.0.142:8888/"
+//#define ZZTAPI @"http://192.168.0.142:8888/"
 
 //#define ZZTAPI @"http://120.79.178.191:8888/"
 

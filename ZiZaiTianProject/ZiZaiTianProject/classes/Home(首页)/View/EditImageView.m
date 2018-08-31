@@ -7,6 +7,13 @@
 //
 
 #import "EditImageView.h"
+@interface EditImageView ()
+
+@property (nonatomic,assign) CGFloat scale;
+
+@property (nonatomic,assign) CGFloat rad;
+
+@end
 
 @implementation EditImageView
 
@@ -24,48 +31,48 @@
     _viewFrame = viewFrame;
 }
 - (void)addUI{
-//    [_borderView removeFromSuperview];
-//    [_editImgView removeFromSuperview];
-//    [_closeImgView removeFromSuperview];
-
-    
-    //间距 20
-    CGFloat space = 20;
-    //外框
-    //整个view
-    UIView *borderView = [[UIView alloc] initWithFrame:CGRectMake(space,space, self.frame.size.width-space*2, self.frame.size.height-space*2)];
-    borderView.backgroundColor = [UIColor clearColor];
-    borderView.layer.borderColor = [UIColor whiteColor].CGColor;
-    borderView.layer.borderWidth = 2;
-    borderView.layer.masksToBounds = YES;
-    [self addSubview:borderView];
-    _borderView = borderView;
-//
-    //编辑图标
-    UIImage *editImg = [UIImage imageNamed:@"Enlarge.png"];
-    
-    UIImageView *editImgView = [[UIImageView alloc] initWithFrame:CGRectMake(self.frame.size.width-editImg.size.width/2-5, -space, editImg.size.width, editImg.size.height)];
-    editImgView.image = editImg;
-    editImgView.center = CGPointMake(borderView.frame.origin.x+borderView.frame.size.width, borderView.frame.origin.y);
-    [self addSubview:editImgView];
-    _editImgView = editImgView;
-    
-    //关闭按钮
-    UIImage *norImage = [UIImage imageNamed:@"Close.png"];
-    UIImage *selImage = [UIImage imageNamed:@"Close.png"];
-    UIButton *closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    closeBtn.frame = CGRectMake(1, self.frame.size.height - space, norImage.size.width, norImage.size.height);
-    [closeBtn setImage:norImage forState:UIControlStateNormal];
-    [closeBtn setImage:selImage forState:UIControlStateHighlighted];
-    [closeBtn addTarget:self action:@selector(closeBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:closeBtn];
-    closeBtn.center = CGPointMake(borderView.frame.origin.x, borderView.frame.origin.y+borderView.frame.size.height);
-    _closeImgView = closeBtn;
-    
    _len = sqrt(self.frame.size.width/2*self.frame.size.width/2+self.frame.size.height/2*self.frame.size.height/2);
+    //放大缩小
+    UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(handlePich:)];
+    [self addGestureRecognizer:pinchGestureRecognizer];
+
+    //旋转
+    UIRotationGestureRecognizer *rotateRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleRotate:)];
+    [self addGestureRecognizer:rotateRecognizer];
 }
 
-- (void)closeBtnClick:(UIButton *)btn{
+-(void)handlePich:(UIPinchGestureRecognizer *)recognizer
+{
+    recognizer.view.transform = CGAffineTransformScale(recognizer.view.transform, recognizer.scale, recognizer.scale);
+    self.scale = recognizer.scale;
+    NSLog(@"%f",self.scale);
+    //试一下  写一个代理
+    if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewTransform:scale:rad:)]) {
+        [self.delegate updateImageViewTransform:self scale:recognizer.scale rad:self.rad];
+    }
+    recognizer.scale = 1;
+}
+
+-(void)handleRotate:(UIRotationGestureRecognizer *)recognizer
+{
+    if(recognizer.state == UIGestureRecognizerStateChanged){
+        recognizer.view.transform = CGAffineTransformRotate(recognizer.view.transform, recognizer.rotation);
+        self.rad = recognizer.rotation;
+        //试一下  写一个代理
+        if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewTransform:scale:rad:)]) {
+            [self.delegate updateImageViewTransform:self scale:self.scale rad:self.rad];
+        }
+        recognizer.rotation = 0;
+    }
+
+}
+
+/*
+调自己  然后隐藏
+删除数据的
+ */
+
+- (void)closeBtnClick{
     self.hidden = YES;
     //发送移除通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"remove" object:self];
@@ -77,9 +84,9 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(checkViewIsHidden:)]) {
         [self.delegate checkViewIsHidden:self];
     }
-    _borderView.hidden = NO;
-    _editImgView.hidden = NO;
-    _closeImgView.hidden = NO;
+//    _borderView.hidden = NO;
+//    _editImgView.hidden = NO;
+//    _closeImgView.hidden = NO;
 }
 -(void)setIsHide:(BOOL)isHide{
     _isHide = isHide;
@@ -96,9 +103,9 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(checkViewIsHidden:)]) {
         [self.delegate checkViewIsHidden:self];
     }
-    _borderView.hidden = YES;
-    _editImgView.hidden = YES;
-    _closeImgView.hidden = YES;
+//    _borderView.hidden = YES;
+//    _editImgView.hidden = YES;
+//    _closeImgView.hidden = YES;
 }
 //点击的开始
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
@@ -131,7 +138,6 @@
         _isMove = NO;
     }
 }
-
 
 //正在移动
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
@@ -169,7 +175,7 @@
     
         //试一下  写一个代理
         if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewTransform:scale:rad:)]) {
-            [self.delegate updateImageViewTransform:self scale:scale rad:rad];
+            [self.delegate updateImageViewTransform:self scale:self.scale rad:self.rad];
         }
     }
 }

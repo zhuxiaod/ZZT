@@ -24,7 +24,7 @@
 #import "ToolBtn.h"
 
 #define MainOperationView self.currentCell.operationView
-@interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate,RectangleViewDelegate,UIGestureRecognizerDelegate,ZZTBubbleImageViewDelegate>
+@interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate,RectangleViewDelegate,UIGestureRecognizerDelegate,ZZTBubbleImageViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 //工具栏
 @property (weak, nonatomic) IBOutlet ToolBtn *upBtn;
@@ -101,6 +101,11 @@
 @property (weak, nonatomic) IBOutlet ColorInButton *coloInBtn;
 
 @property (nonatomic,strong) UIImageView *imageView;
+
+@property (nonatomic,strong) UIButton *cannelBtn;
+
+@property (nonatomic,strong) UIImagePickerController *picker;
+
 @end
 
 @implementation ZZTCreatCartoonViewController
@@ -162,15 +167,34 @@
 //    注册移除image的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeEdit:) name:@"remove" object:NULL];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeRectangleView:) name:@"removeRectangleView" object:NULL];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeBubbleView:) name:@"removeBubbleView" object:NULL];
+
 
     //UICollectionView
     [self setupCollectionView];
 
+    //方框初始化
+//    [self setupRectangleView];
 //    ColorInButton *btn = [ColorInButton ColorInButtonView];
 //    btn.viewColor = [UIColor yellowColor];
 //    self.coloInBtn = btn;
 }
 
+-(void)setupRectangleView{
+    
+//    ZZTFangKuangModel *mode1 = [ZZTFangKuangModel initWithViewFrame:CGRectMake(5, 265, 200, _midView.height - 270) tagNum:self.tagNum];
+//    RectangleView *rectangView1 = [self createFuangKuangViewWithModel:mode1];
+//    [self addFangKuangModelWithView:rectangView1];
+//
+//    ZZTFangKuangModel *mode2 = [ZZTFangKuangModel initWithViewFrame:CGRectMake(150, 80, _midView.width - 155, _midView.height - 270) tagNum:self.tagNum];
+//    RectangleView *rectangView2 = [self createFuangKuangViewWithModel:mode2];
+//    [self addFangKuangModelWithView:rectangView2];
+//
+//    ZZTFangKuangModel *mode3 = [ZZTFangKuangModel initWithViewFrame:CGRectMake(5, 5, 200, 200) tagNum:self.tagNum];
+//    RectangleView *rectangView3 = [self createFuangKuangViewWithModel:mode3];
+//    [self addFangKuangModelWithView:rectangView3];
+
+}
 
 #pragma mark 设置工具栏按钮样式
 -(void)setupToolBtnStyle{
@@ -296,6 +320,7 @@
         }
         self.currentCell = cell;
         self.operationOnce = NO;
+        [self setupRectangleView];
     }
     //cell是否被选中
     cell.isSelect = model.isSelect;
@@ -367,7 +392,7 @@
             //取消所有方框的被选中状态
             if (MainOperationView.subviews[i] != self.mainView) {
                 RectangleView *rectangleView = MainOperationView.subviews[i];
-                rectangleView.mainView.backgroundColor = [UIColor whiteColor];
+//                rectangleView.mainView.backgroundColor = [UIColor whiteColor];
             }
         }
     }
@@ -432,16 +457,23 @@
             //如果是普通的素材
             if(model.viewType == 1){
                 //根据属性快速创建
-                EditImageView *imageView = [self speedInitImageView:model];
-                //重新记录数据
-                ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad];
+                ZZTEditImageViewModel *imageModel = [[ZZTEditImageViewModel alloc] init];
+                if(!model.imageUrl){
+                    EditImageView *imageView = [self speedInitImageView:model];
+                    //重新记录数据
+                    imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:nil tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad localResource:model.localResource];
+                }else{
+                    EditImageView *imageView = [self speedInitImageView:model];
+                    //重新记录数据
+                    imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad localResource:nil];
+                }
                 //不是方框可直接添加素材到cell之中
                 [cellModel.imageArray addObject:imageModel];
             }else{
                 //文字框
                 ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
                 //素材Model
-                ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 scale:model.scale rad:model.rad];
+                ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 scale:model.scale rad:model.rad localResource:nil];
                 //不是方框可直接添加素材到cell之中
                 [cellModel.imageArray addObject:imageModel];
             }
@@ -465,17 +497,23 @@
                         if(model.viewType == 1){
                             self.mainView = rectangView.mainView;
 
-                            EditImageView *imageView = [self speedInitImageView:model];
-                            //素材Model
-                            ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad];
-
+                            ZZTEditImageViewModel *imageModel = [[ZZTEditImageViewModel alloc] init];
+                            if(!model.imageUrl){
+                                EditImageView *imageView = [self speedInitImageView:model];
+                                //重新记录数据
+                                imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:nil tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad localResource:model.localResource];
+                            }else{
+                                EditImageView *imageView = [self speedInitImageView:model];
+                                //重新记录数据
+                                imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad localResource:nil];
+                            }
                             //不是方框可直接添加素材到cell之中
                             [fangKuangModel.viewArray addObject:imageModel];
                         }else{
                             self.mainView = rectangView.mainView;
                             ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
                             //素材Model
-                            ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 scale:model.scale rad:model.rad];
+                            ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 scale:model.scale rad:model.rad localResource:nil];
                             //不是方框可直接添加素材到cell之中
                             [fangKuangModel.viewArray addObject:imageModel];
                         }
@@ -869,6 +907,8 @@
 }
 
 #pragma 获取当前方框的模型
+
+#warning 文字框 这里是有问题的诶
 -(ZZTFangKuangModel *)rectangleModelFromView:(RectangleView *)rectangleView{
     //取到模型组  改变模型的数据
     ZZTFangKuangModel *model = [[ZZTFangKuangModel alloc] init];
@@ -914,7 +954,6 @@
     [MainOperationView addSubview:rectangView];
 
     return rectangView;
-
 }
 #pragma mark 添加方框模型
 -(ZZTFangKuangModel *)addFangKuangModelWithView:(RectangleView *)rectangleView{
@@ -1058,8 +1097,6 @@
     self.choiceColor = color;
 }
 
-- (IBAction)collect:(id)sender {
-}
 
 //收藏夹
 - (IBAction)favorite:(id)sender {
@@ -1094,7 +1131,7 @@
     //通过字符串创建
     EditImageView *imageView = [self speedInitImageViewWithStr:model.img];
     //存储数据
-    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.img tagNum:imageView.tagNum viewType:1 scale:0 rad:0];
+    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.img tagNum:imageView.tagNum viewType:1 scale:0 rad:0 localResource:nil];
     
     //方框内
     if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
@@ -1133,7 +1170,7 @@
     imageView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
     //素材Model
-    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.img tagNum:imageView.tagNum viewType:2 scale:0 rad:0];
+    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.img tagNum:imageView.tagNum viewType:2 scale:0 rad:0 localResource:nil];
     //如果是加入方框
     if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
         //如果可以加入素材 便加入图层
@@ -1208,9 +1245,14 @@
     EditImageView *imageView = [[EditImageView alloc] initWithFrame:model.imageViewFrame];
     imageView.delegate = self;
     //记录父类的名字
+    if(!model.imageUrl){
+        imageView.image = model.localResource;
+    }else{
+        [imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        }];
+    }
     imageView.superViewName = NSStringFromClass([self.mainView class]);
-    [imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-    }];
+
     //旋转 和 放大数据
     if(model.scale || model.rad){
         imageView.transform = CGAffineTransformMakeScale(model.scale, model.scale);
@@ -1255,10 +1297,21 @@
 }
 #pragma mark 素材旋转
 -(void)updateImageViewTransform:(EditImageView *)view scale:(CGFloat)scale rad:(CGFloat)rad{
+    CGFloat rotate = acosf(view.transform.a);
+    
+    // 旋转180度后，需要处理弧度的变化
+    
+    if (view.transform.b < 0) {
+        
+        rotate = M_PI*2 - rotate;
+        
+    }
+    
     ZZTEditImageViewModel *model = [self getImageViewModelWithView:view];
     model.imageViewFrame = view.frame;
     model.scale = scale;
-    model.rad = rad;
+    model.rad = rotate;
+//    NSLog(@"%f",rad);
 }
 #pragma mark 得到素材模型
 -(ZZTEditImageViewModel *)getImageViewModelWithView:(EditImageView *)view{
@@ -1310,7 +1363,7 @@
                                 @"modelType":modelType,
                                 @"modelSubtype":modelSubtype
                                 };
-    [AFNHttpTool POST:@"http://192.168.0.142:8888/fodder/fodderList" parameters:parameter success:^(id responseObject) {
+    [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"fodder/fodderList"] parameters:parameter success:^(id responseObject) {
         NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
         NSMutableArray *array = [ZZTFodderListModel mj_objectArrayWithKeyValuesArray:dic];
         self.dataSource = array;
@@ -1348,6 +1401,18 @@
         if(model.tagNum == rectangleView.tagNum){
             [cellModel.imageArray removeObject:model];
             [rectangleView removeFromSuperview];
+        }
+    }
+}
+
+-(void)removeBubbleView:(NSNotification *)notify{
+    ZZTBubbleImageView *bubbleImageView = notify.object;
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
+    for (int i = 0; i < cellModel.imageArray.count; i++) {
+        ZZTEditImageViewModel *model = cellModel.imageArray[i];
+        if(model.tagNum == bubbleImageView.tagNum){
+            [cellModel.imageArray removeObject:model];
+            [bubbleImageView removeFromSuperview];
         }
     }
 }
@@ -1461,11 +1526,11 @@
 -(void)setupMaterialLibraryView:(NSString *)str{
     [_materialLibraryView removeFromSuperview];
     CGFloat viewHeight = (SCREEN_HEIGHT - 88)/3;
-    CGFloat y = (SCREEN_HEIGHT - 44) - viewHeight;
+    CGFloat y = (SCREEN_HEIGHT - 30) - viewHeight;
     _materialLibraryView = [[ZZTMaterialLibraryView alloc] initWithFrame:CGRectMake(0, y, SCREEN_WIDTH, viewHeight)];
     _materialLibraryView.delagate = self;
     _materialLibraryView.str = str;
-    _materialLibraryView.backgroundColor = [UIColor whiteColor];
+    _materialLibraryView.backgroundColor = [UIColor colorWithHexString:@"#B1B1B1"];
     [self.view addSubview:_materialLibraryView];
 
 }
@@ -1511,6 +1576,8 @@
         }
     }
 }
+
+//预览
 - (IBAction)previewTarget:(ToolBtn *)sender {
     //预览
     //截屏
@@ -1527,17 +1594,181 @@
     UIGraphicsEndImageContext();
     
     //放在一个view上
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT)];
     imageView.image = resultingImage;
     _imageView = imageView;
+    self.collectionView.userInteractionEnabled = NO;
     [self.view addSubview:imageView];
-    
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeImageView)];
-    tap.numberOfTapsRequired = 1;
-    [imageView addGestureRecognizer:tap];
+    //取消btn
+    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    _cannelBtn = btn;
+    [btn addTarget:self action:@selector(removeImageView) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
 }
 
 -(void)removeImageView{
     [self.imageView removeFromSuperview];
+    [self.cannelBtn removeFromSuperview];
+    self.collectionView.userInteractionEnabled = YES;
+}
+
+- (IBAction)upload:(ToolBtn *)sender {
+    //初始化图像选择控制器
+    _picker = [[UIImagePickerController alloc]init];
+    _picker.allowsEditing = YES;  //重点是这两句
+    
+    //遵守代理
+    _picker.delegate =self;
+    //本地
+    [self alert];
+}
+-(void)alert{
+    //标题
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"请选择打开方式" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    //相机
+    UIAlertAction * camera = [UIAlertAction actionWithTitle:@"相机" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self pushCamera];
+    }];
+    //相册
+    UIAlertAction * photo = [UIAlertAction actionWithTitle:@"相册" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self pushPhotoAlbum];
+    }];
+    
+    //取消按钮
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }];
+    //添加各个按钮事件
+    [alert addAction:camera];
+    [alert addAction:photo];
+    [alert addAction:cancel];
+    //弹出sheet提示框
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+//调用相机
+-(void)pushCamera{
+    //告诉是哪一个btn
+    if ([UIImagePickerController isSourceTypeAvailable:
+         UIImagePickerControllerSourceTypeCamera])
+    {
+        // 将sourceType设为UIImagePickerControllerSourceTypeCamera代表拍照或拍视频
+        _picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        // 设置拍摄照片
+        _picker.cameraCaptureMode =UIImagePickerControllerCameraCaptureModePhoto;
+        // 设置使用手机的后置摄像头（默认使用后置摄像头）
+        _picker.cameraDevice =UIImagePickerControllerCameraDeviceRear;
+        // 设置使用手机的前置摄像头。
+        //picker.cameraDevice = UIImagePickerControllerCameraDeviceFront;
+        // 设置拍摄的照片允许编辑
+        _picker.allowsEditing =YES;
+    }else{
+        NSLog(@"模拟器无法打开摄像头");
+    }
+    // 显示picker视图控制器
+    [self presentViewController:_picker animated:YES completion:nil];
+}
+
+//调用相册
+-(void)pushPhotoAlbum{
+    //告诉是哪一个btn
+    //调用系统相册的类
+    //    _picker = [[UIImagePickerController alloc]init];
+    //设置选取的照片是否可编辑
+    _picker.allowsEditing = YES;
+    //设置相册呈现的样式
+    _picker.sourceType =  UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    //选择完成图片或者点击取消按钮都是通过代理来操作我们所需要的逻辑过程
+    //    _picker.delegate = self;
+    [self.navigationController presentViewController:_picker animated:YES completion:^{
+        
+    }];
+}
+
+#pragma mark - 相册代理
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
+
+    UIImage *resultImage = [info objectForKey:@"UIImagePickerControllerEditedImage"];
+    //生成素材
+    //获取当前行的数据
+    ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
+
+    //创建坐标默认
+    EditImageView *imageView = [[EditImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 100, 100)];
+    imageView.delegate = self;
+    //记录父类的名字
+    imageView.superViewName = NSStringFromClass([self.mainView class]);
+    [imageView setImage:resultImage];
+    //设置tag值
+    imageView.tagNum = self.tagNum;
+    self.tagNum = self.tagNum + 1;
+    imageView.superViewTag = self.mainView.tag;
+    //存储数据
+    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:nil tagNum:imageView.tagNum viewType:1 scale:0 rad:0 localResource:resultImage];
+    
+    //得到选择的本地图片
+    //展示
+    //1.能展示
+    //保存
+    //1.方便以后的操作的话 应该怎么搞？
+    //2.我是存图片  还是存地址
+    //如果是操作数据上传的话  我需要传地址
+    //不上传的话  只需要图片就ok 了
+    
+    //方框内
+    if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
+        //如果可以加入素材 便加入图层
+        if(self.isAddM == YES){
+            [self.mainView addSubview:imageView];
+            //要方框数据
+            ZZTFangKuangModel *FKModel = [self rectangleModelFromView:self.currentRectangleView];
+            [FKModel.viewArray addObject:imageModel];
+            [self exceptCurrentViewHiddenOtherView:imageView];
+        }else{
+            //否则失败
+            NSLog(@"必须放大View以后才能添加素材");
+        }
+    }else{
+        //不是方框可直接添加素材到cell之中
+        [cellModel.imageArray addObject:imageModel];
+        [self.mainView addSubview:imageView];
+        [self exceptCurrentViewHiddenOtherView:imageView];
+    }
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+- (IBAction)deletView:(ToolBtn *)sender {
+    //得到当前view
+    //判断是什么view
+//    删除
+    if([NSStringFromClass([self.currentView class]) isEqualToString:@"EditImageView"]){
+        EditImageView *view = (EditImageView *)self.currentView;
+        [view closeBtnClick];
+    }else if([NSStringFromClass([self.currentView class]) isEqualToString:@"ZZTBubbleImageView"]){
+        ZZTBubbleImageView *view = (ZZTBubbleImageView *)self.currentView;
+        [view deleteControlTapAction];
+    }else if([NSStringFromClass([self.currentView class]) isEqualToString:@"RectangleView"]){
+        RectangleView *view = (RectangleView *)self.currentView;
+        [view removeGestureRecognizer];
+        self.currentView = MainOperationView;
+    }
+}
+
+#pragma mark - 加入方框
+-(void)sendTuKuangWithModel:(ZZTFodderListModel *)model{
+    //判断是黑的还是白的
+    if([model.owner isEqualToString:@"0"]){
+        //黑
+        RectangleView *rectangleView = [self createFuangKuangViewWithModel:nil];
+        rectangleView.mainView.backgroundColor = [UIColor blackColor];
+        //添加方框模型
+        [self addFangKuangModelWithView:rectangleView];
+        
+    }else{
+        //白
+        RectangleView *rectangleView = [self createFuangKuangViewWithModel:nil];
+        rectangleView.mainView.backgroundColor = [UIColor whiteColor];
+        //添加方框模型
+        [self addFangKuangModelWithView:rectangleView];
+    }
 }
 @end

@@ -29,6 +29,7 @@
 @property (nonatomic,strong)NSString *fodderType;
 @property (nonatomic,strong)NSString *modelType;
 @property (nonatomic,strong)NSString *modelSubtype;
+
 @end
 
 @implementation ZZTMaterialLibraryView
@@ -75,16 +76,19 @@
 //分三层 如何分层 我要写一个 低配版的
 - (instancetype)initWithFrame:(CGRect)frame{
     if(self = [super initWithFrame:frame]){
+        
+        self.backgroundColor = [UIColor colorWithHexString:@"#B1B1B1"];
         //素材库
         UICollectionViewFlowLayout *layout = [self setupCollectionViewFlowLayout];
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.backgroundColor = [UIColor colorWithHexString:@"#B1B1B1"];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.frame = CGRectMake(0, 60, Screen_Width, self.height - 60 - 5);
         _collectionView.showsVerticalScrollIndicator = NO;
         [_collectionView registerClass:[ZZTMaterialLibraryCell class] forCellWithReuseIdentifier:@"cell"];
         [self addSubview:_collectionView];
+        
         //解析json
         NSArray *arr = [self JsonObject:@"materialLibrary.json"];
         self.materialLibrary = [ZZTKindModel mj_objectArrayWithKeyValuesArray:arr];
@@ -113,9 +117,9 @@
             //创建三级的视图
             [self creatTypeView:_typs];
         }
-        
     }
 }
+
 //3级视图创建时 触发
 -(void)btnIndex:(NSNotification *)text{
     NSLog(@"111%@",text.userInfo[@"text"]);
@@ -155,8 +159,8 @@
     [_MaterialKindView removeFromSuperview];
 
     _MaterialKindView = [[ZZTMaterialKindView alloc] init:kinds Width:SCREEN_WIDTH];
-    _MaterialKindView.frame = CGRectMake(0, 5, SCREEN_WIDTH, 20);
-    _MaterialKindView.backgroundColor = [UIColor blackColor];
+    _MaterialKindView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 30);
+    _MaterialKindView.backgroundColor = [UIColor colorWithHexString:@"#E1E2E3"];
     [self addSubview:_MaterialKindView];
 }
 
@@ -169,13 +173,13 @@
     [self addSubview:_materialTypeView];
 }
 
-
 //代理方法
 -(void)getData:(NSString *)fodderType modelType:(NSString *)modelType modelSubtype:(NSString *)modelSubtype{
     if (self.delagate && [self.delagate respondsToSelector:@selector(sendRequestWithStr:modelType:modelSubtype:)]) {
         [self.delagate sendRequestWithStr:fodderType modelType:modelType modelSubtype:modelSubtype];
     }
 }
+
 -(UICollectionViewFlowLayout *)setupCollectionViewFlowLayout{
     
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
@@ -215,17 +219,23 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     //获取View的信息
     ZZTFodderListModel *model = self.dataSource[indexPath.row];
-   
+    model.owner = [NSString stringWithFormat:@"%ld",indexPath.row];
+    
     if([self.str isEqualToString:@"文字"]){
         //设置一个文字的代理方法
         if(self.delagate && [self.delagate respondsToSelector:@selector(sendTextImageWithModel:)]){
             [self.delagate sendTextImageWithModel:model];
+        }
+    }else if([self.fodderType isEqualToString:@"1"] && [self.modelType isEqualToString:@"1"] && [self.modelSubtype isEqualToString:@"1"]){
+        if(self.delagate && [self.delagate respondsToSelector:@selector(sendTuKuangWithModel:)]){
+            [self.delagate sendTuKuangWithModel:model];
         }
     }else{
         if(self.delagate && [self.delagate respondsToSelector:@selector(sendImageWithModel:)]){
             [self.delagate sendImageWithModel:model];
         }
     }
+    //如果是方框
 }
 
 -(void)dealloc{

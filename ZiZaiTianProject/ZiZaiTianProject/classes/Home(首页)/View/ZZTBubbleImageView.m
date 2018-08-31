@@ -108,33 +108,33 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2)
         ////创建TextView
         [self createTextViewWithFrame:CGRectZero text:nil font:nil];
         
-        //旋转 以后要添加点击状态
-        self.resizingControl = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, IMAGE_ICON_SIZE, IMAGE_ICON_SIZE)];
-        self.resizingControl.image = [UIImage imageNamed:@"Enlarge.png"];
-        //        self.resizingControl.backgroundColor = [UIColor redColor];
-        self.resizingControl.userInteractionEnabled = YES;
-        [self addSubview:self.resizingControl];
+//        //旋转 以后要添加点击状态
+//        self.resizingControl = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, IMAGE_ICON_SIZE, IMAGE_ICON_SIZE)];
+//        self.resizingControl.image = [UIImage imageNamed:@"Enlarge.png"];
+//        //        self.resizingControl.backgroundColor = [UIColor redColor];
+//        self.resizingControl.userInteractionEnabled = YES;
+//        [self addSubview:self.resizingControl];
         
-        //删除
-        self.deleteControl = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, IMAGE_ICON_SIZE, IMAGE_ICON_SIZE)];
-        self.deleteControl.image = [UIImage imageNamed:@"Close.png"];
-        //        self.deleteControl.backgroundColor = [UIColor purpleColor];
-        self.deleteControl.userInteractionEnabled = YES;
-        [self addSubview:self.deleteControl];
+//        //删除
+//        self.deleteControl = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, IMAGE_ICON_SIZE, IMAGE_ICON_SIZE)];
+//        self.deleteControl.image = [UIImage imageNamed:@"Close.png"];
+//        //        self.deleteControl.backgroundColor = [UIColor purpleColor];
+//        self.deleteControl.userInteractionEnabled = YES;
+//        [self addSubview:self.deleteControl];
         
-        //关闭
-        UITapGestureRecognizer *closeTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(deleteControlTapAction:)];
-        [self.deleteControl addGestureRecognizer:closeTap];
+//        //关闭
+//        UITapGestureRecognizer *closeTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(deleteControlTapAction:)];
+//        [self.deleteControl addGestureRecognizer:closeTap];
         
         //移动
         UIPanGestureRecognizer *moveGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveGestureAction:)];
         [self addGestureRecognizer:moveGesture];
         
         //旋转
-        UIPanGestureRecognizer *panRotateGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(rotateViewPanGesture:)];
-        [self.resizingControl addGestureRecognizer:panRotateGesture];
+        UIRotationGestureRecognizer *panRotateGesture = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotateViewPanGesture:)];
+        [self addGestureRecognizer:panRotateGesture];
         
-        [moveGesture requireGestureRecognizerToFail:closeTap];
+//        [moveGesture requireGestureRecognizerToFail:closeTap];
         
         [self layoutSubViewWithFrame:frame];
         
@@ -176,8 +176,13 @@ CG_INLINE CGFloat CGPointGetDistance(CGPoint point1, CGPoint point2)
 }
 
 #pragma mark - 删除
--(void)deleteControlTapAction:(UIGestureRecognizer *)gesture{
-    [self removeFromSuperview];
+-(void)deleteControlTapAction{
+//    [self removeFromSuperview];
+    
+    self.hidden = YES;
+    //发送移除通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"removeBubbleView" object:self];
+    
     //    if([self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidClose:)]) {
     //        [self.bubbleDelegate bubbleViewDidClose:self];
     //    }

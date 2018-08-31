@@ -22,7 +22,7 @@
     //调整图片的位置和尺寸
 
     //    self.imageView.width = self.width - 2;
-    self.imageView.width = self.width * 0.8;
+    self.imageView.width = self.width * 0.6;
 //    self.imageView.height = self.height * 0.7;
     self.imageView.height = self.imageView.width;
     //位置写在后面

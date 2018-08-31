@@ -6,15 +6,15 @@
                "type": "推荐",
                "typeList": [{
                             "detailCode": "1",
-                            "detail": "2格"
+                            "detail": "方框"
                             },
                             {
                             "detailCode": "2",
-                            "detail": "3格"
+                            "detail": "圆框"
                             },
                             {
                             "detailCode": "3",
-                            "detail": "4格"
+                            "detail": "梯形"
                             }
                             ]
                },

@@ -11,7 +11,7 @@
 @implementation ZZTEditImageViewModel
 
 //快速创建一个对象
-+(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl tagNum:(NSInteger )tagNum viewType:(NSInteger)viewType scale:(CGFloat)scale rad:(CGFloat)rad{
++(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl tagNum:(NSInteger )tagNum viewType:(NSInteger)viewType scale:(CGFloat)scale rad:(CGFloat)rad localResource:(UIImage *)localResource{
     ZZTEditImageViewModel *imageModel = [[ZZTEditImageViewModel alloc] init];
     imageModel.imageViewFrame = imageViewFrame;
     imageModel.imageUrl = imageUrl;
@@ -19,6 +19,7 @@
     imageModel.viewType = viewType;
     imageModel.rad = rad;
     imageModel.scale = scale;
+    imageModel.localResource = localResource;
     return imageModel;
 }
 

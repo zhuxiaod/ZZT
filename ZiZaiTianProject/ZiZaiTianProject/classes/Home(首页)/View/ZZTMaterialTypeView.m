@@ -82,9 +82,13 @@
     self.recodeStr = btn.titleLabel.text;
     for (UIButton *button in self.buttons) {
         if([btn.titleLabel.text isEqualToString:button.titleLabel.text]){
+            //被选中按钮
             button.selected = YES;
             [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            [button setBackgroundColor:[UIColor blueColor]];
+            [button setBackgroundColor:[UIColor colorWithHexString:@"#4AA1FC"]];
+            button.layer.cornerRadius = 5.0f;
+            button.layer.borderWidth = 1.0f;
+            button.layer.borderColor = [UIColor colorWithHexString:@"#0069C3"].CGColor;
             //代理传值
             NSDictionary *dic = @{
                                   @"text":btn.titleLabel.text
@@ -93,8 +97,11 @@
             [[NSNotificationCenter defaultCenter] postNotification:notification];
         }else{
             button.selected = NO;
-            [button setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-            [button setBackgroundColor:[UIColor whiteColor]];
+            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [button setBackgroundColor:[UIColor colorWithHexString:@"#A1A2A3"]];
+            button.layer.cornerRadius = 5.0f;
+            button.layer.borderWidth = 2.0f;
+            button.layer.borderColor = [UIColor colorWithHexString:@"#5C5D5E"].CGColor;
         }
     }
 }

@@ -9,6 +9,8 @@
 #import "ZZTMaterialKindView.h"
 #import "ZZTKindModel.h"
 #import "ZZTTypeModel.h"
+#import "RankButton.h"
+
 @interface ZZTMaterialKindView()
 {
     CGFloat Btnx;
@@ -49,7 +51,7 @@
 
 -(void)initButtons{
     CGFloat W = _btnWidth;
-    CGFloat H = 20;
+    CGFloat H = 30;
     //每行列数
     NSInteger rank = _buttonData.count;
     //每列间距
@@ -66,9 +68,11 @@
         NSUInteger Y = (i / rank) * (H +rowMargin);
         //Item top
         ZZTTypeModel *model = self.buttonData[i];
-        UIButton *btn = [[UIButton alloc] init];
+        //修改btn的样式
+        RankButton *btn = [[RankButton alloc] init];
         [btn setTitle:model.type forState:UIControlStateNormal];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+
         btn.frame = CGRectMake(X, Y, W, H);
         btn.selected = NO;
         btn.tag = index;
@@ -85,8 +89,9 @@
     for (UIButton *button in self.buttons) {
         if([btn.titleLabel.text isEqualToString:button.titleLabel.text]){
             button.selected = YES;
-            [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            [button setBackgroundColor:[UIColor blackColor]];
+            [btn setTitleColor:[UIColor colorWithHexString:@"#7B7BE4"] forState:UIControlStateNormal];
+//            [button setBackgroundColor:[UIColor blackColor]];
+            [btn setImage:[UIImage imageNamed:@"排行榜-当前榜单"] forState:UIControlStateNormal];
             //代理传值
             NSDictionary *dic = @{
                                   @"text":btn.titleLabel.text
@@ -98,7 +103,7 @@
         }else{
             button.selected = NO;
             [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [button setBackgroundColor:[UIColor whiteColor]];
+            [button setImage:nil forState:UIControlStateNormal];
         }
     }
 }

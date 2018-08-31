@@ -30,6 +30,7 @@
 
 //背景图
 @property (nonatomic,strong) NSString *backImg;
+
 @property (nonatomic,strong) UIImage *backImage;
 //头像图
 @property (nonatomic,strong) NSString *headImg;

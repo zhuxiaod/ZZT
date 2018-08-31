@@ -41,4 +41,6 @@
 
 -(instancetype)initWithFrame:(CGRect)frame text:(NSString *)text;
 
+-(void)deleteControlTapAction;
+
 @end

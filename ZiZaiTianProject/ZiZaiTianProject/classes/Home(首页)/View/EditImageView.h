@@ -62,5 +62,7 @@
 
 @property (nonatomic,assign) NSInteger tagNum;
 
+//素材删除
+- (void)closeBtnClick;
 
 @end
