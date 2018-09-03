@@ -39,6 +39,7 @@
 @property (nonatomic,strong) UIPanGestureRecognizer *click3;
 @property (nonatomic,strong) UIPanGestureRecognizer *click4;
 @property (nonatomic,strong) UIButton *centerBtn;
+
 @end
 
 @implementation RectangleView
@@ -84,6 +85,7 @@ int i = 0;
 
     }
 }
+
 #pragma mark - 对边操作
 -(void)tapTarget:(UIPanGestureRecognizer *)panGesture{
     //改变变量

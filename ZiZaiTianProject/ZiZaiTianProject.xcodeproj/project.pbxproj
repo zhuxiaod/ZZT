@@ -243,6 +243,7 @@
 		04DE14AC20E4E691009DF030 /* ZZTCartoonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04DE14AA20E4E691009DF030 /* ZZTCartoonCell.xib */; };
 		04DE14B020E5015F009DF030 /* ZZTPlayCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 04DE14AE20E5015F009DF030 /* ZZTPlayCell.m */; };
 		04DE14B120E50160009DF030 /* ZZTPlayCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04DE14AF20E5015F009DF030 /* ZZTPlayCell.xib */; };
+		04E49F93213D5C57007EE617 /* ZZTJiXuYueDuModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E49F92213D5C57007EE617 /* ZZTJiXuYueDuModel.m */; };
 		04E6D49520EC6B4E00116085 /* ZZTMeEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6D49320EC6B4E00116085 /* ZZTMeEditViewController.m */; };
 		04E6D49920EC71A500116085 /* ZZTMeEditTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E6D49820EC71A500116085 /* ZZTMeEditTopView.m */; };
 		04E6D49B20EC71B500116085 /* ZZTMeEditTopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04E6D49A20EC71B500116085 /* ZZTMeEditTopView.xib */; };
@@ -681,6 +682,8 @@
 		04DE14AD20E5015F009DF030 /* ZZTPlayCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTPlayCell.h; sourceTree = "<group>"; };
 		04DE14AE20E5015F009DF030 /* ZZTPlayCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTPlayCell.m; sourceTree = "<group>"; };
 		04DE14AF20E5015F009DF030 /* ZZTPlayCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZZTPlayCell.xib; sourceTree = "<group>"; };
+		04E49F91213D5C57007EE617 /* ZZTJiXuYueDuModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTJiXuYueDuModel.h; sourceTree = "<group>"; };
+		04E49F92213D5C57007EE617 /* ZZTJiXuYueDuModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTJiXuYueDuModel.m; sourceTree = "<group>"; };
 		04E6D49220EC6B4E00116085 /* ZZTMeEditViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTMeEditViewController.h; sourceTree = "<group>"; };
 		04E6D49320EC6B4E00116085 /* ZZTMeEditViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTMeEditViewController.m; sourceTree = "<group>"; };
 		04E6D49720EC71A500116085 /* ZZTMeEditTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTMeEditTopView.h; sourceTree = "<group>"; };
@@ -1300,6 +1303,8 @@
 		F7C04C0320DF3E9E0055E7A8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				04E49F91213D5C57007EE617 /* ZZTJiXuYueDuModel.h */,
+				04E49F92213D5C57007EE617 /* ZZTJiXuYueDuModel.m */,
 				046683B820F4626C0095C6BC /* ZXDCartoonFlexoBtn.h */,
 				046683B920F4626C0095C6BC /* ZXDCartoonFlexoBtn.m */,
 				046683BB20F4817D0095C6BC /* ZZTEasyBtnModel.h */,
@@ -1682,6 +1687,7 @@
 				04E6D49E20EC736400116085 /* ZZTMeEditButtomView.m in Sources */,
 				0484E7E7210B02E700C39369 /* ZZTAddLengthFooterView.m in Sources */,
 				049A99DB20E3879700ED27C9 /* ZZTVIPViewController.m in Sources */,
+				04E49F93213D5C57007EE617 /* ZZTJiXuYueDuModel.m in Sources */,
 				0498B5D3212D5E47005BD26D /* ZZTWordDetailViewController.m in Sources */,
 				04772101210823EC00FC97B5 /* ZZTImageEditView.m in Sources */,
 				046FF65621017921005DED73 /* BaseModel.m in Sources */,

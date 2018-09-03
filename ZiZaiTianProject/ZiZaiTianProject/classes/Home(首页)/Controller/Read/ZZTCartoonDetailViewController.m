@@ -17,6 +17,7 @@
 #import "ZZTStoryDetailCell.h"
 #import "ZZTStoryModel.h"
 #import "UITableView+FDTemplateLayoutCell.h"
+#import "ZZTJiXuYueDuModel.h"
 
 @interface ZZTCartoonDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -30,6 +31,8 @@
 @property (nonatomic,assign) BOOL isNavHide;
 
 @property (nonatomic,strong) UILabel *titleLabel;
+
+@property (nonatomic,strong) ZZTJiXuYueDuModel *model;
 
 @end
 
@@ -275,4 +278,50 @@ NSString *storyDe = @"storyDe";
     [self.navigationController setNavigationBarHidden:velocity.y > 0 animated:YES];
 
 }
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    UITableViewCell *cell = [self.tableView visibleCells].firstObject;
+    NSIndexPath *index = [self.tableView indexPathForCell:cell];
+    NSLog(@"第几组%ld::::第几个%ld",index.section,index.row);
+    
+    //用一个模型来保存
+    self.model.bookIndex = [NSString stringWithFormat:@"%@",self.model.readIndex];
+    self.model.bookName = self.viewTitle;
+    ZZTCartoonModel *model = self.cartoonDetailArray[0];
+    self.model.bookChapter = model.chapterId;
+}
+
+-(ZZTJiXuYueDuModel *)model{
+    if(!_model){
+        _model = [[ZZTJiXuYueDuModel alloc] init];
+    }
+    return _model;
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    //将字典保存到document文件->获取appdocument路径
+    NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    
+    NSString *filePath = [docPath stringByAppendingPathComponent:@"BOOK.plist"];
+    
+    //加载数组
+    NSArray *dicArray = [ZZTJiXuYueDuModel mj_objectArrayWithFilename:filePath];
+    ZZTJiXuYueDuModel *model1 = [[ZZTJiXuYueDuModel alloc] init];
+
+    for (ZZTJiXuYueDuModel *model2 in dicArray) {
+        if([model2.bookName isEqualToString:self.viewTitle]){
+            model1 = model2;
+            model1.bookChapter = self.model.bookChapter;
+            model1.bookIndex = self.model.bookIndex;
+            break;
+        }
+    }
+    //存入
+    [[NSUserDefaults standardUserDefaults] setObject:dicArray forKey:@"UserReader"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    
+}
+
 @end

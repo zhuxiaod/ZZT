@@ -106,6 +106,8 @@
 
 @property (nonatomic,strong) UIImagePickerController *picker;
 
+@property (nonatomic,strong) ZZTBubbleImageView *bubbleImageView;
+
 @end
 
 @implementation ZZTCreatCartoonViewController
@@ -344,6 +346,9 @@
 //数据要用model来装才行
 #pragma mark 点击CollectionViewCell 触发事件
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+//    if([NSStringFromClass([self.currentView class])isEqualToString:@"ZZTBubbleImageView"]){
+//        return;
+//    }
     //获取cell
     ZZTDIYCellModel *model = self.cartoonEditArray[indexPath.row];
     self.mainView = MainOperationView;
@@ -372,6 +377,7 @@
         [self cannelFangKuangColor];
     }{
         self.isMoveAfter = NO;
+        [self bubbleViewDidBeginEditing:self.bubbleImageView];
     }
 
     //改变选中状态
@@ -600,10 +606,10 @@
 -(ZZTBubbleImageView *)createBubbleImageViewWithModel:(ZZTEditImageViewModel *)model{
     //文字没有保存
     //恢复数据
-    ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:model.imageViewFrame text:@"请点击输入内容"];
+    ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:model.imageViewFrame text:@"请点击输入内容" superView:self.mainView];
     imageView.bubbleDelegate = self;
     imageView.superViewName = NSStringFromClass([self.mainView class]);
-    [imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl]];
+    [imageView.imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl]];
     //设置tag值
     imageView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
@@ -706,7 +712,7 @@
     }else if([NSStringFromClass([self.currentView class]) isEqualToString:@"ZZTBubbleImageView"]){
         ZZTBubbleImageView *currentView = (ZZTBubbleImageView *)self.currentView;
         if(currentView && currentView.isHide == NO){
-            currentView.image = [currentView.image flipHorizontal];
+            currentView.imageView.image = [currentView.imageView.image flipHorizontal];
         }
     }
 }
@@ -1162,10 +1168,10 @@
 
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
 
-    ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 100, 100) text:@"请点击输入内容"];
+    ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 100, 100) text:@"请点击输入内容" superView:self.mainView];
     imageView.bubbleDelegate = self;
     imageView.superViewName = NSStringFromClass([self.mainView class]);
-    [imageView sd_setImageWithURL:[NSURL URLWithString:model.img]];
+    [imageView.imageView sd_setImageWithURL:[NSURL URLWithString:model.img]];
     //设置tag值
     imageView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
@@ -1196,7 +1202,12 @@
 
 //设置当前View
 -(void)bubbleViewDidBeginEditing:(ZZTBubbleImageView *)bubbleView{
+    self.isMoveAfter = YES;
+    self.bubbleImageView = bubbleView;
     [self exceptCurrentViewHiddenOtherView:bubbleView];
+}
+-(void)bubbleViewDidBeginEnd:(ZZTBubbleImageView *)bubbleView{
+    
 }
 #pragma mark 文字框移动
 -(void)bubbleViewDidBeginMoving:(ZZTBubbleImageView *)bubbleView{
@@ -1420,6 +1431,8 @@
 //隐藏所有Btn的状态 bug
 - (void)hideAllBtn{
     UIView *view = [[UIView alloc] init];
+  
+
     [self exceptCurrentViewHiddenOtherView:view];
 }
 
@@ -1532,7 +1545,6 @@
     _materialLibraryView.str = str;
     _materialLibraryView.backgroundColor = [UIColor colorWithHexString:@"#B1B1B1"];
     [self.view addSubview:_materialLibraryView];
-
 }
 #pragma mark 隐藏其他View的状态
 -(void)exceptCurrentViewHiddenOtherView:(UIView *)view{

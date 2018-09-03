@@ -11,5 +11,7 @@
 @interface ZZTCartoonContentCell : UITableViewCell
 
 @property (nonatomic,strong,readonly) UIImageView *content;
+
 @property (nonatomic,strong) ZZTCartoonModel *model;
+
 @end

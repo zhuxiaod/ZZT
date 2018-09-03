@@ -80,7 +80,11 @@
 /** RGB色 + 透明度 */
 #define RGB_alphaColor(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 
-#define http://192.168.0.165:8888/
+
+
+
+
+
 #endif /* ZiZaiTianProject_pch */
 
 

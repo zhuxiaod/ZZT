@@ -18,11 +18,13 @@
 
 - (void)bubbleViewDidBeginMoving:(ZZTBubbleImageView *)bubbleView;
 
+- (void)bubbleViewDidBeginEnd:(ZZTBubbleImageView *)bubbleView;
+
 - (void)bubbleViewDidRotate:(ZZTBubbleImageView *)bubbleView rad:(CGFloat)rad;
 
 @end
 
-@interface ZZTBubbleImageView : UIImageView<UITextViewDelegate,UIGestureRecognizerDelegate>
+@interface ZZTBubbleImageView : UIView<UITextViewDelegate,UIGestureRecognizerDelegate>
 //当前字体
 @property (retain, nonatomic) UIFont *curFont;
 //最小字体字号
@@ -37,9 +39,15 @@
 @property (nonatomic,strong) ZZTEditImageViewModel *model;
 
 @property (nonatomic,assign) NSInteger tagNum;
+
 @property (nonatomic,strong) NSString *superViewName;
 
--(instancetype)initWithFrame:(CGRect)frame text:(NSString *)text;
+@property (nonatomic,strong) UIView *superView;
+
+@property (nonatomic,strong) UIImageView *imageView;
+
+
+-(instancetype)initWithFrame:(CGRect)frame text:(NSString *)text superView:(UIView *)superView;
 
 -(void)deleteControlTapAction;
 

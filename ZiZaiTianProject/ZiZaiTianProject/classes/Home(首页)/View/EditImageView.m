@@ -7,6 +7,7 @@
 //
 
 #import "EditImageView.h"
+
 @interface EditImageView ()
 
 @property (nonatomic,assign) CGFloat scale;
@@ -30,6 +31,7 @@
 -(void)setViewFrame:(CGRect)viewFrame{
     _viewFrame = viewFrame;
 }
+
 - (void)addUI{
    _len = sqrt(self.frame.size.width/2*self.frame.size.width/2+self.frame.size.height/2*self.frame.size.height/2);
     //放大缩小
@@ -71,7 +73,6 @@
 调自己  然后隐藏
 删除数据的
  */
-
 - (void)closeBtnClick{
     self.hidden = YES;
     //发送移除通知
@@ -107,6 +108,7 @@
 //    _editImgView.hidden = YES;
 //    _closeImgView.hidden = YES;
 }
+
 //点击的开始
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     //方框的
