@@ -44,9 +44,14 @@ NSString *SuggestionView = @"SuggestionView";
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    UINavigationBar *nab = [UINavigationBar appearanceWhenContainedInInstancesOfClasses:@[[UIView class]]];
-//    
-//    [nab setBackgroundImage:[UIImage createImageWithColor:[UIColor colorWithHexString:@""]] forBarMetrics:UIBarMetricsDefault];
+    //设置导航条的背景图片
+    UIImage *image = [UIImage imageNamed:@"APP架构-作品-顶部渐变条-IOS"];
+    // 设置左边端盖宽度
+    NSInteger leftCapWidth = image.size.width * 0.5;
+    // 设置上边端盖高度
+    NSInteger topCapHeight = image.size.height * 0.5;
+    UIImage *newImage = [image stretchableImageWithLeftCapWidth:leftCapWidth topCapHeight:topCapHeight];
+    [self.navigationController.navigationBar setBackgroundImage:newImage forBarMetrics:UIBarMetricsDefault];
     
     self.view.backgroundColor = [UIColor colorWithHexString:@"#58006E"];
     
@@ -107,7 +112,7 @@ NSString *SuggestionView = @"SuggestionView";
     lc.hasSelectAnimate = YES;
     //选择时的颜色
     lc.labelSelectTextColor = [UIColor whiteColor];
-    lc.labelTextColor = [UIColor grayColor];
+    lc.labelTextColor = [UIColor colorWithHexString:@"#0D2882"];
     lc.font       = [UIFont systemFontOfSize:14];
     lc.spaceing   = SPACEING;
     lc.labelWidth = listViewItemSize;

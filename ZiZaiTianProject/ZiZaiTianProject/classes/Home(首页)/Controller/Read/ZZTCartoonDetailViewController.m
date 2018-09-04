@@ -32,6 +32,10 @@
 
 @property (nonatomic,strong) UILabel *titleLabel;
 
+@property (nonatomic,assign) BOOL isOnce;
+
+@property (nonatomic,assign) BOOL isJXYD;
+
 @property (nonatomic,strong) ZZTJiXuYueDuModel *model;
 
 @end
@@ -86,6 +90,11 @@ NSString *storyDe = @"storyDe";
     
     //title
     [self setupTitleView];
+    
+    self.isOnce = NO;
+    if(self.model){
+        self.isOnce = YES;
+    }
 }
 
 //中间内容
@@ -185,6 +194,8 @@ NSString *storyDe = @"storyDe";
             NSArray *array = [ZZTCartoonModel mj_objectArrayWithKeyValuesArray:dic];
             weakSelf.cartoonDetailArray = array;
             [self.tableView reloadData];
+//            [self.tableView layoutIfNeeded];
+            [self reloadCellWithIndex];
         } failure:^(NSError *error) {
             
         }];
@@ -199,6 +210,8 @@ NSString *storyDe = @"storyDe";
             NSArray *array = [ZZTStoryModel mj_objectArrayWithKeyValuesArray:dic];
             weakSelf.cartoonDetailArray = array;
             [self.tableView reloadData];
+//            [self.tableView layoutIfNeeded];
+            [self reloadCellWithIndex];
         } failure:^(NSError *error) {
             
         }];
@@ -217,6 +230,17 @@ NSString *storyDe = @"storyDe";
     } failure:^(NSError *error) {
         
     }];
+}
+
+//请求数据后显示那一行
+-(void)reloadCellWithIndex{
+    if(self.isJXYD){
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            NSIndexPath *dayOne = [NSIndexPath indexPathForRow:[self.model.bookIndex integerValue] inSection:0];
+            [self.tableView scrollToRowAtIndexPath:dayOne atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        });
+    }
 }
 
 #pragma mark UITableViewDataSource 头高
@@ -271,24 +295,87 @@ NSString *storyDe = @"storyDe";
     if(self.navigationController.navigationBar.hidden == needHide) return;
     
     [self.navigationController setNavigationBarHidden:needHide animated:YES];
-
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
     [self.navigationController setNavigationBarHidden:velocity.y > 0 animated:YES];
-
 }
-
+#pragma mark 滚动更新
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView{
     UITableViewCell *cell = [self.tableView visibleCells].firstObject;
     NSIndexPath *index = [self.tableView indexPathForCell:cell];
-    NSLog(@"第几组%ld::::第几个%ld",index.section,index.row);
-    
-    //用一个模型来保存
-    self.model.bookIndex = [NSString stringWithFormat:@"%@",self.model.readIndex];
+//    NSLog(@"第几组%ld::::第几个%ld",index.section,index.row);
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    UITableViewCell *cell = [self.tableView visibleCells].firstObject;
+    NSIndexPath *index = [self.tableView indexPathForCell:cell];
+    //持续更新
+    self.model.bookIndex = [NSString stringWithFormat:@"%ld",(long)index.row];
     self.model.bookName = self.viewTitle;
     ZZTCartoonModel *model = self.cartoonDetailArray[0];
     self.model.bookChapter = model.chapterId;
+    //保存记录
+    BOOL isHave = NO;
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+
+    NSArray *getArray = [NSKeyedUnarchiver unarchiveObjectWithData:[user objectForKey:@"saveModelArray"]];
+    NSMutableArray *getArray1 = [getArray mutableCopy];
+    for (int i = 0; i < getArray.count; i++) {
+        ZZTJiXuYueDuModel *model = getArray[i];
+        //如果找到名字相同的对象 更新
+        if([model.bookName isEqualToString:self.viewTitle]){
+            model = self.model;
+            NSLog(@"index====:%@",model.bookIndex);
+            [getArray1 replaceObjectAtIndex:i withObject:model];
+            isHave = YES;
+            break;
+        }
+    }
+    
+    if(isHave == YES){
+        NSLog(@"数组里面有这个");
+        //直接保存了
+        NSData *modelDataArr = [NSKeyedArchiver archivedDataWithRootObject:[getArray1 copy]];
+        [user setObject:modelDataArr forKey:@"saveModelArray"];
+        [user synchronize];
+    }else{
+        NSLog(@"数组里面没有这个");
+        NSMutableArray *array = [NSMutableArray array];
+        //如果没有  保存进去
+        if(getArray == nil){
+            array = [NSMutableArray array];
+            [array addObject:self.model];
+        }else{
+            array = [getArray mutableCopy];
+            [array addObject:self.model];
+        }
+
+        NSData *modelDataArr = [NSKeyedArchiver archivedDataWithRootObject:[array copy]];
+        [user setObject:modelDataArr forKey:@"saveModelArray"];
+        [user synchronize];
+    }
+}
+
+//-(void)setModel:(ZZTJiXuYueDuModel *)model{
+//    _model = model;
+//    if(model){
+//        self.isJXYD = YES;
+//    }
+//    else{
+//        self.isJXYD = NO;
+//    }
+//}
+
+-(void)setTestModel:(ZZTJiXuYueDuModel *)testModel{
+    _testModel = testModel;
+    if(testModel){
+        self.isJXYD = YES;
+        self.model = testModel;
+    }else{
+        self.isJXYD = NO;
+    }
 }
 
 -(ZZTJiXuYueDuModel *)model{
@@ -296,32 +383,6 @@ NSString *storyDe = @"storyDe";
         _model = [[ZZTJiXuYueDuModel alloc] init];
     }
     return _model;
-}
-
--(void)viewWillDisappear:(BOOL)animated{
-    [super viewWillDisappear:animated];
-    //将字典保存到document文件->获取appdocument路径
-    NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    
-    NSString *filePath = [docPath stringByAppendingPathComponent:@"BOOK.plist"];
-    
-    //加载数组
-    NSArray *dicArray = [ZZTJiXuYueDuModel mj_objectArrayWithFilename:filePath];
-    ZZTJiXuYueDuModel *model1 = [[ZZTJiXuYueDuModel alloc] init];
-
-    for (ZZTJiXuYueDuModel *model2 in dicArray) {
-        if([model2.bookName isEqualToString:self.viewTitle]){
-            model1 = model2;
-            model1.bookChapter = self.model.bookChapter;
-            model1.bookIndex = self.model.bookIndex;
-            break;
-        }
-    }
-    //存入
-    [[NSUserDefaults standardUserDefaults] setObject:dicArray forKey:@"UserReader"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    
 }
 
 @end

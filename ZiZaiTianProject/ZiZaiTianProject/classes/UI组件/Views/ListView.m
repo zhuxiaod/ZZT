@@ -198,7 +198,7 @@ static NSString * const offsetKeyPath = @"contentOffset";
         label.tag = index;
         label.text = text;
         //颜色
-        label.textColor = [UIColor grayColor];
+        label.textColor = [UIColor colorWithHexString:@"#0D2882"];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(labelDidTap:)];
         [label addGestureRecognizer:tap];
         

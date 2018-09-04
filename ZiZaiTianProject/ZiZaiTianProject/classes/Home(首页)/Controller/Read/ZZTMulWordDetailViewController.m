@@ -14,6 +14,7 @@
 #import "ZZTMulWordListCell.h"
 #import "ZZTChapterlistModel.h"
 #import "ZZTStoryDetailView.h"
+#import "ZZTJiXuYueDuModel.h"
 
 @interface ZZTMulWordDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -27,11 +28,25 @@
 
 @property (nonatomic,strong) NSArray *wordList;
 
+@property (nonatomic,strong) ZZTJiXuYueDuModel *model;
+
+@property (nonatomic,assign) BOOL isHave;
+
+@property (nonatomic,strong) UIButton *starRead;
+
+
 @end
 
 NSString *zztMulWordListCell = @"zztMulWordListCell";
 
 @implementation ZZTMulWordDetailViewController
+
+-(ZZTJiXuYueDuModel *)model{
+    if(!_model){
+        _model = [[ZZTJiXuYueDuModel alloc] init];
+    }
+    return _model;
+}
 
 -(NSArray *)wordList{
     if(!_wordList){
@@ -80,20 +95,33 @@ NSString *zztMulWordListCell = @"zztMulWordListCell";
     //开始阅读
     UIButton *starRead = [[UIButton alloc] init];
     starRead.frame = CGRectMake(SCREEN_WIDTH/3*2, 0, SCREEN_WIDTH/3, 50);
-    [starRead setTitle:@"开始阅读" forState:UIControlStateNormal];
     starRead.backgroundColor = [UIColor colorWithHexString:@"#7778B2"];
-    [starRead addTarget:self action:@selector(starRead) forControlEvents:UIControlEventTouchUpInside];
+    [starRead addTarget:self action:@selector(starReadTarget) forControlEvents:UIControlEventTouchUpInside];
     [starRead setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    _starRead = starRead;
     [bottom addSubview:starRead];
+        
+    //有的话 说明有记录
+    if(self.isHave == YES){
+        NSLog(@"数组里面有这个");
+        [starRead setTitle:@"继续阅读" forState:UIControlStateNormal];
+    }else{
+        NSLog(@"数组里面没有这个");
+        //如果没有  保存进去
+        [starRead setTitle:@"开始阅读" forState:UIControlStateNormal];
+    }
 }
 
 //开始阅读
--(void)starRead{
+-(void)starReadTarget{
     ZZTCartoonDetailViewController *cartoonDetailVC = [[ZZTCartoonDetailViewController alloc] init];
     cartoonDetailVC.type = _cartoonDetail.type;
     cartoonDetailVC.cartoonId = _cartoonDetail.id;
     cartoonDetailVC.viewTitle = _cartoonDetail.bookName;
     cartoonDetailVC.hidesBottomBarWhenPushed = YES;
+    if(self.isHave == YES){
+        cartoonDetailVC.testModel = _model;
+    }
     [self.navigationController pushViewController:cartoonDetailVC animated:YES];
 }
 //设置数据
@@ -128,7 +156,6 @@ NSString *zztMulWordListCell = @"zztMulWordListCell";
 }
 //目录
 -(void)loadListData:(NSString *)ID{
-    weakself(self);
     NSDictionary *paramDict = @{
                                 @"cartoonId":ID
                                 };
@@ -231,5 +258,36 @@ NSString *zztMulWordListCell = @"zztMulWordListCell";
         _ctDetail = [[ZZTCarttonDetailModel alloc] init];
     }
     return _ctDetail;
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    [self JiXuYueDuTarget];
+}
+//判断是否有这个记录
+-(void)JiXuYueDuTarget{
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
+    //本地有没有这一本漫画
+    NSArray *getArray = [NSKeyedUnarchiver unarchiveObjectWithData:[user objectForKey:@"saveModelArray"]];
+    NSMutableArray *getArray1 = [getArray mutableCopy];
+    ZZTJiXuYueDuModel *model = [[ZZTJiXuYueDuModel alloc] init];
+    for (int i = 0; i < getArray1.count; i++) {
+        model = getArray1[i];
+        if([model.bookName isEqualToString:self.cartoonDetail.bookName]){
+            self.model = model;
+            self.isHave = YES;
+            break;
+        }else{
+            self.isHave = NO;
+        }
+    }
+    //有的话 说明有记录
+    if(self.isHave == YES){
+        NSLog(@"数组里面有这个");
+        [_starRead setTitle:@"继续阅读" forState:UIControlStateNormal];
+    }else{
+        NSLog(@"数组里面没有这个");
+        //如果没有  保存进去
+        [_starRead setTitle:@"开始阅读" forState:UIControlStateNormal];
+    }
 }
 @end

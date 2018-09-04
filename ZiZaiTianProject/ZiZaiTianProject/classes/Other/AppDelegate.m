@@ -30,7 +30,20 @@
     
     //3.显示窗口
     [self.window makeKeyAndVisible];
+    
+    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    
     return YES;
 }
+
+void uncaughtExceptionHandler(NSException *exception) {
+    
+    NSLog(@"reason: %@", exception);
+    
+    // Internal error reporting
+    
+}
+
+
 
 @end

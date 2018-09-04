@@ -26,7 +26,13 @@
     nab.translucent = NO;
     
     //设置导航条的背景图片
-    [nab setBackgroundImage:[UIImage createImageWithColor:[UIColor colorWithHexString:@"#58006E"]] forBarMetrics:UIBarMetricsDefault];
+    UIImage *image = [UIImage imageNamed:@"APP架构-作品-顶部渐变条-IOS"];
+    // 设置左边端盖宽度
+    NSInteger leftCapWidth = image.size.width * 0.5;
+    // 设置上边端盖高度
+    NSInteger topCapHeight = image.size.height * 0.5;
+    UIImage *newImage = [image stretchableImageWithLeftCapWidth:leftCapWidth topCapHeight:topCapHeight];
+    [nab setBackgroundImage:newImage forBarMetrics:UIBarMetricsDefault];
 //    [nab setShadowImage:[UIImage new]];
 }
  

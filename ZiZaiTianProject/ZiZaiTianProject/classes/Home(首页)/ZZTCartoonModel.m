@@ -10,4 +10,6 @@
 
 @implementation ZZTCartoonModel
 
+MJCodingImplementation
+
 @end
