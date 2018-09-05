@@ -24,7 +24,7 @@
 
 @end
 
-@interface ZZTBubbleImageView : UIView<UITextViewDelegate,UIGestureRecognizerDelegate>
+@interface ZZTBubbleImageView : UIImageView<UITextViewDelegate,UIGestureRecognizerDelegate>
 //当前字体
 @property (retain, nonatomic) UIFont *curFont;
 //最小字体字号
@@ -44,7 +44,7 @@
 
 @property (nonatomic,strong) UIView *superView;
 
-@property (nonatomic,strong) UIImageView *imageView;
+//@property (nonatomic,strong) UIImageView *imageView;
 
 
 -(instancetype)initWithFrame:(CGRect)frame text:(NSString *)text superView:(UIView *)superView;

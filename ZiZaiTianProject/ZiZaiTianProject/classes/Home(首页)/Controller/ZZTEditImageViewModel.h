@@ -24,13 +24,11 @@
 @property (nonatomic,strong) NSString *viewContent;
 //视图型号
 @property (nonatomic,assign) NSInteger viewType;
-//放大倍数
-@property (nonatomic,assign) CGFloat scale;
-
-@property (nonatomic,assign) CGFloat rad;
 
 @property (nonatomic,strong) UIImage *localResource;
 
-+(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl tagNum:(NSInteger )tagNum viewType:(NSInteger)viewType scale:(CGFloat)scale rad:(CGFloat)rad localResource:(UIImage *)localResource;
+@property(nonatomic,assign) CGAffineTransform viewTransform;
+
++(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl tagNum:(NSInteger )tagNum viewType:(NSInteger)viewType localResource:(UIImage *)localResource viewTransform:(CGAffineTransform)viewTransform;
 
 @end

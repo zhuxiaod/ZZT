@@ -115,9 +115,9 @@
             //解析模型数据
             _typs = [ZZTDetailModel mj_objectArrayWithKeyValuesArray:model.typeList];
             //创建三级的视图
-            [self creatTypeView:_typs];
         }
     }
+    [self creatTypeView:_typs];
 }
 
 //3级视图创建时 触发
@@ -133,7 +133,7 @@
 }
 
 -(void)setStr:(NSString *)str{
-    //第一次创建
+    //第一次创建 2次  第二次为想要的
     _str = str;
     _kinds = nil;
     _typs = nil;
@@ -156,6 +156,7 @@
 
 //2级创建方法
 -(void)creatView:(NSMutableArray *)kinds{
+    //2次
     [_MaterialKindView removeFromSuperview];
 
     _MaterialKindView = [[ZZTMaterialKindView alloc] init:kinds Width:SCREEN_WIDTH];

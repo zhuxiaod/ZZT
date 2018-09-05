@@ -62,9 +62,9 @@ textView 大小问题 和 输入输出问题
 -(instancetype)initWithFrame:(CGRect)frame text:(NSString *)text superView:(UIView *)superView{
     self = [super initWithFrame:frame];
     if(self){
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
-        [self addSubview:imageView];
-        self.imageView = imageView;
+//        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+//        [self addSubview:imageView];
+//        self.imageView = imageView;
         
         self.userInteractionEnabled = YES;
         UIFont *font = [UIFont systemFontOfSize:14];
@@ -169,7 +169,7 @@ textView 大小问题 和 输入输出问题
     [textView setFont:font];
     //自动修正
     [textView setAutocorrectionType:UITextAutocorrectionTypeNo];
-    [self.imageView addSubview:textView];
+    [self addSubview:textView];
     //处于最底处
     [self sendSubviewToBack:textView];
     self.textView = textView;

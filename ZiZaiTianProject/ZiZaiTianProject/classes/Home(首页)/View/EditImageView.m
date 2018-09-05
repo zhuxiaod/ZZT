@@ -8,7 +8,7 @@
 
 #import "EditImageView.h"
 
-@interface EditImageView ()
+@interface EditImageView ()<UIGestureRecognizerDelegate>
 
 @property (nonatomic,assign) CGFloat scale;
 
@@ -36,10 +36,12 @@
    _len = sqrt(self.frame.size.width/2*self.frame.size.width/2+self.frame.size.height/2*self.frame.size.height/2);
     //放大缩小
     UIPinchGestureRecognizer *pinchGestureRecognizer = [[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(handlePich:)];
+    pinchGestureRecognizer.delegate = self;
     [self addGestureRecognizer:pinchGestureRecognizer];
 
     //旋转
     UIRotationGestureRecognizer *rotateRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleRotate:)];
+    rotateRecognizer.delegate = self;
     [self addGestureRecognizer:rotateRecognizer];
 }
 
@@ -47,26 +49,27 @@
 {
     recognizer.view.transform = CGAffineTransformScale(recognizer.view.transform, recognizer.scale, recognizer.scale);
     self.scale = recognizer.scale;
-    NSLog(@"%f",self.scale);
-    //试一下  写一个代理
-    if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewTransform:scale:rad:)]) {
-        [self.delegate updateImageViewTransform:self scale:recognizer.scale rad:self.rad];
-    }
+   
     recognizer.scale = 1;
+
+    if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewTransform:)]) {
+        [self.delegate updateImageViewTransform:self];
+    }
 }
 
 -(void)handleRotate:(UIRotationGestureRecognizer *)recognizer
 {
+    //旋转前位置  旋转和放大 都不能记载位置  只能移动记载
+    //旋转的角度
     if(recognizer.state == UIGestureRecognizerStateChanged){
         recognizer.view.transform = CGAffineTransformRotate(recognizer.view.transform, recognizer.rotation);
-        self.rad = recognizer.rotation;
+        self.rad += recognizer.rotation;
         //试一下  写一个代理
-        if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewTransform:scale:rad:)]) {
-            [self.delegate updateImageViewTransform:self scale:self.scale rad:self.rad];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewTransform:)]) {
+            [self.delegate updateImageViewTransform:self];
         }
         recognizer.rotation = 0;
     }
-
 }
 
 /*
@@ -81,13 +84,9 @@
 
 //可编辑状态
 - (void)showEditBtn{
-//    _isHide = NO;
     if (self.delegate && [self.delegate respondsToSelector:@selector(checkViewIsHidden:)]) {
         [self.delegate checkViewIsHidden:self];
     }
-//    _borderView.hidden = NO;
-//    _editImgView.hidden = NO;
-//    _closeImgView.hidden = NO;
 }
 -(void)setIsHide:(BOOL)isHide{
     _isHide = isHide;
@@ -148,49 +147,31 @@
     if (_isMove) {
         //获得当前的位置
         CGPoint curPoint = [[touches anyObject] locationInView:self.superview];
+        //没有变化的位置
+
         //中心
         self.center =  CGPointMake(curPoint.x-(_startTouchPoint.x-_startTouchCenter.x), curPoint.y-(_startTouchPoint.y-_startTouchCenter.y));
-    }else{
-        //停止移动
-        //比较位置
-        CGPoint curPoint = [[touches anyObject] locationInView:self.superview];
-        CGFloat sx = curPoint.x - self.center.x;
-        CGFloat sy = curPoint.y - self.center.y;
-        CGFloat curLen = sqrtf(sx*sx+sy*sy);
-        CGFloat scale = curLen/_len;
-        CGFloat tan = atanf(sy/sx);  //取到弧度
-        CGFloat angle = tan * 180/M_PI;
-        if (sx >= 0) {
-            angle = angle + 45;
-        }else{
-            angle = angle + 225;
-        }
-        //图形变化
-        _editImgView.transform = CGAffineTransformMakeScale(1.0f/scale, 1.0f/scale);
-        _closeImgView.transform = CGAffineTransformMakeScale(1.0f/scale, 1.0f/scale);
-        _borderView.layer.borderWidth = 2*1.0f/scale;
-        
-        
-        CGFloat rad = angle/180*M_PI;
-        self.transform = CGAffineTransformMakeScale(scale, scale);
-        self.transform = CGAffineTransformRotate(self.transform,rad);
-    
-        //试一下  写一个代理
-        if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewTransform:scale:rad:)]) {
-            [self.delegate updateImageViewTransform:self scale:self.scale rad:self.rad];
+        //没有变化的中心
+
+        if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewFrame:)]) {
+            [self.delegate updateImageViewFrame:self];
         }
     }
 }
 //切换状态
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewFrame:)]) {
-        [self.delegate updateImageViewFrame:self];
-    }
+//    if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewFrame:curPoint:)]) {
+////        [self.delegate updateImageViewFrame:self curPoint:0];
+//    }
     _isMove = NO;
     self.viewFrame = _editImgView.frame;
 }
 
 
-
+#pragma mark - 代理方法实现旋转 + 缩放捏合 可同时进行
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
 
 @end

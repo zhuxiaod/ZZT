@@ -99,7 +99,6 @@
             NSNotification *notification = [NSNotification notificationWithName:@"btnText" object:nil userInfo:dic];
             [[NSNotificationCenter defaultCenter] postNotification:notification];
             //点击判断是索引 传出去
-
         }else{
             button.selected = NO;
             [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];

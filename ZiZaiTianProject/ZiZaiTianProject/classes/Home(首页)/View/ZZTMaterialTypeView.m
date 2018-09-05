@@ -77,6 +77,7 @@
         [self addSubview:btn];
     }
 }
+
 //ok
 -(void)buttonSelected:(UIButton *)btn{
     self.recodeStr = btn.titleLabel.text;

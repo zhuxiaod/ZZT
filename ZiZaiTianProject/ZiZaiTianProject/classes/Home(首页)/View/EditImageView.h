@@ -18,7 +18,7 @@
 
 -(void)updateImageViewFrame:(EditImageView *)view;
 
--(void)updateImageViewTransform:(EditImageView *)view scale:(CGFloat)scale rad:(CGFloat)rad;
+-(void)updateImageViewTransform:(EditImageView *)view;
 
 //观察View是否隐藏
 -(void)checkViewIsHidden:(EditImageView *)view;

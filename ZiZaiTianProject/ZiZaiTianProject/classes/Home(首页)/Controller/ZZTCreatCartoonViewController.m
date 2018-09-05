@@ -24,6 +24,7 @@
 #import "ToolBtn.h"
 
 #define MainOperationView self.currentCell.operationView
+
 @interface ZZTCreatCartoonViewController ()<MaterialLibraryViewDelegate,EditImageViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PaletteViewDelegate,RectangleViewDelegate,UIGestureRecognizerDelegate,ZZTBubbleImageViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 //工具栏
@@ -467,11 +468,11 @@
                 if(!model.imageUrl){
                     EditImageView *imageView = [self speedInitImageView:model];
                     //重新记录数据
-                    imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:nil tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad localResource:model.localResource];
+                    imageModel = [ZZTEditImageViewModel initImgaeViewModel:model.imageViewFrame imageUrl:nil tagNum:imageView.tagNum viewType:1 localResource:model.localResource viewTransform:imageView.transform];
                 }else{
                     EditImageView *imageView = [self speedInitImageView:model];
                     //重新记录数据
-                    imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad localResource:nil];
+                    imageModel = [ZZTEditImageViewModel initImgaeViewModel:model.imageViewFrame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 localResource:nil viewTransform:imageView.transform];
                 }
                 //不是方框可直接添加素材到cell之中
                 [cellModel.imageArray addObject:imageModel];
@@ -479,7 +480,7 @@
                 //文字框
                 ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
                 //素材Model
-                ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 scale:model.scale rad:model.rad localResource:nil];
+                ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 localResource:nil viewTransform:bubbleImageView.transform];
                 //不是方框可直接添加素材到cell之中
                 [cellModel.imageArray addObject:imageModel];
             }
@@ -507,11 +508,11 @@
                             if(!model.imageUrl){
                                 EditImageView *imageView = [self speedInitImageView:model];
                                 //重新记录数据
-                                imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:nil tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad localResource:model.localResource];
+                                imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:nil tagNum:imageView.tagNum viewType:1 localResource:model.localResource viewTransform:imageView.transform];
                             }else{
                                 EditImageView *imageView = [self speedInitImageView:model];
                                 //重新记录数据
-                                imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 scale:model.scale rad:model.rad localResource:nil];
+                                imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 localResource:nil viewTransform:imageView.transform];
                             }
                             //不是方框可直接添加素材到cell之中
                             [fangKuangModel.viewArray addObject:imageModel];
@@ -519,7 +520,7 @@
                             self.mainView = rectangView.mainView;
                             ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
                             //素材Model
-                            ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 scale:model.scale rad:model.rad localResource:nil];
+                            ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 localResource:nil viewTransform:bubbleImageView.transform];
                             //不是方框可直接添加素材到cell之中
                             [fangKuangModel.viewArray addObject:imageModel];
                         }
@@ -609,11 +610,11 @@
     ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:model.imageViewFrame text:@"请点击输入内容" superView:self.mainView];
     imageView.bubbleDelegate = self;
     imageView.superViewName = NSStringFromClass([self.mainView class]);
-    [imageView.imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl]];
+    [imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl]];
     //设置tag值
     imageView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
-    imageView.transform = CGAffineTransformMakeRotation(-model.rad);
+    imageView.transform = model.viewTransform;
     [self.mainView addSubview:imageView];
     //清除框
     [self exceptCurrentViewHiddenOtherView:imageView];
@@ -712,7 +713,7 @@
     }else if([NSStringFromClass([self.currentView class]) isEqualToString:@"ZZTBubbleImageView"]){
         ZZTBubbleImageView *currentView = (ZZTBubbleImageView *)self.currentView;
         if(currentView && currentView.isHide == NO){
-            currentView.imageView.image = [currentView.imageView.image flipHorizontal];
+            currentView.image = [currentView.image flipHorizontal];
         }
     }
 }
@@ -1137,7 +1138,7 @@
     //通过字符串创建
     EditImageView *imageView = [self speedInitImageViewWithStr:model.img];
     //存储数据
-    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.img tagNum:imageView.tagNum viewType:1 scale:0 rad:0 localResource:nil];
+    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.img tagNum:imageView.tagNum viewType:1 localResource:nil viewTransform:imageView.transform];
     
     //方框内
     if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
@@ -1171,12 +1172,12 @@
     ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 100, 100) text:@"请点击输入内容" superView:self.mainView];
     imageView.bubbleDelegate = self;
     imageView.superViewName = NSStringFromClass([self.mainView class]);
-    [imageView.imageView sd_setImageWithURL:[NSURL URLWithString:model.img]];
+    [imageView sd_setImageWithURL:[NSURL URLWithString:model.img]];
     //设置tag值
     imageView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
     //素材Model
-    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.img tagNum:imageView.tagNum viewType:2 scale:0 rad:0 localResource:nil];
+    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.img tagNum:imageView.tagNum viewType:2 localResource:nil viewTransform:imageView.transform];
     //如果是加入方框
     if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
         //如果可以加入素材 便加入图层
@@ -1220,7 +1221,7 @@
 -(void)bubbleViewDidRotate:(ZZTBubbleImageView *)bubbleView rad:(CGFloat)rad{
     ZZTEditImageViewModel *model = [self getEditImageViewModelWithView:bubbleView];
     model.imageViewFrame = bubbleView.frame;
-    model.rad = rad;
+
 }
 #pragma mark 获取文字框的模型
 -(ZZTEditImageViewModel *)getEditImageViewModelWithView:(ZZTBubbleImageView *)bubbleView{
@@ -1253,7 +1254,11 @@
 #pragma mark 恢复绘图素材
 -(EditImageView *)speedInitImageView:(ZZTEditImageViewModel *)model{
     //位置
+//    EditImageView *imageView = [[EditImageView alloc] init];
+    //变成了没有进行变化的时候
+    //但是为什么会变大呢？？？
     EditImageView *imageView = [[EditImageView alloc] initWithFrame:model.imageViewFrame];
+    NSLog(@"恢复素材:%@",NSStringFromCGRect(imageView.frame));
     imageView.delegate = self;
     //记录父类的名字
     if(!model.imageUrl){
@@ -1264,12 +1269,15 @@
     }
     imageView.superViewName = NSStringFromClass([self.mainView class]);
 
-    //旋转 和 放大数据
-    if(model.scale || model.rad){
-        imageView.transform = CGAffineTransformMakeScale(model.scale, model.scale);
-        imageView.transform = CGAffineTransformRotate(imageView.transform,model.rad);
-    }
+//    //旋转 和 放大数据
+//    if(model.scale || model.rad){
+//        imageView.transform = CGAffineTransformMakeScale(model.scale, model.scale);
+//        imageView.transform = CGAffineTransformRotate(imageView.transform,model.rad);
+//    }
     [self addEditImageView:imageView];
+    imageView.transform = model.viewTransform;
+//    imageView.transform = CGAffineTransformRotate(imageView.transform,model.rad);
+
     return imageView;
 }
 
@@ -1306,24 +1314,23 @@
         self.collectionView.scrollEnabled = NO;
     }
 }
+
+/*
+ updateImageViewFrame
+ */
 #pragma mark 素材旋转
--(void)updateImageViewTransform:(EditImageView *)view scale:(CGFloat)scale rad:(CGFloat)rad{
-    CGFloat rotate = acosf(view.transform.a);
-    
-    // 旋转180度后，需要处理弧度的变化
-    
-    if (view.transform.b < 0) {
-        
-        rotate = M_PI*2 - rotate;
-        
-    }
-    
+-(void)updateImageViewTransform:(EditImageView *)view{
+    //记录当前变化后的tansform  如果不能直接赋值 要求算出来
     ZZTEditImageViewModel *model = [self getImageViewModelWithView:view];
+    CGAffineTransform lastTransform = view.transform;
+    view.transform = CGAffineTransformIdentity;
+    //变化前的位置
     model.imageViewFrame = view.frame;
-    model.scale = scale;
-    model.rad = rotate;
-//    NSLog(@"%f",rad);
+    //回到变化后
+    view.transform = lastTransform;
+    model.viewTransform = view.transform;
 }
+
 #pragma mark 得到素材模型
 -(ZZTEditImageViewModel *)getImageViewModelWithView:(EditImageView *)view{
     //更新的位置
@@ -1360,11 +1367,17 @@
     [self exceptCurrentViewHiddenOtherView:view];
 }
 
-//更新素材的位置
+//更新素材的位置 updateImageViewTransform
 -(void)updateImageViewFrame:(EditImageView *)view{
+    CGAffineTransform lastTransform = view.transform;
     //更新的位置
     ZZTEditImageViewModel *model = [self getImageViewModelWithView:view];
+    view.transform = CGAffineTransformIdentity;
+    //变化前的位置
     model.imageViewFrame = view.frame;
+
+    //回到变化后
+    view.transform = lastTransform;
 }
 
 #pragma mark 请求素材库
@@ -1546,6 +1559,7 @@
     _materialLibraryView.backgroundColor = [UIColor colorWithHexString:@"#B1B1B1"];
     [self.view addSubview:_materialLibraryView];
 }
+
 #pragma mark 隐藏其他View的状态
 -(void)exceptCurrentViewHiddenOtherView:(UIView *)view{
     self.currentView = view;
@@ -1634,6 +1648,7 @@
     //本地
     [self alert];
 }
+
 -(void)alert{
     //标题
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"请选择打开方式" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -1716,7 +1731,7 @@
     self.tagNum = self.tagNum + 1;
     imageView.superViewTag = self.mainView.tag;
     //存储数据
-    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:nil tagNum:imageView.tagNum viewType:1 scale:0 rad:0 localResource:resultImage];
+    ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:nil tagNum:imageView.tagNum viewType:1 localResource:resultImage viewTransform:imageView.transform];
     
     //得到选择的本地图片
     //展示
@@ -1783,4 +1798,12 @@
         [self addFangKuangModelWithView:rectangleView];
     }
 }
+
+-(CGAffineTransform)transformFromRect:(CGRect)fromRect toRect:(CGRect)toRect{
+    CGAffineTransform moveTrans = CGAffineTransformMakeTranslation(CGRectGetMidX(toRect) - CGRectGetMidX(fromRect), CGRectGetMidY(toRect) - CGRectGetMidY(fromRect));
+    CGAffineTransform scaleTrans = CGAffineTransformMakeScale(toRect.size.width / fromRect.size.width, toRect.size.height / fromRect.size.height);
+    //右边先执行
+    return CGAffineTransformConcat(scaleTrans, moveTrans);
+}
+
 @end
