@@ -29,6 +29,8 @@
 
 @property(nonatomic,assign) CGAffineTransform viewTransform;
 
+@property (nonatomic,assign) CGPoint viewCenter;
+
 +(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl tagNum:(NSInteger )tagNum viewType:(NSInteger)viewType localResource:(UIImage *)localResource viewTransform:(CGAffineTransform)viewTransform;
 
 @end

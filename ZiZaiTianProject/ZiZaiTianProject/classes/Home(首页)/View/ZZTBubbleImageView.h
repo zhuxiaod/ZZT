@@ -11,6 +11,8 @@
 @class ZZTBubbleImageView;
 
 @protocol ZZTBubbleImageViewDelegate <NSObject>
+    
+
 
 @optional
 
@@ -20,11 +22,19 @@
 
 - (void)bubbleViewDidBeginEnd:(ZZTBubbleImageView *)bubbleView;
 
-- (void)bubbleViewDidRotate:(ZZTBubbleImageView *)bubbleView rad:(CGFloat)rad;
+- (void)bubbleViewDidRotate:(ZZTBubbleImageView *)bubbleView;
+
+- (void)bubbleViewSaveText:(ZZTBubbleImageView *)bubbleView text:(NSString *)text;
 
 @end
 
-@interface ZZTBubbleImageView : UIImageView<UITextViewDelegate,UIGestureRecognizerDelegate>
+@interface ZZTBubbleImageView : UIImageView{
+    CGPoint _startTouchPoint;
+    CGPoint _startTouchCenter;
+    BOOL _isMove;
+    CGFloat _len;
+    UITextView *TextView;
+}
 //当前字体
 @property (retain, nonatomic) UIFont *curFont;
 //最小字体字号
@@ -43,9 +53,6 @@
 @property (nonatomic,strong) NSString *superViewName;
 
 @property (nonatomic,strong) UIView *superView;
-
-//@property (nonatomic,strong) UIImageView *imageView;
-
 
 -(instancetype)initWithFrame:(CGRect)frame text:(NSString *)text superView:(UIView *)superView;
 

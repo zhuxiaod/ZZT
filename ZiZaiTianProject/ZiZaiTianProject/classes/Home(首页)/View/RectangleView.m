@@ -25,7 +25,8 @@
     CGFloat selfHeight;
     CGFloat proportion;
     CGRect lastFrame;
-    
+    CGRect nowFrame;
+
     CGPoint _startTouchPoint;
     CGPoint _startTouchCenter;
 }
@@ -82,7 +83,6 @@ int i = 0;
         [self.bottomBorder removeGestureRecognizer:self.click4];
         [self.centerBtn setTitle:@"完成" forState:UIControlStateNormal];
         self.centerBtn.alpha = 0.6;
-
     }
 }
 
@@ -401,17 +401,19 @@ CGPoint legend_point;
 
 #pragma mark - 双击事件
 -(void)tapGestureTarget:(UITapGestureRecognizer *)gesture{
+    //原来的大小
     selfHeight = self.height;
     selfWidth = self.width;
-    //倍数越小的  越快放大
+    
+    //计算倍数
     CGFloat pW = self.superView.width / self.width;
     CGFloat pH = self.superView.height / self.height;
-    
-    //是放大
+
+    //如果没有放大  那么放大
     if(self.isBig == NO){
         lastFrame = self.frame;
-
-        //等比放大
+        
+        //判断怎么放大
         if(pW < pH){
             selfWidth = self.superView.width;
             proportion = self.superView.width / self.width;
@@ -421,18 +423,20 @@ CGPoint legend_point;
             proportion = self.superView.height / self.height;
             selfWidth = selfWidth * proportion;
         }
-        
+        //放大了
         self.frame = CGRectMake(0, 0, selfWidth, selfHeight);
+        nowFrame = self.frame;
         //放大后代理
         self.isBig = YES;
-        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:)]){
-            [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion];
+        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:minSize:maxSize:)]){
+            [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion minSize:lastFrame maxSize:nowFrame];
         }
     }else{
+        //变回原来的样子
         self.frame = lastFrame;
         self.isBig = NO;
-        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:)]){
-            [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion];
+        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:minSize:maxSize:)]){
+            [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion minSize:lastFrame maxSize:nowFrame];
         }
     }
 }

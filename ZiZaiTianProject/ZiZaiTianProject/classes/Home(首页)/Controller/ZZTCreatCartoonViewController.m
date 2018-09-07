@@ -480,7 +480,7 @@
                 //文字框
                 ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
                 //素材Model
-                ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 localResource:nil viewTransform:bubbleImageView.transform];
+                ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:model.imageViewFrame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 localResource:nil viewTransform:bubbleImageView.transform];
                 //不是方框可直接添加素材到cell之中
                 [cellModel.imageArray addObject:imageModel];
             }
@@ -520,7 +520,7 @@
                             self.mainView = rectangView.mainView;
                             ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
                             //素材Model
-                            ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:bubbleImageView.frame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 localResource:nil viewTransform:bubbleImageView.transform];
+                            ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:model.imageViewFrame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 localResource:nil viewTransform:bubbleImageView.transform];
                             //不是方框可直接添加素材到cell之中
                             [fangKuangModel.viewArray addObject:imageModel];
                         }
@@ -607,15 +607,15 @@
 -(ZZTBubbleImageView *)createBubbleImageViewWithModel:(ZZTEditImageViewModel *)model{
     //文字没有保存
     //恢复数据
-    ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:model.imageViewFrame text:@"请点击输入内容" superView:self.mainView];
+    ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:model.imageViewFrame text:model.viewContent superView:self.mainView];
     imageView.bubbleDelegate = self;
     imageView.superViewName = NSStringFromClass([self.mainView class]);
     [imageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl]];
     //设置tag值
     imageView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
-    imageView.transform = model.viewTransform;
     [self.mainView addSubview:imageView];
+    imageView.transform = model.viewTransform;
     //清除框
     [self exceptCurrentViewHiddenOtherView:imageView];
     return imageView;
@@ -1014,57 +1014,79 @@
 }
 
 #pragma mark 方框放大操作
--(void)enlargedAfterEditView:(RectangleView *)rectangleView isBig:(BOOL)isBig proportion:(CGFloat)proportion{
+-(void)enlargedAfterEditView:(RectangleView *)rectangleView isBig:(BOOL)isBig proportion:(CGFloat)proportion minSize:(CGRect)minSize maxSize:(CGRect)maxSize{
     //记录放大缩小的状态
     self.isAddM = isBig;
     
-    //比例
+    //比例 大
     if(isBig == YES){
+        //1.
         self.proportion = proportion;
+    }else{
+        //负数
+        CGFloat box = proportion - 1;
+        self.proportion = 1 - box;
     }
     //获取方框的模型
     ZZTFangKuangModel *FKModel = [self FangKuangModelFromCellModel];
     //如果已经放大
     if(self.isAddM == YES){
-        
+
         for (int i = 0; i < FKModel.viewArray.count; i++) {
             ZZTEditImageViewModel *model = FKModel.viewArray[i];
-            CGFloat x  = model.imageViewFrame.origin.x * self.proportion;
-            CGFloat y  = model.imageViewFrame.origin.y * self.proportion;
-            CGFloat w  = model.imageViewFrame.size.width * self.proportion;
-            CGFloat h  = model.imageViewFrame.size.height * self.proportion;
-            CGRect frame = CGRectMake(x, y, w, h);
-            //mainView 要变成当前的方框
+            //大小变化
+            CGAffineTransform transform = CGAffineTransformScale(model.viewTransform,  self.proportion,  self.proportion);
+            
+            //坐标变化
             if(model.viewType == 2){
                 ZZTBubbleImageView *image = self.currentRectangleView.mainView.subviews[i];
-                image.frame = frame;
+                image.transform = model.viewTransform;
+                image.transform = transform;
                 image.isHide = YES;
             }else{
+            
                 EditImageView *image = self.currentRectangleView.mainView.subviews[i];
-                image.frame = frame;
+                image.transform = model.viewTransform;
+                image.center = model.viewCenter;
                 image.isHide = YES;
             }
-            model.imageViewFrame = frame;
         }
     }else{
+        //第一次进来 本来就放大了 所以要减小
         for (int i = 0; i < FKModel.viewArray.count; i++) {
             ZZTEditImageViewModel *model = FKModel.viewArray[i];
-            CGFloat x  = model.imageViewFrame.origin.x / self.proportion;
-            CGFloat y  = model.imageViewFrame.origin.y / self.proportion;
-            CGFloat w  = model.imageViewFrame.size.width / self.proportion;
-            CGFloat h  = model.imageViewFrame.size.height / self.proportion;
-            CGRect frame = CGRectMake(x, y, w, h);
+            //不能用这个
+            CGAffineTransform transform = CGAffineTransformScale(model.viewTransform, 0.72, 0.72);
             
             if(model.viewType == 2){
                 ZZTBubbleImageView *image = self.currentRectangleView.mainView.subviews[i];
-                image.frame = frame;
+                //保存数据
+                model.viewTransform = image.transform;
+                model.viewCenter = image.center;
+                //缩小
+                image.transform = transform;
+                
+                CGPoint center = image.center;
+                //算出比例
+                center.x = center.x * self.proportion;
+                center.y = center.y * self.proportion;
+                image.center = center;
                 image.isHide = YES;
             }else{
                 EditImageView *image = self.currentRectangleView.mainView.subviews[i];
-                image.frame = frame;
+                //保存数据
+                model.viewTransform = image.transform;
+                model.viewCenter = image.center;
+                //缩小
+                image.transform = transform;
+
+                CGPoint center = image.center;
+                //算出比例
+                center.x = center.x * self.proportion;
+                center.y = center.y * self.proportion;
+                image.center = center;
                 image.isHide = YES;
             }
-            model.imageViewFrame = frame;
         }
     }
 }
@@ -1169,7 +1191,7 @@
 
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
 
-    ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 100, 100) text:@"请点击输入内容" superView:self.mainView];
+    ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 200, 200) text:@"请输入内容" superView:self.mainView];
     imageView.bubbleDelegate = self;
     imageView.superViewName = NSStringFromClass([self.mainView class]);
     [imageView sd_setImageWithURL:[NSURL URLWithString:model.img]];
@@ -1184,8 +1206,8 @@
         if(self.isAddM == YES){
             [self.mainView addSubview:imageView];
             
-            ZZTFangKuangModel *FKModel = [self rectangleModelFromView:(RectangleView *)self.mainView];
-            
+//            ZZTFangKuangModel *FKModel = [self rectangleModelFromView:(RectangleView *)self.mainView];
+            ZZTFangKuangModel *FKModel = [self rectangleModelFromView:self.currentRectangleView];
             [FKModel.viewArray addObject:imageModel];
             //不管之前的呢 怎么快 怎么来
             [self exceptCurrentViewHiddenOtherView:imageView];
@@ -1207,8 +1229,18 @@
     self.bubbleImageView = bubbleView;
     [self exceptCurrentViewHiddenOtherView:bubbleView];
 }
+//移动后更新位置
 -(void)bubbleViewDidBeginEnd:(ZZTBubbleImageView *)bubbleView{
-    
+    CGAffineTransform lastTransform = bubbleView.transform;
+    ZZTEditImageViewModel *model = [self getEditImageViewModelWithView:bubbleView];
+    bubbleView.transform = CGAffineTransformIdentity;
+    model.imageViewFrame = bubbleView.frame;
+    bubbleView.transform = lastTransform;
+}
+//保存文字
+-(void)bubbleViewSaveText:(ZZTBubbleImageView *)bubbleView text:(NSString *)text{
+    ZZTEditImageViewModel *model = [self getEditImageViewModelWithView:bubbleView];
+    model.viewContent = text;
 }
 #pragma mark 文字框移动
 -(void)bubbleViewDidBeginMoving:(ZZTBubbleImageView *)bubbleView{
@@ -1218,19 +1250,26 @@
     model.imageViewFrame = startRect;
 }
 #pragma mark 文字框旋转
--(void)bubbleViewDidRotate:(ZZTBubbleImageView *)bubbleView rad:(CGFloat)rad{
+-(void)bubbleViewDidRotate:(ZZTBubbleImageView *)bubbleView{
+    //记录当前变化后的tansform  如果不能直接赋值 要求算出来
     ZZTEditImageViewModel *model = [self getEditImageViewModelWithView:bubbleView];
+    CGAffineTransform lastTransform = bubbleView.transform;
+    bubbleView.transform = CGAffineTransformIdentity;
+    //变化前的位置
     model.imageViewFrame = bubbleView.frame;
-
+    //回到变化后
+    bubbleView.transform = lastTransform;
+    model.viewTransform = bubbleView.transform;
 }
+
 #pragma mark 获取文字框的模型
 -(ZZTEditImageViewModel *)getEditImageViewModelWithView:(ZZTBubbleImageView *)bubbleView{
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
     ZZTEditImageViewModel *model = [[ZZTEditImageViewModel alloc]init];
     //如果是方框
     if([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]){
-        ZZTFangKuangModel *FKModel = [self rectangleModelFromView:(RectangleView *)self.mainView];
-        
+//        ZZTFangKuangModel *FKModel = [self rectangleModelFromView:(RectangleView *)self.mainView];
+        ZZTFangKuangModel *FKModel = [self rectangleModelFromView:self.currentRectangleView];
         //更新model中的数据
         for (int i = 0; i < FKModel.viewArray.count; i++) {
             model = FKModel.viewArray[i];
@@ -1732,16 +1771,7 @@
     imageView.superViewTag = self.mainView.tag;
     //存储数据
     ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:nil tagNum:imageView.tagNum viewType:1 localResource:resultImage viewTransform:imageView.transform];
-    
-    //得到选择的本地图片
-    //展示
-    //1.能展示
-    //保存
-    //1.方便以后的操作的话 应该怎么搞？
-    //2.我是存图片  还是存地址
-    //如果是操作数据上传的话  我需要传地址
-    //不上传的话  只需要图片就ok 了
-    
+
     //方框内
     if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
         //如果可以加入素材 便加入图层
@@ -1797,13 +1827,6 @@
         //添加方框模型
         [self addFangKuangModelWithView:rectangleView];
     }
-}
-
--(CGAffineTransform)transformFromRect:(CGRect)fromRect toRect:(CGRect)toRect{
-    CGAffineTransform moveTrans = CGAffineTransformMakeTranslation(CGRectGetMidX(toRect) - CGRectGetMidX(fromRect), CGRectGetMidY(toRect) - CGRectGetMidY(fromRect));
-    CGAffineTransform scaleTrans = CGAffineTransformMakeScale(toRect.size.width / fromRect.size.width, toRect.size.height / fromRect.size.height);
-    //右边先执行
-    return CGAffineTransformConcat(scaleTrans, moveTrans);
 }
 
 @end

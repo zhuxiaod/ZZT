@@ -17,7 +17,7 @@
 
 -(void)setupMainView:(RectangleView *)rectangleView;
 
--(void)enlargedAfterEditView:(RectangleView *)rectangleView isBig:(BOOL)isBig proportion:(CGFloat)proportion;
+-(void)enlargedAfterEditView:(RectangleView *)rectangleView isBig:(BOOL)isBig proportion:(CGFloat)proportion minSize:(CGRect)minSize maxSize:(CGRect)maxSize;
 
 -(void)updateRectangleViewFrame:(RectangleView *)view;
 

@@ -63,7 +63,6 @@
     //旋转的角度
     if(recognizer.state == UIGestureRecognizerStateChanged){
         recognizer.view.transform = CGAffineTransformRotate(recognizer.view.transform, recognizer.rotation);
-        self.rad += recognizer.rotation;
         //试一下  写一个代理
         if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewTransform:)]) {
             [self.delegate updateImageViewTransform:self];
@@ -88,6 +87,7 @@
         [self.delegate checkViewIsHidden:self];
     }
 }
+
 -(void)setIsHide:(BOOL)isHide{
     _isHide = isHide;
     if(isHide == YES){
@@ -96,6 +96,7 @@
         [self showEditBtn];
     }
 }
+
 //隐藏
 - (void)hideEditBtn{
 //    _isHide = YES;
