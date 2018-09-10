@@ -13,19 +13,25 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ZZTCreatCartoonViewController">
             <connections>
+                <outlet property="buJuBtn" destination="yca-ya-WAs" id="ACO-9q-yfD"/>
+                <outlet property="changJingBtn" destination="C4z-vR-KQW" id="rdw-iY-KBK"/>
                 <outlet property="collectBtn" destination="ctX-uk-FER" id="5bD-dd-wgv"/>
                 <outlet property="coloringBtn" destination="cZo-HO-McS" id="yCm-Wr-peh"/>
                 <outlet property="deletBtn" destination="lEh-c5-QiY" id="sd5-Rj-WKM"/>
                 <outlet property="downBtn" destination="495-90-gkb" id="1t2-FA-r9z"/>
                 <outlet property="emptyBtn" destination="sDg-Um-exH" id="eWf-QG-Zev"/>
                 <outlet property="flipBtn" destination="OQn-3c-QzU" id="Bap-JD-lPW"/>
+                <outlet property="jueSeBtn" destination="PzL-2n-0l4" id="cKs-Qm-zmu"/>
                 <outlet property="meBtn" destination="ehG-Rb-53R" id="fvx-cI-XtJ"/>
                 <outlet property="midView" destination="Tdg-gU-MEG" id="pvC-To-ZAM"/>
                 <outlet property="paletteBtn" destination="KRv-uU-3KV" id="Qoc-gv-vnF"/>
                 <outlet property="previewBtn" destination="Hvs-4O-dyQ" id="3xA-lo-qZY"/>
+                <outlet property="topView" destination="Igg-EB-Acb" id="Wgr-83-bfg"/>
                 <outlet property="upBtn" destination="pp4-Lk-rCD" id="Qhp-N8-E4n"/>
                 <outlet property="uploadBtn" destination="wS4-jU-0SP" id="FPi-TM-Juu"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="wenZiBtn" destination="dFo-6X-q5T" id="6a2-Dq-F2H"/>
+                <outlet property="xiaoGuoBtn" destination="5GP-P0-tMc" id="cLH-Ds-eCW"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -339,35 +345,35 @@
                             <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
                             <state key="normal" title="布局"/>
                             <connections>
-                                <action selector="Layout:" destination="-1" eventType="touchUpInside" id="oGR-sh-PfP"/>
+                                <action selector="Layout:" destination="-1" eventType="touchUpInside" id="fgR-ba-QgY"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C4z-vR-KQW">
                             <rect key="frame" x="75" y="0.0" width="75" height="30"/>
                             <state key="normal" title="场景"/>
                             <connections>
-                                <action selector="scene:" destination="-1" eventType="touchUpInside" id="78g-TT-iZb"/>
+                                <action selector="scene:" destination="-1" eventType="touchUpInside" id="dHV-A1-ym5"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PzL-2n-0l4">
                             <rect key="frame" x="150" y="0.0" width="75" height="30"/>
                             <state key="normal" title="角色"/>
                             <connections>
-                                <action selector="role:" destination="-1" eventType="touchUpInside" id="4bg-fK-mvv"/>
+                                <action selector="role:" destination="-1" eventType="touchUpInside" id="1zB-P7-xpU"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5GP-P0-tMc">
                             <rect key="frame" x="225" y="0.0" width="75" height="30"/>
                             <state key="normal" title="效果"/>
                             <connections>
-                                <action selector="specialEffects:" destination="-1" eventType="touchUpInside" id="lQy-Yq-0kd"/>
+                                <action selector="specialEffects:" destination="-1" eventType="touchUpInside" id="o32-Dr-Lsu"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFo-6X-q5T">
                             <rect key="frame" x="300" y="0.0" width="75" height="30"/>
                             <state key="normal" title="文字"/>
                             <connections>
-                                <action selector="textView:" destination="-1" eventType="touchUpInside" id="AI9-Hd-Oo5"/>
+                                <action selector="textView:" destination="-1" eventType="touchUpInside" id="yo4-ur-JbV"/>
                             </connections>
                         </button>
                     </subviews>

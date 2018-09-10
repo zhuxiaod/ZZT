@@ -17,7 +17,7 @@
  *  @param color      颜色值
  *  @param colorPoint 中心点
  */
--(void)patette:(Palette *)patette choiceColor:(UIColor *)color colorPoint:(CGPoint)colorPoint;
+-(void)patette:(Palette *)patette choiceColor:(UIColor *)color colorPoint:(CGPoint)colorPoint colorH:(CGFloat)colorH colorS:(CGFloat)colorS;
 
 @end
 @interface Palette : UIView

@@ -62,6 +62,9 @@
 
 @property (nonatomic,assign) NSInteger tagNum;
 
+@property (nonatomic,strong) NSString *type;
+
+@property (nonatomic,strong) NSString *curType;
 //素材删除
 - (void)closeBtnClick;
 

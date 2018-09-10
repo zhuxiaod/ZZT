@@ -31,6 +31,8 @@
 
 @property (nonatomic,assign) CGPoint viewCenter;
 
+@property (nonatomic,strong) NSString *type;
+
 +(ZZTEditImageViewModel *)initImgaeViewModel:(CGRect)imageViewFrame imageUrl:(NSString *)imageUrl tagNum:(NSInteger )tagNum viewType:(NSInteger)viewType localResource:(UIImage *)localResource viewTransform:(CGAffineTransform)viewTransform;
 
 @end

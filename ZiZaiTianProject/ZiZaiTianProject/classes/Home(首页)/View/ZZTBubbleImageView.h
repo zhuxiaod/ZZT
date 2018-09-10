@@ -11,10 +11,10 @@
 @class ZZTBubbleImageView;
 
 @protocol ZZTBubbleImageViewDelegate <NSObject>
-    
-
 
 @optional
+
+- (void)bubbleViewSaveText:(ZZTBubbleImageView *)bubbleView text:(NSString *)text;
 
 - (void)bubbleViewDidBeginEditing:(ZZTBubbleImageView *)bubbleView;
 
@@ -23,8 +23,6 @@
 - (void)bubbleViewDidBeginEnd:(ZZTBubbleImageView *)bubbleView;
 
 - (void)bubbleViewDidRotate:(ZZTBubbleImageView *)bubbleView;
-
-- (void)bubbleViewSaveText:(ZZTBubbleImageView *)bubbleView text:(NSString *)text;
 
 @end
 
@@ -53,6 +51,10 @@
 @property (nonatomic,strong) NSString *superViewName;
 
 @property (nonatomic,strong) UIView *superView;
+
+@property (nonatomic,strong) NSString *type;
+@property (nonatomic,strong) NSString *curType;
+
 
 -(instancetype)initWithFrame:(CGRect)frame text:(NSString *)text superView:(UIView *)superView;
 

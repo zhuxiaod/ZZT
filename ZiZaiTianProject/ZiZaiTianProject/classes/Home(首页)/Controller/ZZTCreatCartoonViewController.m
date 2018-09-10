@@ -53,6 +53,8 @@
 
 @property (nonatomic,strong) NSMutableArray *editImageArray;
 
+@property (weak, nonatomic) IBOutlet UIView *topView;
+
 @property (nonatomic,strong) UIImage *image;
 
 @property (nonatomic,strong) UIView *currentView;
@@ -92,6 +94,8 @@
 //图片地址数组
 @property (nonatomic,strong) NSMutableArray *imageUrlArr;
 
+@property (nonatomic,strong) NSArray *bottomArray;
+
 //一章的卡通内容
 @property (strong,nonatomic) NSMutableArray *cartoonArray;
 //记录现在正在那一页面
@@ -108,6 +112,21 @@
 @property (nonatomic,strong) UIImagePickerController *picker;
 
 @property (nonatomic,strong) ZZTBubbleImageView *bubbleImageView;
+
+@property (nonatomic,assign) CGFloat colorH;
+
+@property (nonatomic,assign) CGFloat colorS;
+
+@property (nonatomic,strong) UIView *topBtnView;
+
+@property (nonatomic,strong) UIButton *closeBtn;
+//当前类型
+@property (nonatomic,strong) NSString *curType;
+@property (weak, nonatomic) IBOutlet UIButton *buJuBtn;
+@property (weak, nonatomic) IBOutlet UIButton *changJingBtn;
+@property (weak, nonatomic) IBOutlet UIButton *jueSeBtn;
+@property (weak, nonatomic) IBOutlet UIButton *xiaoGuoBtn;
+@property (weak, nonatomic) IBOutlet UIButton *wenZiBtn;
 
 @end
 
@@ -234,6 +253,9 @@
     
     [self.uploadBtn setImage:[UIImage imageNamed:@"WechatIMG320"] forState:UIControlStateNormal];
     [self.uploadBtn setTitle:@"本地" forState:UIControlStateNormal];
+    
+    NSArray *array = [NSArray arrayWithObjects:self.buJuBtn,self.changJingBtn,self.jueSeBtn,self.xiaoGuoBtn,self.wenZiBtn,nil];
+    _bottomArray = array;
 }
 
 
@@ -370,7 +392,7 @@
         //找到这个方框
         RectangleView *rectangleView = (RectangleView *)self.currentRectangleView;
         //缩小操作
-        [rectangleView tapGestureTarget:nil];
+        [rectangleView tapGestureTarget];
     }
     
     //判断view 移动后会触发一次 那一次是不会响应这一条的
@@ -469,10 +491,12 @@
                     EditImageView *imageView = [self speedInitImageView:model];
                     //重新记录数据
                     imageModel = [ZZTEditImageViewModel initImgaeViewModel:model.imageViewFrame imageUrl:nil tagNum:imageView.tagNum viewType:1 localResource:model.localResource viewTransform:imageView.transform];
+                    imageModel.type = model.type;
                 }else{
                     EditImageView *imageView = [self speedInitImageView:model];
                     //重新记录数据
                     imageModel = [ZZTEditImageViewModel initImgaeViewModel:model.imageViewFrame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 localResource:nil viewTransform:imageView.transform];
+                    imageModel.type = model.type;
                 }
                 //不是方框可直接添加素材到cell之中
                 [cellModel.imageArray addObject:imageModel];
@@ -481,6 +505,9 @@
                 ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
                 //素材Model
                 ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:model.imageViewFrame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 localResource:nil viewTransform:bubbleImageView.transform];
+                imageModel.viewContent = model.viewContent;
+                imageModel.type = model.type;
+                bubbleImageView.type = model.type;
                 //不是方框可直接添加素材到cell之中
                 [cellModel.imageArray addObject:imageModel];
             }
@@ -491,8 +518,32 @@
             ZZTFangKuangModel *mode = (ZZTFangKuangModel *)indexModel.imageArray[i];
             //恢复方框
             RectangleView *rectangView = [self createFuangKuangViewWithModel:mode];
-            //添加方框model
+            rectangView.mainView.backgroundColor = [UIColor colorWithHue:mode.colorH saturation:mode.colorS brightness:1.0 alpha:1.0];
+//            rectangView.mainView.backgroundColor = [UIColor colorWithHue:0 saturation:0 brightness:1 alpha:1.0];
             ZZTFangKuangModel *fangKuangModel = [self addFangKuangModelWithView:rectangView];
+            fangKuangModel.type = mode.type;
+            if(mode.isCircle == YES){
+                rectangView.isCircle = YES;
+                rectangView.layer.cornerRadius = rectangView.width/2;
+            }
+            if(mode.isBlack == YES){
+                rectangView.layer.borderColor = [UIColor whiteColor].CGColor;
+            }else{
+                rectangView.layer.borderColor = [UIColor blackColor].CGColor;
+            }
+            fangKuangModel.isBlack = mode.isBlack;
+
+            if(mode.colorF == 1){
+                //黑色
+                rectangView.mainView.backgroundColor = [UIColor colorWithHue:mode.colorH saturation:mode.colorS brightness:0 alpha:1.0];
+            }else if (mode.colorF == 2){
+                rectangView.mainView.backgroundColor = [UIColor colorWithHue:mode.colorH saturation:mode.colorS brightness:1 alpha:1.0];
+            }
+            fangKuangModel.colorF = mode.colorF;
+            fangKuangModel.colorH = mode.colorH;
+            fangKuangModel.colorS = mode.colorS;
+
+            //添加方框model
             //如果这个方框里面是有内容的
             //位置的更新没有被传进去
             if(mode.viewArray.count > 0){
@@ -509,10 +560,12 @@
                                 EditImageView *imageView = [self speedInitImageView:model];
                                 //重新记录数据
                                 imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:nil tagNum:imageView.tagNum viewType:1 localResource:model.localResource viewTransform:imageView.transform];
+                                imageModel.type = model.type;
                             }else{
                                 EditImageView *imageView = [self speedInitImageView:model];
                                 //重新记录数据
                                 imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.imageUrl tagNum:imageView.tagNum viewType:1 localResource:nil viewTransform:imageView.transform];
+                                imageModel.type = model.type;
                             }
                             //不是方框可直接添加素材到cell之中
                             [fangKuangModel.viewArray addObject:imageModel];
@@ -521,6 +574,8 @@
                             ZZTBubbleImageView *bubbleImageView = [self createBubbleImageViewWithModel:model];
                             //素材Model
                             ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:model.imageViewFrame imageUrl:model.imageUrl tagNum:bubbleImageView.tagNum viewType:2 localResource:nil viewTransform:bubbleImageView.transform];
+                            imageModel.viewContent = model.viewContent;
+                            imageModel.type = model.type;
                             //不是方框可直接添加素材到cell之中
                             [fangKuangModel.viewArray addObject:imageModel];
                         }
@@ -914,7 +969,6 @@
 }
 
 #pragma 获取当前方框的模型
-
 #warning 文字框 这里是有问题的诶
 -(ZZTFangKuangModel *)rectangleModelFromView:(RectangleView *)rectangleView{
     //取到模型组  改变模型的数据
@@ -939,7 +993,6 @@
 }
 
 -(RectangleView *)createFuangKuangViewWithModel:(ZZTFangKuangModel *)model{
-
     CGRect viewFrame;
     if(model){
         //恢复
@@ -955,7 +1008,8 @@
     rectangView.isClick = YES;
     rectangView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
-#warning 这个代理是干什么的？？
+    rectangView.type = @"布局";
+    #warning 这个代理是干什么的？？
     [self checkRectangleView:rectangView];
     
     [MainOperationView addSubview:rectangView];
@@ -974,10 +1028,22 @@
 }
 #pragma mark 设置当前方框
 -(void)checkRectangleView:(RectangleView *)rectangleView{
-    //设置方框为当前View
-    self.mainView = rectangleView.mainView;
-    self.currentRectangleView = rectangleView;
-    [self exceptCurrentViewHiddenOtherView:rectangleView];
+    rectangleView.curType = self.curType;
+    //如果点击的正是现在的方框 什么也不做
+    if(self.currentRectangleView == rectangleView){
+    
+    }else if(self.currentRectangleView != rectangleView && self.currentRectangleView.isBig == YES){
+        //如果
+        [self.currentRectangleView closeView];
+        [self.closeBtn removeFromSuperview];
+        [self.topBtnView removeFromSuperview];
+    }
+    if(rectangleView.isBig == NO){
+        //设置方框为当前View
+        self.mainView = rectangleView.mainView;
+        self.currentRectangleView = rectangleView;
+        [self exceptCurrentViewHiddenOtherView:rectangleView];
+    }
 }
 
 #pragma mark 方框移动 更新位置
@@ -1022,10 +1088,24 @@
     if(isBig == YES){
         //1.
         self.proportion = proportion;
+        [self.topBtnView removeFromSuperview];
+        [self.closeBtn removeFromSuperview];
+        //生成一个关闭的窗口
+        UIView *topBtnView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, self.view.width, 30)];
+        topBtnView.backgroundColor = [UIColor blackColor];
+        _topBtnView = topBtnView;
+        [self.view addSubview:topBtnView];
+        //关闭按钮
+        UIButton *closeBtn = [[UIButton alloc] initWithFrame:CGRectMake(topBtnView.width/2 - 50, 0, 100, topBtnView.height)];
+        [closeBtn setTitle:@"确定" forState:UIControlStateNormal];
+        [closeBtn addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
+        _closeBtn = closeBtn;
+        [topBtnView addSubview:closeBtn];
     }else{
         //负数
         CGFloat box = proportion - 1;
         self.proportion = 1 - box;
+        [self close];
     }
     //获取方框的模型
     ZZTFangKuangModel *FKModel = [self FangKuangModelFromCellModel];
@@ -1090,6 +1170,15 @@
         }
     }
 }
+
+-(void)close{
+    if(self.currentRectangleView.isBig == YES){
+        [self.currentRectangleView closeView];
+    }
+    [self.closeBtn removeFromSuperview];
+    [self.topBtnView removeFromSuperview];
+}
+
 //更新方框的坐标
 -(void)updateRectangleViewFrame:(RectangleView *)view{
     ZZTFangKuangModel *model = [self rectangleModelFromView:view];
@@ -1114,16 +1203,19 @@
 
 //改变cell的颜色
 -(void)changeColor{
+    ZZTFangKuangModel *FKModel = [self rectangleModelFromView:self.currentRectangleView];
+    FKModel.colorH = self.colorH;
+    FKModel.colorS = self.colorS;
+    FKModel.colorF = 0;
     self.mainView.backgroundColor = self.choiceColor;
     self.coloringBtn.imageView.backgroundColor = self.choiceColor;
-    
-    //点击时 获取方框的背景图
-    
 }
 
 #pragma mark 取色板代理方法
--(void)patetteView:(ZZTPaletteView *)patetteView choiceColor:(UIColor *)color colorPoint:(CGPoint)colorPoint{
+-(void)patetteView:(ZZTPaletteView *)patetteView choiceColor:(UIColor *)color colorPoint:(CGPoint)colorPoint colorH:(CGFloat)colorH colorS:(CGFloat)colorS{
     self.choiceColor = color;
+    self.colorS = colorS;
+    self.colorH = colorH;
 }
 
 
@@ -1161,6 +1253,7 @@
     EditImageView *imageView = [self speedInitImageViewWithStr:model.img];
     //存储数据
     ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.img tagNum:imageView.tagNum viewType:1 localResource:nil viewTransform:imageView.transform];
+    imageModel.type = imageView.type;
     
     //方框内
     if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
@@ -1192,6 +1285,7 @@
     ZZTDIYCellModel *cellModel = self.cartoonEditArray[self.selectRow];
 
     ZZTBubbleImageView *imageView = [[ZZTBubbleImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 200, 200) text:@"请输入内容" superView:self.mainView];
+    imageView.type = self.curType;
     imageView.bubbleDelegate = self;
     imageView.superViewName = NSStringFromClass([self.mainView class]);
     [imageView sd_setImageWithURL:[NSURL URLWithString:model.img]];
@@ -1200,6 +1294,11 @@
     self.tagNum = self.tagNum + 1;
     //素材Model
     ZZTEditImageViewModel *imageModel = [ZZTEditImageViewModel initImgaeViewModel:imageView.frame imageUrl:model.img tagNum:imageView.tagNum viewType:2 localResource:nil viewTransform:imageView.transform];
+    imageModel.viewContent = @"请输入内容";
+    imageModel.type = imageView.type;
+
+//    [self bubbleViewSaveText:imageView text:@"请输入内容"];
+
     //如果是加入方框
     if ([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]) {
         //如果可以加入素材 便加入图层
@@ -1225,10 +1324,12 @@
 
 //设置当前View
 -(void)bubbleViewDidBeginEditing:(ZZTBubbleImageView *)bubbleView{
+    bubbleView.curType = self.curType;
     self.isMoveAfter = YES;
     self.bubbleImageView = bubbleView;
     [self exceptCurrentViewHiddenOtherView:bubbleView];
 }
+
 //移动后更新位置
 -(void)bubbleViewDidBeginEnd:(ZZTBubbleImageView *)bubbleView{
     CGAffineTransform lastTransform = bubbleView.transform;
@@ -1237,18 +1338,27 @@
     model.imageViewFrame = bubbleView.frame;
     bubbleView.transform = lastTransform;
 }
+
 //保存文字
 -(void)bubbleViewSaveText:(ZZTBubbleImageView *)bubbleView text:(NSString *)text{
     ZZTEditImageViewModel *model = [self getEditImageViewModelWithView:bubbleView];
     model.viewContent = text;
 }
+
 #pragma mark 文字框移动
 -(void)bubbleViewDidBeginMoving:(ZZTBubbleImageView *)bubbleView{
-    CGRect startRect = [bubbleView convertRect:bubbleView.bounds toView:_mainView
-                        ];
+
     ZZTEditImageViewModel *model = [self getEditImageViewModelWithView:bubbleView];
-    model.imageViewFrame = startRect;
+    
+    CGAffineTransform lastTransform = bubbleView.transform;
+    bubbleView.transform = CGAffineTransformIdentity;
+    //变化前的位置
+    model.imageViewFrame = bubbleView.frame;
+    //回到变化后
+    bubbleView.transform = lastTransform;
+    model.viewTransform = bubbleView.transform;
 }
+
 #pragma mark 文字框旋转
 -(void)bubbleViewDidRotate:(ZZTBubbleImageView *)bubbleView{
     //记录当前变化后的tansform  如果不能直接赋值 要求算出来
@@ -1278,7 +1388,6 @@
             }
         }
     }else{
-        
         //更新位置
         for (ZZTEditImageViewModel *imageViewModel in cellModel.imageArray) {
             if(imageViewModel.tagNum == bubbleView.tagNum && imageViewModel.viewType == 2){
@@ -1297,6 +1406,7 @@
     //变成了没有进行变化的时候
     //但是为什么会变大呢？？？
     EditImageView *imageView = [[EditImageView alloc] initWithFrame:model.imageViewFrame];
+    imageView.type = model.type;
     NSLog(@"恢复素材:%@",NSStringFromCGRect(imageView.frame));
     imageView.delegate = self;
     //记录父类的名字
@@ -1324,6 +1434,7 @@
 -(EditImageView *)speedInitImageViewWithStr:(NSString *)imgUrl{
     //创建坐标默认
     EditImageView *imageView = [[EditImageView alloc] initWithFrame:CGRectMake(self.midView.center.x/2, 20, 100, 100)];
+    imageView.type = self.curType;
     imageView.delegate = self;
     //记录父类的名字
     imageView.superViewName = NSStringFromClass([self.mainView class]);
@@ -1350,13 +1461,13 @@
     //btn没有隐藏
     if (view.isHide == NO) {
         //collectionView不能动
-        self.collectionView.scrollEnabled = NO;
+//        self.collectionView.scrollEnabled = NO;
     }
 }
 
 /*
- updateImageViewFrame
- */
+    updateImageViewFrame
+*/
 #pragma mark 素材旋转
 -(void)updateImageViewTransform:(EditImageView *)view{
     //记录当前变化后的tansform  如果不能直接赋值 要求算出来
@@ -1399,10 +1510,13 @@
 }
 //隐藏其他View
 -(void)EditImageViewWithViewIncell:(EditImageView *)view{
+    view.curType = self.curType;
     [self exceptCurrentViewHiddenOtherView:view];
 }
 //隐藏其他View
 -(void)EditImageViewWithViewInRectangleView:(EditImageView *)view{
+    //给view发送当前的type
+    view.curType = self.curType;
     [self exceptCurrentViewHiddenOtherView:view];
 }
 
@@ -1563,30 +1677,49 @@
 
 #pragma mark 素材库
 //布局
-- (IBAction)Layout:(id)sender {
+- (IBAction)Layout:(UIButton *)sender {
+    [self setBottomBtn:sender];
     [self setupMaterialLibraryView:@"布局"];
 }
 
 //场景
-- (IBAction)scene:(id)sender {
+- (IBAction)scene:(UIButton *)sender {
+    [self setBottomBtn:sender];
     [self setupMaterialLibraryView:@"场景"];
 }
 
 //角色
-- (IBAction)role:(id)sender {
+- (IBAction)role:(UIButton *)sender {
+    [self setBottomBtn:sender];
     [self setupMaterialLibraryView:@"角色"];
 }
 
 //效果
-- (IBAction)specialEffects:(id)sender {
+- (IBAction)specialEffects:(UIButton *)sender {
+    [self setBottomBtn:sender];
     [self setupMaterialLibraryView:@"效果"];
 }
 
 //文字
-- (IBAction)textView:(id)sender {
+- (IBAction)textView:(UIButton *)sender {
+    [self setBottomBtn:sender];
     [self setupMaterialLibraryView:@"文字"];
 }
 
+-(void)setBottomBtn:(UIButton *)sender{
+    for (int i = 0;i < self.bottomArray.count;i++) {
+        UIButton *btn = self.bottomArray[i];
+        if([sender.titleLabel.text isEqualToString:btn.titleLabel.text]){
+            [btn setBackgroundImage:[UIImage imageNamed:btn                                                                           .titleLabel.text] forState:UIControlStateNormal];
+            [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+            self.curType = btn.titleLabel.text;
+        }else{
+            [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [btn setBackgroundImage:[UIImage createImageWithColor:[UIColor clearColor]] forState:UIControlStateNormal];
+        }
+    }
+
+}
 //弹出底部View
 -(void)setupMaterialLibraryView:(NSString *)str{
     [_materialLibraryView removeFromSuperview];
@@ -1812,21 +1945,81 @@
 
 #pragma mark - 加入方框
 -(void)sendTuKuangWithModel:(ZZTFodderListModel *)model{
+    //如果已经有框 还是放大 那么缩小当前已经放大的框
+    if(self.currentRectangleView && self.currentRectangleView.isBig == YES){
+        //缩小
+        [self.currentRectangleView closeView];
+    }
+    
     //判断是黑的还是白的
     if([model.owner isEqualToString:@"0"]){
         //黑
         RectangleView *rectangleView = [self createFuangKuangViewWithModel:nil];
         rectangleView.mainView.backgroundColor = [UIColor blackColor];
+        rectangleView.layer.borderColor = [UIColor whiteColor].CGColor;
+
         //添加方框模型
-        [self addFangKuangModelWithView:rectangleView];
-        
+        ZZTFangKuangModel *model = [self addFangKuangModelWithView:rectangleView];
+        model.modelColor = rectangleView.mainView.backgroundColor;
+        model.type = rectangleView.type;
+        //记录边的颜色
+        model.isBlack = YES;
+        model.colorF = 1;
+        model.colorH = 0;
+        model.colorS = 0;
     }else{
         //白
         RectangleView *rectangleView = [self createFuangKuangViewWithModel:nil];
         rectangleView.mainView.backgroundColor = [UIColor whiteColor];
+        rectangleView.layer.borderColor = [UIColor blackColor].CGColor;
+        
         //添加方框模型
-        [self addFangKuangModelWithView:rectangleView];
+        ZZTFangKuangModel *model = [self addFangKuangModelWithView:rectangleView];
+        model.modelColor = rectangleView.mainView.backgroundColor;
+        model.type = rectangleView.type;
+        //记录边的颜色
+        model.isBlack = NO;
+        model.colorF = 2;
+        model.colorH = 0;
+        model.colorS = 0;
     }
 }
-
+#pragma mark 圆框
+-(void)sendYuanKuangWithModel:(ZZTFodderListModel *)model{
+    //判断是黑的还是白的
+    if([model.owner isEqualToString:@"0"]){
+        //黑
+        RectangleView *rectangleView = [self createFuangKuangViewWithModel:nil];
+        rectangleView.mainView.backgroundColor = [UIColor whiteColor];
+        rectangleView.layer.borderColor = [UIColor blackColor].CGColor;
+        rectangleView.isCircle = YES;
+        rectangleView.layer.cornerRadius = rectangleView.width/2;
+        //添加方框模型
+        ZZTFangKuangModel *model = [self addFangKuangModelWithView:rectangleView];
+        model.modelColor = rectangleView.mainView.backgroundColor;
+        model.type = rectangleView.type;
+        //记录边的颜色
+        model.isBlack = NO;
+        model.colorF = 2;
+        model.colorH = 0;
+        model.colorS = 0;
+        model.isCircle = YES;
+    }
+//    else{
+//        //白
+//        RectangleView *rectangleView = [self createFuangKuangViewWithModel:nil];
+//        rectangleView.mainView.backgroundColor = [UIColor whiteColor];
+//        rectangleView.layer.borderColor = [UIColor blackColor].CGColor;
+//
+//        //添加方框模型
+//        ZZTFangKuangModel *model = [self addFangKuangModelWithView:rectangleView];
+//        model.modelColor = rectangleView.mainView.backgroundColor;
+//        model.type = rectangleView.type;
+//        //记录边的颜色
+//        model.isBlack = NO;
+//        model.colorF = 2;
+//        model.colorH = 0;
+//        model.colorS = 0;
+//    }
+}
 @end

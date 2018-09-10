@@ -19,6 +19,9 @@
 
 -(void)sendTuKuangWithModel:(ZZTFodderListModel *)model;
 
+-(void)sendYuanKuangWithModel:(ZZTFodderListModel *)model;
+
+
 @end
 
 @interface ZZTMaterialLibraryView : UIView

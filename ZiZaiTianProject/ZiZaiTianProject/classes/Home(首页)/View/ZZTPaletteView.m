@@ -14,6 +14,7 @@
 @property (nonatomic,strong) UIView *choicesColorView;
 
 @end
+
 @implementation ZZTPaletteView
 
 #pragma mark 初始化
@@ -70,13 +71,16 @@
 -(void)clickPaletteBtn:(UITapGestureRecognizer *)sender{
     [self removeFromSuperview];
 }
+
 #pragma mark 取色板代理方法
--(void)patette:(Palette *)patette choiceColor:(UIColor *)color colorPoint:(CGPoint)colorPoint{
+-(void)patette:(Palette *)patette choiceColor:(UIColor *)color colorPoint:(CGPoint)colorPoint colorH:(CGFloat)colorH colorS:(CGFloat)colorS{
     self.choicesColorView.backgroundColor = color;
-    if ([self.delegate respondsToSelector:@selector(patetteView:choiceColor:colorPoint:)]) {
-        [self.delegate patetteView:self choiceColor:color colorPoint:colorPoint];
+    if ([self.delegate respondsToSelector:@selector(patetteView:choiceColor:colorPoint:colorH:colorS:)]){
+        [self.delegate patetteView:self choiceColor:color colorPoint:colorPoint colorH:colorH colorS:colorS];
     }
 }
+
+
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     UIView *result = [super hitTest:point withEvent:event];
     if (result == self) {
@@ -84,7 +88,6 @@
     }else {
         return result;
     }
-    
 }
 
 @end

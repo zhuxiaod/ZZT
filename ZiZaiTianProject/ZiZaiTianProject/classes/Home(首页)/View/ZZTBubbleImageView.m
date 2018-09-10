@@ -59,10 +59,13 @@ textView 大小问题 和 输入输出问题
 
 #pragma mark - 捏合手势
 - (void)handlePinch:(UIPinchGestureRecognizer *)recognizer {
+    if([self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginEditing:)]) {
+        [self.bubbleDelegate bubbleViewDidBeginEditing:self];
+    }
     //记录开始的bounds
     BOOL increase = NO;
 
-    if([recognizer state] == UIGestureRecognizerStateChanged){
+    if([recognizer state] == UIGestureRecognizerStateChanged && [self.curType isEqualToString:self.type]){
 
         CGFloat scale = recognizer.scale;
         recognizer.view.transform = CGAffineTransformScale(recognizer.view.transform, scale, scale);
@@ -78,16 +81,10 @@ textView 大小问题 和 输入输出问题
         if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidRotate:)]) {
             [self.bubbleDelegate bubbleViewDidRotate:self];
         }
-//        CGAffineTransform lastTransform = self.transform;
-//        self.transform = CGAffineTransformIdentity;
-//        self.width = self.bounds.size.width * recognizer.scale;
-//        self.height = self.bounds.size.height * scale;
+
         CGRect rect2 = CGRectMake(0, 0, roundf(self.bounds.size.width * self.scale), roundf(self.bounds.size.height * self.scale));
-//        CGRect rect2 = {CGPointZero, {roundf(self.bounds.size.width * self.scale) ,roundf(self.bounds.size.height * self.scale)}};
 
         [self layoutSubViewWithFrame:rect2];
-        NSLog(@"%@",NSStringFromCGRect(rect2));
-//        self.transform = lastTransform;
         recognizer.scale = 1.0;
 
     }
@@ -144,16 +141,13 @@ textView 大小问题 和 输入输出问题
 -(void)hideEditBtn{
     //关闭键盘
     [self endEditing:YES];
-//    self.resizingControl.hidden = YES;
-//    self.deleteControl.hidden = YES;
+
 }
 
 -(void)setIsHide:(BOOL)isHide{
     _isHide = isHide;
     if(isHide == YES){
         [self hideEditBtn];
-    }else{
-//        [self showEditBtn];
     }
 }
 
@@ -171,49 +165,6 @@ textView 大小问题 和 输入输出问题
 {
     return self.textView.text;
 }
-
-//#pragma mark - 旋转手势
-//-(void)rotateViewPanGesture:(UIRotationGestureRecognizer *)recognizer{
-//    recognizer.view.transform = CGAffineTransformRotate(recognizer.view.transform, recognizer.rotation);
-//    recognizer.rotation = 0.0;
-//    //试一下  写一个代理
-//    if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidRotate:)]) {
-//        [self.bubbleDelegate bubbleViewDidRotate:self];
-//    }
-//}
-//
-//#pragma mark - 移动手势
-//-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-//    [super touchesBegan:touches withEvent:event];
-//    UITouch *touch = [touches anyObject];
-//    //获取点击时所在父View的位置
-//    startTouchPoint = [touch locationInView:self.superView];
-//    startTouchCenter = self.center;
-//    //正在移动
-//    _isMove = YES;
-//    prevPoint = startTouchPoint;
-//    if([self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginEditing:)]) {
-//        [self.bubbleDelegate bubbleViewDidBeginEditing:self];
-//    }
-//}
-//
-//-(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-//    [super touchesMoved:touches withEvent:event];
-//
-//    NSArray *touchesArr = [[event allTouches] allObjects];
-//    if (_isMove && touchesArr.count == 1){
-//        //获得当前的位置
-//        CGPoint curPoint = [[touches anyObject] locationInView:self.superView];
-//        //中心
-//        self.center =  CGPointMake(curPoint.x-(startTouchPoint.x-startTouchCenter.x), curPoint.y-(startTouchPoint.y-startTouchCenter.y));
-//    }
-//
-//    if([self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginEditing:)]) {
-//        [self.bubbleDelegate bubbleViewDidBeginEditing:self];
-//    }
-//}
-//
-
 
 #pragma mark - 代理方法实现旋转 + 缩放捏合 可同时进行
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
@@ -278,9 +229,14 @@ textView 大小问题 和 输入输出问题
         [self.textView setFont:[self.curFont fontWithSize:--cFont]];
         [self centerTextVertically];
         
+        //移动
+        UIPanGestureRecognizer *PanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selfMove:)];
+        [self addGestureRecognizer:PanGestureRecognizer];
+        
     }
     return self;
 }
+
 
 //中央字体垂直
 - (void)centerTextVertically
@@ -371,61 +327,48 @@ textView 大小问题 和 输入输出问题
     return  tH;
 }
 
-//#pragma mark - 捏合手势
-//- (void)handlePinch:(UIPinchGestureRecognizer *)recognizer {
-//    CGFloat scale = recognizer.scale;
-//    recognizer.view.transform = CGAffineTransformScale(recognizer.view.transform, scale, scale);
-//    //在已缩放大小基础下进行累加变化；区别于：使用 CGAffineTransformMakeScale 方法就是在原大小基础下进行变化
-//    recognizer.scale = 1.0;
-//}
-
 #pragma mark - 旋转手势
 -(void)rotateViewPanGesture:(UIRotationGestureRecognizer *)recognizer{
-    recognizer.view.transform = CGAffineTransformRotate(recognizer.view.transform, recognizer.rotation);
-    recognizer.rotation = 0.0;
-    if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidRotate:)]) {
-        [self.bubbleDelegate bubbleViewDidRotate:self];
+    if([self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginEditing:)]) {
+        [self.bubbleDelegate bubbleViewDidBeginEditing:self];
+    }
+    if([self.curType isEqualToString: self.type]){
+        recognizer.view.transform = CGAffineTransformRotate(recognizer.view.transform, recognizer.rotation);
+        recognizer.rotation = 0.0;
+        if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidRotate:)]) {
+            [self.bubbleDelegate bubbleViewDidRotate:self];
+        }
     }
 }
 
 #pragma mark - 移动手势
-//BOOL isMove;
-//CGPoint legend_point;
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [super touchesBegan:touches withEvent:event];
-    UITouch *touch = [touches anyObject];
-    //获取点击时所在父View的位置
-    _startTouchPoint = [touch locationInView:self.superview];
-    _startTouchCenter = self.center;
-    //正在移动
-    _isMove = YES;
-    if([self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginEditing:)]) {
-        [self.bubbleDelegate bubbleViewDidBeginEditing:self];
+-(void)selfMove:(UIPanGestureRecognizer *)gesture{
+    if(gesture.state == UIGestureRecognizerStateBegan){
+        _startTouchPoint = [gesture locationInView:self.superView];
+        _startTouchCenter = self.center;
+        //正在移动
+        _isMove = YES;
+        if([self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginEditing:)]) {
+            [self.bubbleDelegate bubbleViewDidBeginEditing:self];
+        }
+    }else if(gesture.state == UIGestureRecognizerStateChanged){
+        if (_isMove && [self.curType isEqualToString:self.type]) {
+            //获得当前的位置
+            CGPoint curPoint = [gesture locationInView:self.superView];
+            //中心
+            self.center = CGPointMake(curPoint.x-(_startTouchPoint.x-_startTouchCenter.x), curPoint.y-(_startTouchPoint.y-_startTouchCenter.y));
+            if([self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginMoving:)]) {
+                [self.bubbleDelegate bubbleViewDidBeginMoving:self];
+            }
+        }
+    }else if(gesture.state == UIGestureRecognizerStateEnded){
+            _isMove = NO;
     }
-}
-
--(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [super touchesMoved:touches withEvent:event];
-    if (_isMove) {
-        //获得当前的位置
-        CGPoint curPoint = [[touches anyObject] locationInView:self.superview];
-        //中心
-        self.center =  CGPointMake(curPoint.x-(_startTouchPoint.x-_startTouchCenter.x), curPoint.y-(_startTouchPoint.y-_startTouchCenter.y));
-    }
-    if([self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginEditing:)]) {
-        [self.bubbleDelegate bubbleViewDidBeginEditing:self];
-    }
-}
-
-//切换状态
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    _isMove = NO;
 }
 
 - (void)layoutSubViewWithFrame:(CGRect)frame
 {
     CGRect tRect = frame;
-    
     tRect.size.width = self.bounds.size.width * 0.64;
     tRect.size.height = self.bounds.size.height * 0.46;
     tRect.origin.x = (self.bounds.size.width - tRect.size.width) * 0.5;
@@ -439,22 +382,25 @@ textView 大小问题 和 输入输出问题
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    if([self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginEditing:)]) {
+        [self.bubbleDelegate bubbleViewDidBeginEditing:self];
+    }
+  
+    
     if ([text isEqualToString:@"\n"])
     {
         [self endEditing:YES];
-        //        if (self.delegate && [self.delegate respondsToSelector:@selector(textViewDidEndEditing:)])
-        //        {
-        //            [self.delegate textViewDidEndEditing:self];
-        //        }
+
         return NO;
     }
-    //
+
     _isDeleting = (range.length >= 1 && text.length == 0);
     
     if (textView.font.pointSize <= self.minFontSize && !_isDeleting) return NO;
     
     return YES;
 }
+
 //已经发生改变
 - (void)textViewDidChange:(UITextView *)textView
 {
@@ -513,18 +459,20 @@ textView 大小问题 和 输入输出问题
     }
     [self centerTextVertically];
     [self.textView setText:calcStr];
-    if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(bubbleViewSaveText:text::)]) {
+    if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(bubbleViewSaveText:text:)]) {
         [self.bubbleDelegate bubbleViewSaveText:self text:calcStr];
     }
 }
 #pragma mark 开启键盘
 - (BOOL)textViewShouldBeginEditing:(UITextView *)aTextView
 {
-    //    if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginEditing:)]) {
-    //        [self.bubbleDelegate bubbleViewDidBeginEditing:self];
-    //    }
-    //    self.isHide = NO;
-    return YES;
+    if (self.bubbleDelegate && [self.bubbleDelegate respondsToSelector:@selector(bubbleViewDidBeginEditing:)]) {
+        [self.bubbleDelegate bubbleViewDidBeginEditing:self];
+    }
+    if([self.curType isEqualToString:self.type]){
+        return YES;
+    }
+    return NO;
 }
 
 -(void)test:(NSString *)str{
@@ -559,4 +507,5 @@ textView 大小问题 和 输入输出问题
     self.hidden = YES;
     [[NSNotificationCenter defaultCenter] postNotificationName:@"removeBubbleView" object:self];
 }
+
 @end

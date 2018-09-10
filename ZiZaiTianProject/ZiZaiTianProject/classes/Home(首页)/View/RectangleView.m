@@ -40,6 +40,7 @@
 @property (nonatomic,strong) UIPanGestureRecognizer *click3;
 @property (nonatomic,strong) UIPanGestureRecognizer *click4;
 @property (nonatomic,strong) UIButton *centerBtn;
+@property (nonatomic,strong) UIPinchGestureRecognizer *PinchGestureRecognizer;
 
 @end
 
@@ -63,13 +64,13 @@ int i = 0;
     _isBig = isBig;
     //没有变大
     if(isBig == NO){
-            self.mainView.userInteractionEnabled = NO;
-            [self.topBorder addGestureRecognizer:self.click1];
-            [self.leftBorder addGestureRecognizer:self.click2];
-            [self.rightBorder addGestureRecognizer:self.click3];
-            [self.bottomBorder addGestureRecognizer:self.click4];
-            [self.centerBtn setTitle:@"编辑" forState:UIControlStateNormal];
-            self.centerBtn.alpha = 1;
+        self.mainView.userInteractionEnabled = NO;
+        [self.topBorder addGestureRecognizer:self.click1];
+        [self.leftBorder addGestureRecognizer:self.click2];
+        [self.rightBorder addGestureRecognizer:self.click3];
+        [self.bottomBorder addGestureRecognizer:self.click4];
+        [self.centerBtn setTitle:@"编辑" forState:UIControlStateNormal];
+        self.centerBtn.alpha = 1;
     }else{
         //变大
         self.mainView.userInteractionEnabled = YES;
@@ -81,13 +82,15 @@ int i = 0;
         [self.rightBorder removeGestureRecognizer:self.click3];
         
         [self.bottomBorder removeGestureRecognizer:self.click4];
-        [self.centerBtn setTitle:@"完成" forState:UIControlStateNormal];
-        self.centerBtn.alpha = 0.6;
     }
 }
 
 #pragma mark - 对边操作
 -(void)tapTarget:(UIPanGestureRecognizer *)panGesture{
+    if(self.delegate && [self.delegate respondsToSelector:@selector(checkRectangleView:)]){
+        [self.delegate checkRectangleView:self];
+    }
+    if(![self.curType isEqualToString:self.type])return;
     //改变变量
     CGFloat width = startWidth;
     CGFloat height = startHeight;
@@ -192,80 +195,12 @@ int i = 0;
     if (isHide == YES) {
         self.centerBtn.hidden = YES;
     }else{
-        self.centerBtn.hidden = NO;
-    }
-}
-#pragma mark - 移动手势
-BOOL isMove;
-CGPoint legend_point;
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [super touchesBegan:touches withEvent:event];
-    self.isClick = YES;
-    if(self.delegate && [self.delegate respondsToSelector:@selector(checkRectangleView:)]){
-        [self.delegate checkRectangleView:self];
-    }
-
-    //默认状态为no
-    isMove = NO;
-    self.isHide = NO;
-    //获取响应事件的对象
-    UITouch *touch = [touches anyObject];
-    //获取在屏幕上的点
-    CGPoint point = [touch locationInView:self.superView];
-    //如果这个点在V2的范围里面
-    //也就是说点击到了V2
-    if (CGRectContainsPoint(self.frame, point)) {
-        //记录这个点
-        legend_point = [touch locationInView:self];
-        //可移动状态
-        isMove = YES;
+        if(self.isBig == NO){
+            if([self.curType isEqualToString:self.type])self.centerBtn.hidden = NO;
+        }
     }
 }
 
--(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [super touchesMoved:touches withEvent:event];
-    
-    if(self.delegate && [self.delegate respondsToSelector:@selector(setupMainView:)]){
-        [self.delegate setupMainView:self];
-    }
-//    如果是可移动状态
-    if (!isMove) {
-        return;
-    }
-    //自动释放池
-    @autoreleasepool {
-        //获得点击对象
-        UITouch *touch = [touches anyObject];
-        //在屏幕上的点
-        CGPoint point = [touch locationInView:self.superView];
-        //转化成相对的中心
-        //可将点击的点 变成点击中心点 移动
-        point.x += self.frame.size.width/2.0f - legend_point.x;
-        point.y += self.frame.size.height/2.0f - legend_point.y;
-        //        限制范围
-        //如果点小于中心位置 那么直接变成中心位置
-        if (point.x < self.width / 2.0f) {
-            point.x = self.width / 2.0f;
-        }
-        if (point.y < self.height / 2.0f) {
-            point.y = self.height / 2.0f;
-        }
-        //中心点不能离开 325的位置
-        if (point.x > self.superView.width - self.width / 2.0f) {
-            point.x = self.superView.width - self.width / 2.0f;
-        }
-        if (point.y > self.superView.height - self.height / 2.0f) {
-            point.y = self.superView.height - self.height / 2.0f;
-        }
-        //通过点来计算中心点  控制中心点的位置
-        self.center = point;
-    }
-}
--(void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(updateRectangleViewFrame:)]) {
-        [self.delegate updateRectangleViewFrame:self];
-    }
-}
 #pragma mark - 初始化
 -(void)addUI{
     
@@ -307,7 +242,6 @@ CGPoint legend_point;
     centerBtn.backgroundColor = [UIColor colorWithHexString:@"#91EDF2"];
     centerBtn.layer.borderColor = [UIColor colorWithHexString:@"#62C7AC"].CGColor;
     centerBtn.layer.borderWidth = 1.0f;
-//    [centerBtn addTarget:self action:@selector(tapGestureTarget:) forControlEvents:UIControlEventTouchUpInside];
     centerBtn.layer.cornerRadius = centerBtn.frame.size.height / 2;
     centerBtn.layer.masksToBounds = YES;
     _centerBtn = centerBtn;
@@ -315,7 +249,6 @@ CGPoint legend_point;
     
     //边线
     self.layer.borderWidth = 2.0f;
-    self.layer.borderColor = [UIColor blackColor].CGColor;
     
     [mainView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.mas_top);
@@ -326,7 +259,7 @@ CGPoint legend_point;
     
     [topBorder mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.mas_top);
-        make.height.mas_equalTo(8);
+        make.height.mas_equalTo(15);
         make.left.mas_equalTo(self.mas_left);
         make.right.mas_equalTo(self.mas_right);
     }];
@@ -335,21 +268,21 @@ CGPoint legend_point;
         make.top.mas_equalTo(self.mas_top);
         make.bottom.mas_equalTo(self.mas_bottom);
         make.left.mas_equalTo(self.mas_left);
-        make.width.mas_equalTo(8);
+        make.width.mas_equalTo(15);
     }];
     
     [rightBorder mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.mas_top);
         make.bottom.mas_equalTo(self.mas_bottom);
         make.right.mas_equalTo(self.mas_right);
-        make.width.mas_equalTo(8);
+        make.width.mas_equalTo(15);
     }];
     
     [bottomBorder mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(self.mas_bottom);
         make.left.mas_equalTo(self.mas_left);
         make.right.mas_equalTo(self.mas_right);
-        make.height.mas_equalTo(8);
+        make.height.mas_equalTo(15);
     }];
     
     [centerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -377,20 +310,85 @@ CGPoint legend_point;
     
     UIPinchGestureRecognizer *PinchGestureRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)];
     [self addGestureRecognizer:PinchGestureRecognizer];
+    _PinchGestureRecognizer = PinchGestureRecognizer;
 
-
-    UITapGestureRecognizer *TapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureTarget:)];
-    TapGestureRecognizer.numberOfTapsRequired = 1;
-    [self.centerBtn addGestureRecognizer:TapGestureRecognizer];
+    //移动
+    UIPanGestureRecognizer *PanGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(selfMove:)];
+    [self addGestureRecognizer:PanGestureRecognizer];
     
-    [TapGestureRecognizer requireGestureRecognizerToFail:PinchGestureRecognizer];
+//    [TapGestureRecognizer requireGestureRecognizerToFail:PinchGestureRecognizer];
 
     self.layer.masksToBounds = YES;
     
-//    //删除
-    UITapGestureRecognizer *removeGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:nil];
-    removeGestureRecognizer.numberOfTapsRequired = 3;
-    [self addGestureRecognizer:removeGestureRecognizer];
+    //单击
+    UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(checkView:)];
+    tapGestureRecognizer.numberOfTapsRequired = 1;
+    [self addGestureRecognizer:tapGestureRecognizer];
+    
+    [self.centerBtn addTarget:self action:@selector(tapGestureTarget) forControlEvents:UIControlEventTouchUpInside];
+
+}
+
+-(void)checkView:(UITapGestureRecognizer *)gesture{
+    if(self.delegate && [self.delegate respondsToSelector:@selector(checkRectangleView:)]){
+        [self.delegate checkRectangleView:self];
+    }
+    if([self.curType isEqualToString:self.type]){
+        self.isHide = NO;
+    }
+}
+#pragma mark 移动
+BOOL isMove;
+CGPoint legend_point;
+-(void)selfMove:(UIPanGestureRecognizer *)gesture{
+    if(gesture.state == UIGestureRecognizerStateBegan){
+        if(self.isBig == NO){
+                self.isClick = YES;
+                if(self.delegate && [self.delegate respondsToSelector:@selector(checkRectangleView:)]){
+                    [self.delegate checkRectangleView:self];
+                }
+                //默认状态为no
+            isMove = NO;
+            if([self.curType isEqualToString:self.type]){
+                self.isHide = NO;
+            }
+                //获取响应事件的对象
+                //获取在屏幕上的点
+                CGPoint point = [gesture locationInView:self.superView];
+                //如果这个点在V2的范围里面
+                //也就是说点击到了V2
+                if (CGRectContainsPoint(self.frame, point)) {
+                    //记录这个点
+                    legend_point = [gesture locationInView:self];
+                    //可移动状态
+                    isMove = YES;
+                }
+            }
+    }else if (gesture.state == UIGestureRecognizerStateChanged){
+        if(self.isBig == NO && [self.curType isEqualToString:self.type]){
+                if(self.delegate && [self.delegate respondsToSelector:@selector(setupMainView:)]){
+                    [self.delegate setupMainView:self];
+                }
+                //    如果是可移动状态
+                if (!isMove) {
+                    return;
+                }
+                //自动释放池
+                @autoreleasepool {
+                    CGPoint translation = [gesture translationInView:self.superView];
+                    gesture.view.transform = CGAffineTransformTranslate(gesture.view.transform, translation.x, translation.y);
+                    [gesture setTranslation:CGPointZero inView:self.superView];
+                }
+            }
+        }else if (gesture.state == UIGestureRecognizerStateEnded){
+            if (self.delegate && [self.delegate respondsToSelector:@selector(updateRectangleViewFrame:)]) {
+                [self.delegate updateRectangleViewFrame:self];
+            }
+        }
+}
+
+-(void)closeView{
+    [self tapGestureTarget];
 }
 
 #pragma mark - 删除事件
@@ -400,7 +398,7 @@ CGPoint legend_point;
 }
 
 #pragma mark - 双击事件
--(void)tapGestureTarget:(UITapGestureRecognizer *)gesture{
+-(void)tapGestureTarget{
     //原来的大小
     selfHeight = self.height;
     selfWidth = self.width;
@@ -426,61 +424,39 @@ CGPoint legend_point;
         //放大了
         self.frame = CGRectMake(0, 0, selfWidth, selfHeight);
         nowFrame = self.frame;
+        if(self.isCircle == YES){
+            self.layer.cornerRadius = self.width/2;
+        }
         //放大后代理
         self.isBig = YES;
         if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:minSize:maxSize:)]){
             [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion minSize:lastFrame maxSize:nowFrame];
         }
+        self.centerBtn.hidden = YES;
     }else{
         //变回原来的样子
         self.frame = lastFrame;
+        if(self.isCircle == YES){
+            self.layer.cornerRadius = self.width/2;
+        }
         self.isBig = NO;
         if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:minSize:maxSize:)]){
             [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion minSize:lastFrame maxSize:nowFrame];
         }
+//        [self addGestureRecognizer:_PinchGestureRecognizer];
+        self.centerBtn.hidden = NO;
     }
+   
 }
 
 #pragma mark - 捏合手势
 -(void)pinch:(UIPinchGestureRecognizer *)gesture{
-    CGFloat scale = gesture.scale;
-    
-    pinchWidth= gesture.view.width * scale;
-    pinchHeight = gesture.view.height * scale;
-
-    if(gesture.state == UIGestureRecognizerStateBegan){
-        //获取当前状态
-        startHeight = self.height;
-        startWidth = self.width;
-        startX = self.x;
-        startY = self.y;
-        
-    }else if(gesture.state == UIGestureRecognizerStateEnded) {
-        
-        startHeight = self.height;
-        startWidth = self.width;
-        startX = self.x;
-        startY = self.y;
-        
-    }else if (gesture.state == UIGestureRecognizerStateChanged){
-
-        if(pinchWidth >= self.superView.width - startX){
-            pinchWidth = self.width;
-            pinchHeight = self.height;
-        }
-        if(pinchHeight >= self.superView.height - startY){
-            pinchHeight = self.height;
-            pinchWidth = self.width;
-        }
-        if(pinchWidth <= 100){
-            pinchWidth = 100;
-            pinchHeight = self.height;
-        }
-        if(pinchHeight <= 100){
-            pinchHeight = 100;
-            pinchWidth = self.width;
-        }
-        self.frame = CGRectMake(startX, startY, pinchWidth, pinchHeight);
+    if(self.delegate && [self.delegate respondsToSelector:@selector(checkRectangleView:)]){
+        [self.delegate checkRectangleView:self];
+    }
+    if([self.curType isEqualToString:self.type]){
+        gesture.view.transform = CGAffineTransformScale(gesture.view.transform, gesture.scale, gesture.scale);
+        gesture.scale = 1;
     }
 }
 
@@ -502,4 +478,15 @@ CGPoint legend_point;
     return number;
 }
 
+-(void)setIsCircle:(BOOL)isCircle{
+    _isCircle = isCircle;
+    //边失去控制
+    [self.topBorder removeGestureRecognizer:self.click1];
+    
+    [self.leftBorder removeGestureRecognizer:self.click2];
+    
+    [self.rightBorder removeGestureRecognizer:self.click3];
+    
+    [self.bottomBorder removeGestureRecognizer:self.click4];
+}
 @end

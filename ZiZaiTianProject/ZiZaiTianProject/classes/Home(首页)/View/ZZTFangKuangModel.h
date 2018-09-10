@@ -16,6 +16,23 @@
 
 @property (nonatomic,assign) NSInteger tagNum;
 
+@property (nonatomic,strong) UIColor *modelColor;
+
+@property (nonatomic,assign) BOOL isBlack;
+
+@property (nonatomic,assign) CGFloat colorF;
+
+
+@property (nonatomic,assign) CGFloat colorH;
+
+@property (nonatomic,assign) CGFloat colorS;
+
+@property (nonatomic,assign) CGFloat colorB;
+
+@property (nonatomic,strong) NSString *type;
+
+@property (nonatomic,assign) BOOL isCircle;
+
 +(instancetype)initWithViewFrame:(CGRect)viewFrame tagNum:(NSInteger)tagNum;
 
 @end

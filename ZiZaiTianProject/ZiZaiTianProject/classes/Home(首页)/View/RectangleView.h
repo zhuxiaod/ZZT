@@ -39,8 +39,15 @@
 //方框存放视图的东西
 @property (nonatomic,strong) UIView *mainView;
 
--(void)tapGestureTarget:(UITapGestureRecognizer *)gesture;
+@property (nonatomic,strong) NSString *type;
+
+@property (nonatomic,strong) NSString *curType;
+
+@property (nonatomic,assign) BOOL isCircle;
+
+-(void)tapGestureTarget;
 
 -(void)removeGestureRecognizer;
 
+-(void)closeView;
 @end

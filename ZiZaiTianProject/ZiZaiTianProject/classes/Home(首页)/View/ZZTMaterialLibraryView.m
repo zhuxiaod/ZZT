@@ -34,8 +34,6 @@
 
 @implementation ZZTMaterialLibraryView
 
-
-
 -(NSArray *)materialLibrary{
     if(!_materialLibrary){
         _materialLibrary = [NSArray array];
@@ -98,6 +96,7 @@
 //        self.fodderType = @"1";
         self.modelType = @"1";
         self.modelSubtype = @"1";
+        
     }
     return self;
 }
@@ -230,6 +229,11 @@
     }else if([self.fodderType isEqualToString:@"1"] && [self.modelType isEqualToString:@"1"] && [self.modelSubtype isEqualToString:@"1"]){
         if(self.delagate && [self.delagate respondsToSelector:@selector(sendTuKuangWithModel:)]){
             [self.delagate sendTuKuangWithModel:model];
+        }
+    }else if([self.fodderType isEqualToString:@"1"] && [self.modelType isEqualToString:@"1"] && [self.modelSubtype isEqualToString:@"2"]){
+        //圆形
+        if(self.delagate && [self.delagate respondsToSelector:@selector(sendTuKuangWithModel:)]){
+            [self.delagate sendYuanKuangWithModel:model];
         }
     }else{
         if(self.delagate && [self.delagate respondsToSelector:@selector(sendImageWithModel:)]){
