@@ -17,9 +17,6 @@
     CGFloat startY;
     CGFloat startWidth;
     CGFloat startHeight;
-    
-    CGFloat pinchWidth;
-    CGFloat pinchHeight;
 
     CGFloat selfWidth;
     CGFloat selfHeight;
@@ -27,8 +24,10 @@
     CGRect lastFrame;
     CGRect nowFrame;
 
+    CGPoint lastCenter;
     CGPoint _startTouchPoint;
     CGPoint _startTouchCenter;
+    CGAffineTransform lastTransform;
 }
 
 @property (nonatomic,weak) UIView *topBorder;
@@ -41,7 +40,7 @@
 @property (nonatomic,strong) UIPanGestureRecognizer *click4;
 @property (nonatomic,strong) UIButton *centerBtn;
 @property (nonatomic,strong) UIPinchGestureRecognizer *PinchGestureRecognizer;
-
+@property (nonatomic,assign) CGFloat scale;
 @end
 
 @implementation RectangleView
@@ -56,6 +55,7 @@ int i = 0;
         currentProportion = 0;
         self.isBig = NO;
         self.isClick = NO;
+        self.scale = 0;
     }
     return self;
 }
@@ -297,12 +297,12 @@ int i = 0;
     UIPanGestureRecognizer *click2 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
     UIPanGestureRecognizer *click3 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
     UIPanGestureRecognizer *click4 = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(tapTarget:)];
-    
+
     [topBorder addGestureRecognizer:click1];
     [leftBorder addGestureRecognizer:click2];
     [rightBorder addGestureRecognizer:click3];
     [bottomBorder addGestureRecognizer:click4];
-    
+
     self.click1 = click1;
     self.click2 = click2;
     self.click3 = click3;
@@ -326,7 +326,6 @@ int i = 0;
     [self addGestureRecognizer:tapGestureRecognizer];
     
     [self.centerBtn addTarget:self action:@selector(tapGestureTarget) forControlEvents:UIControlEventTouchUpInside];
-
 }
 
 -(void)checkView:(UITapGestureRecognizer *)gesture{
@@ -337,6 +336,7 @@ int i = 0;
         self.isHide = NO;
     }
 }
+
 #pragma mark 移动
 BOOL isMove;
 CGPoint legend_point;
@@ -399,54 +399,67 @@ CGPoint legend_point;
 
 #pragma mark - 双击事件
 -(void)tapGestureTarget{
-    //原来的大小
-    selfHeight = self.height;
-    selfWidth = self.width;
-    
+    //放大后 frame 的值 有所变化
     //计算倍数
     CGFloat pW = self.superView.width / self.width;
     CGFloat pH = self.superView.height / self.height;
 
     //如果没有放大  那么放大
     if(self.isBig == NO){
-        lastFrame = self.frame;
-        
-        //判断怎么放大
-        if(pW < pH){
-            selfWidth = self.superView.width;
-            proportion = self.superView.width / self.width;
-            selfHeight = selfHeight * proportion;
+        //原来的大小
+        selfHeight = self.height;
+        selfWidth = self.width;
+
+        lastTransform = self.transform;
+        lastCenter = self.center;
+        if(self.isCircle == YES || pW < pH){
+            //圆
+            proportion = self.superView.width / selfWidth;
+            self.transform = CGAffineTransformScale(self.transform, proportion, proportion);
+            NSLog(@"22222:%@",NSStringFromCGSize(CGSizeApplyAffineTransform(self.bounds.size,self.transform)));
         }else{
-            selfHeight = self.superView.height;
-            proportion = self.superView.height / self.height;
-            selfWidth = selfWidth * proportion;
+            //方型
+            proportion = self.superView.height / selfHeight;
+            self.transform = CGAffineTransformScale(self.transform, proportion, proportion);
+
         }
+        self.x = 0;
+        self.y = 0;
+
         //放大了
-        self.frame = CGRectMake(0, 0, selfWidth, selfHeight);
-        nowFrame = self.frame;
-        if(self.isCircle == YES){
-            self.layer.cornerRadius = self.width/2;
-        }
+        [self removeGestureRecognizer:_PinchGestureRecognizer];
+
         //放大后代理
         self.isBig = YES;
-        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:minSize:maxSize:)]){
-            [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion minSize:lastFrame maxSize:nowFrame];
+        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:)]){
+            [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion];
         }
         self.centerBtn.hidden = YES;
     }else{
+        //计算比例
+        NSLog(@"ppppp1%f",proportion);
+        if(pW < pH){
+            proportion = selfWidth/self.superView.width;
+        }else{
+            proportion = selfHeight/self.superView.height;
+        }
+
+        NSLog(@"ppppp2%f",proportion);
         //变回原来的样子
-        self.frame = lastFrame;
-        if(self.isCircle == YES){
-            self.layer.cornerRadius = self.width/2;
-        }
+        self.transform = CGAffineTransformScale(self.transform, proportion, proportion);
+        
+        self.center = lastCenter;
+
         self.isBig = NO;
-        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:minSize:maxSize:)]){
-            [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion minSize:lastFrame maxSize:nowFrame];
+        if(self.delegate && [self.delegate respondsToSelector:@selector(enlargedAfterEditView:isBig:proportion:)]){
+            [self.delegate enlargedAfterEditView:self isBig:self.isBig proportion:proportion];
         }
-//        [self addGestureRecognizer:_PinchGestureRecognizer];
+        [self addGestureRecognizer:_PinchGestureRecognizer];
         self.centerBtn.hidden = NO;
     }
-   
+    if (self.delegate && [self.delegate respondsToSelector:@selector(updateRectangleViewFrame:)]) {
+        [self.delegate updateRectangleViewFrame:self];
+    }
 }
 
 #pragma mark - 捏合手势
@@ -456,6 +469,7 @@ CGPoint legend_point;
     }
     if([self.curType isEqualToString:self.type]){
         gesture.view.transform = CGAffineTransformScale(gesture.view.transform, gesture.scale, gesture.scale);
+        self.scale += gesture.scale;
         gesture.scale = 1;
     }
 }
@@ -488,5 +502,7 @@ CGPoint legend_point;
     [self.rightBorder removeGestureRecognizer:self.click3];
     
     [self.bottomBorder removeGestureRecognizer:self.click4];
+    self.layer.cornerRadius = self.width / 2;
+
 }
 @end

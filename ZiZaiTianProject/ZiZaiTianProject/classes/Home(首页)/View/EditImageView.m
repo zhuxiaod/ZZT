@@ -27,6 +27,7 @@
         self.userInteractionEnabled = YES;
         //添加UI
         [self addUI];
+   
     }
     return self;
 }
@@ -96,77 +97,18 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"remove" object:self];
 }
 
--(void)setIsHide:(BOOL)isHide{
-    _isHide = isHide;
-    if(isHide == YES){
-        [self hideEditBtn];
-    }
-}
-
-//隐藏
-- (void)hideEditBtn{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(checkViewIsHidden:)]) {
-        [self.delegate checkViewIsHidden:self];
-    }
-}
-
-////点击的开始
-//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-//    //方框的
-//    //所在方框上的
-//    if ([self.superViewName isEqualToString:@"UIView"]) {
-//        if (self.delegate && [self.delegate respondsToSelector:@selector(EditImageViewWithViewInRectangleView:)]) {
-//            [self.delegate EditImageViewWithViewInRectangleView:self];
-//        }
-//    }else{
-//        //所在cell上的
-//        if (self.delegate && [self.delegate respondsToSelector:@selector(EditImageViewWithViewIncell:)]) {
-//            [self.delegate EditImageViewWithViewIncell:self];
-//        }
-//    }
-//
-//    self.isHide = NO;
-//    UITouch *touch = [touches anyObject];
-//    //获取点击时所在父View的位置
-//    _startTouchPoint = [touch locationInView:self.superview];
-//    _startTouchCenter = self.center;
-//    //正在移动
-//    _isMove = YES;
-//    CGPoint p = [touch locationInView:self];
-//
-//    //判断一个CGPoint 是否包含再另一个UIView的CGRect里面,常用与测试给定的对象之间是否又重叠
-//    if (CGRectContainsPoint(_editImgView.frame,p)) {
-////        _isMove = NO;
-//    }
-//}
-//
-////正在移动
-//- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-//
-//    //如果是正在移动
-//    if (_isMove) {
-//        //获得当前的位置
-//        if([self.curType isEqualToString:self.type]){
-//            CGPoint curPoint = [[touches anyObject] locationInView:self.superview];
-//
-//            //中心
-//            self.center =  CGPointMake(curPoint.x-(_startTouchPoint.x-_startTouchCenter.x), curPoint.y - (_startTouchPoint.y-_startTouchCenter.y));
-//
-//            //没有变化的中心
-//            if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewFrame:)]) {
-//                [self.delegate updateImageViewFrame:self];
-//            }
-//        }
-//    }
-//}
-//
-////切换状态
-//- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-//    _isMove = NO;
-//}
-
 #pragma mark 移动
 -(void)selfMove:(UIPanGestureRecognizer *)gesture{
+    if ([self.superViewName isEqualToString:@"UIView"]) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(EditImageViewWithViewInRectangleView:)]) {
+            [self.delegate EditImageViewWithViewInRectangleView:self];
+        }
+    }else{
+        //所在cell上的
+        if (self.delegate && [self.delegate respondsToSelector:@selector(EditImageViewWithViewIncell:)]) {
+            [self.delegate EditImageViewWithViewIncell:self];
+        }
+    }
     if(gesture.state == UIGestureRecognizerStateBegan){
 
             //默认状态为no
@@ -192,12 +134,17 @@
                 return;
             }
             //自动释放池
+        if([self.curType isEqualToString:self.type]){
             @autoreleasepool {
                 CGPoint translation = [gesture translationInView:self.superview];
                 gesture.view.transform = CGAffineTransformTranslate(gesture.view.transform, translation.x, translation.y);
                 [gesture setTranslation:CGPointZero inView:self.superview];
             }
+            if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewFrame:)]) {
+                [self.delegate updateImageViewFrame:self];
+            }
         }
+    }
 }
 
 #pragma mark - 代理方法实现旋转 + 缩放捏合 可同时进行

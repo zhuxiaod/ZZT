@@ -20,10 +20,7 @@
     [super layoutSubviews];
     
     //调整图片的位置和尺寸
-
-    //    self.imageView.width = self.width - 2;
     self.imageView.width = self.width * 0.6;
-//    self.imageView.height = self.height * 0.7;
     self.imageView.height = self.imageView.width;
     //位置写在后面
     self.imageView.y = 0;
@@ -32,10 +29,10 @@
     //调整文字的位置和尺寸
     [self.titleLabel sizeToFit];
     self.titleLabel.x = 0;
-    self.titleLabel.y = self.imageView.height+5;
+    self.titleLabel.y = self.imageView.height + 4;
     self.titleLabel.width = self.width;
 //    self.titleLabel.height = self.height * 0.2;
-    self.titleLabel.height = self.height - self.imageView.width;
+    self.titleLabel.height = self.height - self.imageView.width - 5;
     [self setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     self.titleLabel.font = [UIFont systemFontOfSize:12];
     self.adjustsImageWhenHighlighted = NO;

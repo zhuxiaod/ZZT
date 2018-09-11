@@ -403,7 +403,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tdg-gU-MEG">
-                    <rect key="frame" x="40" y="60" width="335" height="577"/>
+                    <rect key="frame" x="40" y="50" width="335" height="587"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
             </subviews>
@@ -412,7 +412,7 @@
                 <constraint firstItem="YOO-7l-zKi" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="0E4-ex-M2d"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="Laf-hk-uyu" secondAttribute="trailing" id="26D-o5-n2e"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="YOO-7l-zKi" secondAttribute="trailing" id="2vr-kD-LZr"/>
-                <constraint firstItem="Tdg-gU-MEG" firstAttribute="top" secondItem="Laf-hk-uyu" secondAttribute="bottom" constant="10" id="BjW-bG-gu1"/>
+                <constraint firstItem="Tdg-gU-MEG" firstAttribute="top" secondItem="Laf-hk-uyu" secondAttribute="bottom" id="BjW-bG-gu1"/>
                 <constraint firstItem="YOO-7l-zKi" firstAttribute="top" secondItem="UC2-Wc-Y0z" secondAttribute="bottom" id="Fr2-gb-FGJ"/>
                 <constraint firstItem="Laf-hk-uyu" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="GXe-af-NTV"/>
                 <constraint firstItem="UC2-Wc-Y0z" firstAttribute="top" secondItem="Laf-hk-uyu" secondAttribute="bottom" id="M83-HW-SQX"/>
@@ -424,7 +424,7 @@
                 <constraint firstItem="YOO-7l-zKi" firstAttribute="top" secondItem="Tdg-gU-MEG" secondAttribute="bottom" id="ual-jq-l08"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
-            <point key="canvasLocation" x="-1831" y="-737"/>
+            <point key="canvasLocation" x="-1831.5" y="-737.5"/>
         </view>
         <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="ptG-4r-6He"/>
     </objects>
