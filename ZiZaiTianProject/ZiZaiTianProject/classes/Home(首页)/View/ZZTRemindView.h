@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^ReturnValueBlock) (UIButton *btn);
+
 @interface ZZTRemindView : UIView
+
+@property (nonatomic,copy) ReturnValueBlock btnBlock;
+
+@property (nonatomic,strong) NSString *viewTitle;
 
 @end

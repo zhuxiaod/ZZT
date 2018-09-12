@@ -110,7 +110,6 @@
         }
     }
     if(gesture.state == UIGestureRecognizerStateBegan){
-
             //默认状态为no
             isMove = NO;
             if([self.curType isEqualToString:self.type]){
@@ -126,6 +125,9 @@
                 legend_point = [gesture locationInView:self];
                 //可移动状态
                 isMove = YES;
+            }
+            if (self.delegate && [self.delegate respondsToSelector:@selector(updateImageViewFrame:)]) {
+                [self.delegate updateImageViewFrame:self];
             }
     }else if (gesture.state == UIGestureRecognizerStateChanged){
   

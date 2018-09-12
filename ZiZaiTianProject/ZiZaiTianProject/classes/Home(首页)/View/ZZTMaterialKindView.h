@@ -10,6 +10,6 @@
 
 @interface ZZTMaterialKindView : UIView
 
--(instancetype)init:(NSArray *)array Width:(CGFloat)width;
+-(instancetype)init:(NSArray *)array Width:(CGFloat)width isMe:(BOOL)isMe;
 
 @end

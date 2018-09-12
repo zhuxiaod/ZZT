@@ -66,9 +66,9 @@
 //设置图片数据 刷新
 -(void)setDataSource:(NSMutableArray *)dataSource{
     _dataSource = dataSource;
-    dispatch_async(dispatch_get_main_queue(), ^{
+//    dispatch_async(dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
-    });
+//    });
 }
 
 //分三层 如何分层 我要写一个 低配版的
@@ -93,46 +93,53 @@
         //注册通知
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btnData:)name:@"btnText" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btnIndex:)name:@"btnIndex" object:nil];
-//        self.fodderType = @"1";
         self.modelType = @"1";
         self.modelSubtype = @"1";
-        
     }
     return self;
 }
 
 //1 点击事件 获得
-//2级创建的时候 触发一次
+//2级创建的时候 触发一次 二次
 -(void)btnData:(NSNotification *)text{
     //寻找这个对象
     for (ZZTTypeModel *model in self.kinds) {
-        
         //找到点击的btn 相对应的模型
-        if ([model.type isEqualToString:text.userInfo[@"text"]]) {
+       if([model.type isEqualToString:@"我的"]){
+            self.modelType = model.typeCode;
+           _typs = [ZZTDetailModel mj_objectArrayWithKeyValuesArray:model.typeList];
+           [self creatTypeView:_typs];
+            //不需要创建  直接拿数据了
+            if (self.delagate && [self.delagate respondsToSelector:@selector(obtainMyDataSourse)]) {
+                [self.delagate obtainMyDataSourse];
+            }
+           break;
+        }else if ([model.type isEqualToString:text.userInfo[@"text"]]) {
             //记录模型的索引
             self.modelType = model.typeCode;
             //解析模型数据
             _typs = [ZZTDetailModel mj_objectArrayWithKeyValuesArray:model.typeList];
             //创建三级的视图
+            [self creatTypeView:_typs];
+            break;
         }
     }
-    [self creatTypeView:_typs];
 }
 
 //3级视图创建时 触发
 -(void)btnIndex:(NSNotification *)text{
-    NSLog(@"111%@",text.userInfo[@"text"]);
     for (ZZTDetailModel *model in self.typs) {
         if ([model.detail isEqualToString:text.userInfo[@"text"]]){
             self.modelSubtype = model.detailCode;
             //代理传出去
             [self getData:self.fodderType modelType:self.modelType modelSubtype:self.modelSubtype];
+            break;
         }
     }
 }
-
+//布局 创建 。。。。传进来
 -(void)setStr:(NSString *)str{
-    //第一次创建 2次  第二次为想要的
+    //选中的地步按钮的title
     _str = str;
     _kinds = nil;
     _typs = nil;
@@ -141,24 +148,30 @@
         if([str isEqualToString:material.kind]){
             //找到索引
             self.fodderType = material.code;
-            //2级数据
+            //2级数据(推荐)
             _kinds = [ZZTTypeModel mj_objectArrayWithKeyValuesArray:material.kindList];
+            //推荐
             ZZTTypeModel *type = _kinds[0];
-            //默认第一个3级数据
+            //方框组
             _typs = [ZZTDetailModel mj_objectArrayWithKeyValuesArray:type.typeList];
-            //暴力方法
         }
     }
     //创建2级视图
-    [self creatView:_kinds];
 }
-
+-(void)setIsMe:(BOOL)isMe{
+    _isMe = isMe;
+    if(isMe == YES){
+        //我的
+        [self creatView:_kinds isMe:YES];
+    }else{
+        [self creatView:_kinds isMe:NO];
+    }
+}
 //2级创建方法
--(void)creatView:(NSMutableArray *)kinds{
+-(void)creatView:(NSMutableArray *)kinds isMe:(BOOL)isMe{
     //2次
     [_MaterialKindView removeFromSuperview];
-
-    _MaterialKindView = [[ZZTMaterialKindView alloc] init:kinds Width:SCREEN_WIDTH];
+    _MaterialKindView = [[ZZTMaterialKindView alloc] init:kinds Width:SCREEN_WIDTH isMe:isMe];
     _MaterialKindView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 30);
     _MaterialKindView.backgroundColor = [UIColor colorWithHexString:@"#E1E2E3"];
     [self addSubview:_MaterialKindView];

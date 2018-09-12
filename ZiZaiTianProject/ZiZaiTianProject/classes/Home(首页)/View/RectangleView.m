@@ -502,7 +502,6 @@ CGPoint legend_point;
     [self.rightBorder removeGestureRecognizer:self.click3];
     
     [self.bottomBorder removeGestureRecognizer:self.click4];
-    self.layer.cornerRadius = self.width / 2;
 
 }
 @end

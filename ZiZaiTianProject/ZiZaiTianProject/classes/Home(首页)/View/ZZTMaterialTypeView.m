@@ -38,7 +38,7 @@
         [self initButtons];
         if(self.buttons.count > 0){
             UIButton *btn = self.buttons[0];
-            btn.selected = YES;
+//            btn.selected = YES;
             [self buttonSelected:btn];
         }
     }

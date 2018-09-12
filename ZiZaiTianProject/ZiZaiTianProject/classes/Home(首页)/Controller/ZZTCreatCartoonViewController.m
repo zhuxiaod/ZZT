@@ -128,6 +128,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *jueSeBtn;
 @property (weak, nonatomic) IBOutlet UIButton *xiaoGuoBtn;
 @property (weak, nonatomic) IBOutlet UIButton *wenZiBtn;
+@property (nonatomic,strong) ZZTRemindView *remindView;
 
 @end
 
@@ -184,7 +185,7 @@
     [self setBOOL];
 
     //测试数据
-    ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:SCREEN_HEIGHT - 80 isSelect:YES];
+    ZZTDIYCellModel *cell = [ZZTDIYCellModel initCellWith:SCREEN_HEIGHT - 100 isSelect:YES];
     [self.cartoonEditArray addObject:cell];
 
 //    注册移除image的通知
@@ -257,6 +258,8 @@
     
     NSArray *array = [NSArray arrayWithObjects:self.buJuBtn,self.changJingBtn,self.jueSeBtn,self.xiaoGuoBtn,self.wenZiBtn,nil];
     _bottomArray = array;
+    
+    [self setBottomBtn:self.buJuBtn];
 }
 
 
@@ -294,8 +297,8 @@
     
     //足的长
     flowLayout.footerReferenceSize =CGSizeMake(SCREEN_WIDTH, 40);
-    
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0,SCREEN_WIDTH - 40, 80) collectionViewLayout:flowLayout];
+    [self.view layoutIfNeeded];
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0,SCREEN_WIDTH - 40, SCREEN_HEIGHT - 80) collectionViewLayout:flowLayout];
     collectionView.backgroundColor = [UIColor  grayColor];
     collectionView.delegate = self;
     collectionView.dataSource = self;
@@ -339,7 +342,7 @@
 #pragma mark 定义每个UICollectionView的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     //动态定义cell的大小
-    return CGSizeMake(SCREEN_WIDTH - 40,SCREEN_HEIGHT - 100);
+    return CGSizeMake(SCREEN_WIDTH - 40,SCREEN_HEIGHT - 80);
 }
 
 #pragma mark 漫画信息
@@ -431,10 +434,8 @@
 
 //保存（未解决）
 - (IBAction)save:(UIButton *)sender{
-    
-    ZZTRemindView *remindView = [[ZZTRemindView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-    [self.view addSubview:remindView];
-    [self imageThumb];
+
+//    [self imageThumb];
 }
 
 #pragma mark 遍历显示
@@ -500,6 +501,7 @@
             }else{
                 rectangView.layer.borderColor = [UIColor blackColor].CGColor;
             }
+            rectangView.isHide = YES;
             fangKuangModel.isBlack = mode.isBlack;
 
             if(mode.colorF == 1){
@@ -648,8 +650,18 @@
 #pragma mark - 全部清空
 - (IBAction)empty:(id)sender {
     //可以恢复
-//    self.isEmpty = YES;
+    ZZTRemindView *remindView = [[ZZTRemindView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    _remindView = remindView;
+    remindView.viewTitle = @"清空全部?";
+    remindView.btnBlock = ^(UIButton *btn) {
+        [self removeAll];
+        [self.remindView removeFromSuperview];
+    };
+    [self.view addSubview:remindView];
+  
+}
 
+-(void)removeAll{
     //数据全部清除
     for(int i = 0;i < self.cartoonEditArray.count;i++){
         ZZTDIYCellModel *cellModel = self.cartoonEditArray[i];
@@ -660,13 +672,25 @@
         }
     }
     [self.collectionView reloadData];
-    self.isAddM = YES;
+    self.isAddM = NO;
+//    self.currentRectangleView.isBig = NO;
 }
-
 #pragma mark 发布 未完成
 - (IBAction)commit:(id)sender {
-    //保存当前的内容 (最后一页的时候提交 没问题  但是如果返回上一页或者什么了  就有问题了)
-    [self seveCurrentView];
+    ZZTRemindView *remindView = [[ZZTRemindView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    remindView.viewTitle = @"确认发布";
+    remindView.btnBlock = ^(UIButton *btn) {
+        [self publish];
+        [self.remindView removeFromSuperview];
+    };
+    [self.view addSubview:remindView];
+}
+
+-(void)publish{
+    //保存当前页的内容 (这里可能有bug) //判断当前页是否是最后的那一页
+    if(self.currentIndex == self.cartoonArray.count){
+        [self seveCurrentView];
+    }
     //合成图数组
     NSMutableArray *imageArray = [NSMutableArray array];
     //合成完成
@@ -675,34 +699,26 @@
         self.currentIndex = i;
         //显示当前的内容
         [self restoreAtIndex];
-        
+        //取消所有view的状态
         [self exceptCurrentViewHiddenOtherView:view];
-        //截图
-        UIGraphicsBeginImageContextWithOptions(MainOperationView.bounds.size, NO, [UIScreen mainScreen].scale);
-        
-        UIImage *resultingImage = [[UIImage alloc] init];
-        
-        [resultingImage drawInRect:CGRectMake(0, 0,MainOperationView.bounds.size.width, MainOperationView.bounds.size.height)];
-        
-        [MainOperationView.layer renderInContext:UIGraphicsGetCurrentContext()];
-        
-        resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-        
-        UIGraphicsEndImageContext();
+        //截图区域 和 比例
+        UIImage *resultingImage = [self printscreen:MainOperationView];
         
         [imageArray addObject:resultingImage];
+//        UIImageWriteToSavedPhotosAlbum(resultingImage, nil, nil, nil);
         
+        //清屏
         ZZTDIYCellModel *cellModel = self.cartoonEditArray[_selectRow];
         cellModel.imageArray = nil;
         for (UIView *view in MainOperationView.subviews) {
             [view removeFromSuperview];
         }
     }
-    
+    //上传图片
     [self upLoadQiNiuLoad:imageArray];
     //说明有内容
     if(self.imageUrlArr.count > 0){
-
+        
         NSString *string = [self.imageUrlArr componentsJoinedByString:@","];
         NSDictionary *dic = @{
                               @"userId":@"1",
@@ -711,7 +727,7 @@
                               @"chapterName":@"1",
                               @"chapterId":@"1"
                               };
-        [AFNHttpTool POST:@"http://192.168.0.165:8888/cartoon/insertCartoonChapter" parameters:dic success:^(id responseObject) {
+        [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"cartoon/insertCartoonChapter"] parameters:dic success:^(id responseObject) {
             NSLog(@"成功了");
         } failure:^(NSError *error) {
             
@@ -731,12 +747,12 @@
     //是当前对象才能被翻转
     if([NSStringFromClass([self.currentView class]) isEqualToString:@"EditImageView"]){
         EditImageView *currentView = (EditImageView *)self.currentView;
-        if(currentView && currentView.isHide == NO){
+        if(currentView){
             currentView.image = [currentView.image flipHorizontal];
         }
     }else if([NSStringFromClass([self.currentView class]) isEqualToString:@"ZZTBubbleImageView"]){
         ZZTBubbleImageView *currentView = (ZZTBubbleImageView *)self.currentView;
-        if(currentView && currentView.isHide == NO){
+        if(currentView){
             currentView.image = [currentView.image flipHorizontal];
         }
     }
@@ -787,6 +803,7 @@
         }
     }
 }
+
 #pragma mark 获取方框内索引 交换
 -(void)exchangeFangKuangViewUpIndex{
     //获得正在编辑的View
@@ -968,13 +985,14 @@
         viewFrame = model.viewFrame;
     }else{
         //第一次创建
-        viewFrame = CGRectMake(self.midView.center.x/2, 20, 200, 200);
+        viewFrame = CGRectMake(self.midView.center.x/2 - 100, 20, 200, 200);
     }
     RectangleView *rectangView = [[RectangleView alloc] initWithFrame:viewFrame];
     //方框永远在cell之上
     rectangView.superView = MainOperationView;
     rectangView.delegate = self;
-    rectangView.isClick = YES;
+
+    
     rectangView.tagNum = self.tagNum;
     self.tagNum = self.tagNum + 1;
     rectangView.type = @"布局";
@@ -995,6 +1013,7 @@
     [cellModel.imageArray addObject:FKModel];
     return FKModel;
 }
+
 #pragma mark 设置当前方框
 -(void)checkRectangleView:(RectangleView *)rectangleView{
     rectangleView.curType = self.curType;
@@ -1072,6 +1091,7 @@
         [topBtnView addSubview:closeBtn];
     }else{
         [self close];
+        self.isAddM = NO;
     }
 }
 
@@ -1079,6 +1099,7 @@
     if(self.currentRectangleView.isBig == YES){
         [self.currentRectangleView closeView];
     }
+    self.currentRectangleView.isHide = YES;
     [self.closeBtn removeFromSuperview];
     [self.topBtnView removeFromSuperview];
 }
@@ -1086,7 +1107,6 @@
 //更新方框的坐标
 -(void)updateRectangleViewFrame:(RectangleView *)view{
     ZZTFangKuangModel *model = [self rectangleModelFromView:view];
-
     model.viewFrame = view.frame;
 }
 
@@ -1125,8 +1145,81 @@
 
 //收藏夹
 - (IBAction)favorite:(id)sender {
+    NSString *image = [[NSString alloc] init];
+    NSString *type = [[NSString alloc] init];
+
+    if([NSStringFromClass([self.currentView class])isEqualToString:@"ZZTBubbleImageView"]){
+        ZZTBubbleImageView *currentView = (ZZTBubbleImageView *)self.currentView;
+        ZZTEditImageViewModel *model = [self getEditImageViewModelWithView:currentView];
+        image = model.imageUrl;
+        type = model.type;
+    }else if([NSStringFromClass([self.currentView class])isEqualToString:@"EditImageView"]){
+        EditImageView *currentView = (EditImageView *)self.currentView;
+        ZZTEditImageViewModel *model = [self getImageViewModelWithView:currentView];
+        image = model.imageUrl;
+        type = model.type;
+    }else if([NSStringFromClass([self.currentView class])isEqualToString:@"RectangleView"]){
+        RectangleView *currentView = (RectangleView *)self.currentView;
+        currentView.isHide = YES;
+        //开启
+        UIImage *resultingImage = [self printscreen:currentView];
+        
+        //上传图片
+        NSString *imgName = [self getImgName];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:imgName];
+        BOOL result = [UIImagePNGRepresentation(resultingImage) writeToFile:filePath atomically:YES];
+        if(result == YES){
+            AFNHttpTool *tool = [[AFNHttpTool alloc] init];
+            NSString *toke = [tool makeToken:ZZTAccessKey secretKey:ZZTSecretKey];
+            
+            [AFNHttpTool putImagePath:filePath key:imgName token:toke complete:^(id objc) {
+                NSLog(@"%@",objc); //  上传成功并获取七牛云的图片地址
+                [self collectImageWithImageName:imgName type:@"1"];
+            }];
+        }
+    }
 }
 
+//截图
+-(UIImage *)printscreen:(UIView *)view{
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, [UIScreen mainScreen].scale);
+    
+    UIImage *resultingImage = [[UIImage alloc] init];
+    
+    [resultingImage drawInRect:CGRectMake(0, 0,view.bounds.size.width, view.bounds.size.height)];
+    
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    return resultingImage;
+}
+
+-(void)collectImageWithImageName:(NSString *)image type:(NSString *)type{
+    if([type isEqualToString:@"布局"]){
+        type = @"1";
+    }else if([type isEqualToString:@"场景"]){
+        type = @"2";
+    }else if([type isEqualToString:@"角色"]){
+        type = @"3";
+    }else if([type isEqualToString:@"效果"]){
+        type = @"4";
+    }else if([type isEqualToString:@"文字"]){
+        type = @"5";
+    }
+    NSDictionary *dic = @{
+                          @"userId":@"1",
+                          @"fodderImg":image,
+                          @"fodderType":type
+                          };
+    [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"fodder/insertUserFodderCollect"] parameters:dic success:^(id responseObject) {
+        NSLog(@"收藏成功");
+    } failure:^(NSError *error) {
+        
+    }];
+}
 #pragma mark - 单页清空
 - (IBAction)emptyView:(id)sender {
     //当前cell的数据
@@ -1139,7 +1232,6 @@
         view.hidden = YES;
     }
     [self.collectionView reloadData];
-    self.isAddM = YES;
 }
 
 #pragma mark ZZTMaterialLibraryViewDelegate 按索引获取数据
@@ -1373,7 +1465,6 @@
     //如果是方框
     if([NSStringFromClass([self.mainView class]) isEqualToString:@"UIView"]){
         ZZTFangKuangModel *FKModel = [self rectangleModelFromView:self.currentRectangleView];
-        
         //更新model中的数据
         for (int i = 0; i < FKModel.viewArray.count; i++) {
             model = FKModel.viewArray[i];
@@ -1414,6 +1505,7 @@
     model.imageViewFrame = view.frame;
     //回到变化后
     view.transform = lastTransform;
+    model.viewTransform = view.transform;
 }
 
 #pragma mark 请求素材库
@@ -1483,53 +1575,58 @@
     [self exceptCurrentViewHiddenOtherView:view];
 }
 
-#pragma mark 截图 这里要搞个异步
-- (void)imageThumb{
-    [self hideAllBtn];
-
-    NSMutableArray *imageArray = [NSMutableArray array];
-   
-    //循环截图
-    //多少个cell 截图多少次   更新了 要变换才行
-    for(int i = 0;i < self.cartoonEditArray.count;i++){
-        //数据管理cell  数据错误
-        ZZTCartoonDrawView *cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-        //开启
-        UIGraphicsBeginImageContextWithOptions(cell.bounds.size, NO, [UIScreen mainScreen].scale);
-        
-        UIImage *resultingImage = [[UIImage alloc] init];
-        [resultingImage drawInRect:CGRectMake(0, 0,cell.bounds.size.width, cell.bounds.size.height)];
-        
-        [cell.layer renderInContext:UIGraphicsGetCurrentContext()];
-        
-        resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-        
-        UIGraphicsEndImageContext();
-        
-        
-        [imageArray addObject:resultingImage];
-        //保存本地
-//        resultingImage = [resultingImage stretchableImageWithLeftCapWidth:SCREEN_WIDTH topCapHeight:SCREEN_HEIGHT];
-        UIImageWriteToSavedPhotosAlbum(resultingImage, nil, nil, nil);
-        
-        cell.alpha = 0.6;
+//#pragma mark 截图 这里要搞个异步
+//- (void)imageThumb{
+//    [self hideAllBtn];
+//    /*
+//     保存
+//     */
+//    NSMutableArray *imageArray = [NSMutableArray array];
+//
+//    //循环截图
+//    //多少个cell 截图多少次   更新了 要变换才行
+//    for(int i = 0;i < self.cartoonEditArray.count;i++){
+//        //数据管理cell  数据错误
+//        ZZTCartoonDrawView *cell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+//        //开启
+//        UIGraphicsBeginImageContextWithOptions(cell.bounds.size, NO, [UIScreen mainScreen].scale);
+//
+//        UIImage *resultingImage = [[UIImage alloc] init];
+//        [resultingImage drawInRect:CGRectMake(0, 0,cell.bounds.size.width, cell.bounds.size.height)];
+//
+//        [cell.layer renderInContext:UIGraphicsGetCurrentContext()];
+//
+//        resultingImage = UIGraphicsGetImageFromCurrentImageContext();
+//
+//        UIGraphicsEndImageContext();
+//
+//
+//        [imageArray addObject:resultingImage];
+//        //保存本地
+////        resultingImage = [resultingImage stretchableImageWithLeftCapWidth:SCREEN_WIDTH topCapHeight:SCREEN_HEIGHT];
+//        UIImageWriteToSavedPhotosAlbum(resultingImage, nil, nil, nil);
+//
+//    }
+//
+//}
+//生成文件名
+-(NSString *)getImgName{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = [formatter stringFromDate:[NSDate date]];
+    NSString *imgName = [formatter stringFromDate:[NSDate date]];
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    NSMutableString *randomString = [NSMutableString stringWithCapacity:32];
+    for (NSInteger i = 0; i < 32; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform((uint32_t)letters.length)]];
     }
-    
+    imgName = [NSString stringWithFormat:@"%@%@.png",imgName,randomString];
+    return imgName;
 }
-
 -(void)upLoadQiNiuLoad:(NSArray *)array{
     //上传七牛云
     for (int i = 0; i < array.count; i++) {
         //文件名
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = [formatter stringFromDate:[NSDate date]];
-        NSString *imgName = [formatter stringFromDate:[NSDate date]];
-        NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        NSMutableString *randomString = [NSMutableString stringWithCapacity:32];
-        for (NSInteger i = 0; i < 32; i++) {
-            [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random_uniform((uint32_t)letters.length)]];
-        }
-        imgName = [NSString stringWithFormat:@"%@%@.png",imgName,randomString];
+        NSString *imgName = [self getImgName];
         //写入本地
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:imgName];
@@ -1537,7 +1634,7 @@
         
         if (result == YES) {
             NSLog(@"保存成功");
-            
+            [self.imageUrlArr removeAllObjects];
             AFNHttpTool *tool = [[AFNHttpTool alloc] init];
             NSString *toke = [tool makeToken:ZZTAccessKey secretKey:ZZTSecretKey];
             
@@ -1591,9 +1688,8 @@
     for (int i = 0;i < self.bottomArray.count;i++) {
         UIButton *btn = self.bottomArray[i];
         if([sender.titleLabel.text isEqualToString:btn.titleLabel.text]){
-            UIImage *buttonImage = [[UIImage imageNamed:btn.titleLabel.text] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+            UIImage *buttonImage = [UIImage imageNamed:btn.titleLabel.text];
             [btn setBackgroundImage:buttonImage forState:UIControlStateNormal];
-            
             [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
             self.curType = btn.titleLabel.text;
         }else{
@@ -1601,20 +1697,26 @@
             [btn setBackgroundImage:[UIImage createImageWithColor:[UIColor clearColor]] forState:UIControlStateNormal];
         }
     }
-
 }
+
 //弹出底部View
 -(void)setupMaterialLibraryView:(NSString *)str{
+    ZZTMaterialLibraryView *view = [self MaterialLibraryViewWithStr:str];
+    view.isMe = NO;
+}
+
+-(ZZTMaterialLibraryView *)MaterialLibraryViewWithStr:(NSString *)str{
     [_materialLibraryView removeFromSuperview];
     CGFloat viewHeight = (SCREEN_HEIGHT - 88)/3;
     CGFloat y = (SCREEN_HEIGHT - 30) - viewHeight;
     _materialLibraryView = [[ZZTMaterialLibraryView alloc] initWithFrame:CGRectMake(0, y, SCREEN_WIDTH, viewHeight)];
     _materialLibraryView.delagate = self;
+    //调试入口
     _materialLibraryView.str = str;
     _materialLibraryView.backgroundColor = [UIColor colorWithHexString:@"#B1B1B1"];
     [self.view addSubview:_materialLibraryView];
+    return _materialLibraryView;
 }
-
 #pragma mark 隐藏其他View的状态
 -(void)exceptCurrentViewHiddenOtherView:(UIView *)view{
     self.currentView = view;
@@ -1663,16 +1765,7 @@
     //预览
     //截屏
     //开启
-    UIGraphicsBeginImageContextWithOptions(_midView.bounds.size, NO, [UIScreen mainScreen].scale);
-    
-    UIImage *resultingImage = [[UIImage alloc] init];
-    [resultingImage drawInRect:CGRectMake(0, 0,_midView.bounds.size.width, _midView.bounds.size.height)];
-    
-    [_midView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    
-    resultingImage = UIGraphicsGetImageFromCurrentImageContext();
-    
-    UIGraphicsEndImageContext();
+    UIImage *resultingImage = [self printscreen:_midView];
     
     //放在一个view上
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, SCREEN_HEIGHT)];
@@ -1809,6 +1902,7 @@
     }
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
+
 - (IBAction)deletView:(ToolBtn *)sender {
 //    删除
     if([NSStringFromClass([self.currentView class]) isEqualToString:@"EditImageView"]){
@@ -1857,6 +1951,11 @@
 -(void)speedInitFangKuangViewWith:(BOOL)isBlack colorF:(CGFloat)colorF isCircle:(BOOL)isCircle{
     RectangleView *rectangleView = [self createFuangKuangViewWithModel:nil];
     rectangleView.isCircle = isCircle;
+    
+    if(rectangleView.isCircle == YES){
+        rectangleView.layer.cornerRadius = rectangleView.width/2;
+    }
+    
     if (isBlack == YES) {
         rectangleView.mainView.backgroundColor = [UIColor blackColor];
         rectangleView.layer.borderColor = [UIColor whiteColor].CGColor;
@@ -1885,4 +1984,42 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 }
 
+#pragma mark 我的
+- (IBAction)MyCollectTarget:(UIButton *)sender {
+    //打开响应的底部View
+    ZZTMaterialLibraryView *view = [self MaterialLibraryViewWithStr:self.curType];
+    view.isMe = YES;
+    //打开我的收藏夹
+    
+    //收到数据
+    //让2级显示最后一个
+    //数据请求新的接口
+}
+
+-(void)obtainMyDataSourse{
+    NSString *type = [[NSString alloc] init];
+    if([self.curType isEqualToString:@"布局"]){
+        type = @"1";
+    }else if([self.curType isEqualToString:@"场景"]){
+        type = @"2";
+    }else if([self.curType isEqualToString:@"角色"]){
+        type = @"3";
+    }else if([self.curType isEqualToString:@"效果"]){
+        type = @"4";
+    }else if([self.curType isEqualToString:@"文字"]){
+        type = @"5";
+    }
+    NSDictionary *parameter = @{
+                                @"userId":@"1",
+                                @"fodderType":type
+                                };
+    [AFNHttpTool POST:[ZZTAPI stringByAppendingString:@"fodder/getFodderCollectInfo"] parameters:parameter success:^(id responseObject) {
+        NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+        NSMutableArray *array = [ZZTFodderListModel mj_objectArrayWithKeyValuesArray:dic];
+        self.dataSource = array;
+        self.materialLibraryView.dataSource = array;
+    } failure:^(NSError *error) {
+        
+    }];
+}
 @end

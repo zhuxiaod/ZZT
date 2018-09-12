@@ -27,6 +27,6 @@
 
 -(void)setImageURl:(NSString *)imageURl{
     _imageURl = imageURl;
-    [_imageView sd_setImageWithURL:[NSURL URLWithString:imageURl] placeholderImage:[UIImage imageNamed:@"peien"]];
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:imageURl]];
 }
 @end

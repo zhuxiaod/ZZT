@@ -21,6 +21,8 @@
 
 -(void)sendYuanKuangWithModel:(ZZTFodderListModel *)model;
 
+-(void)obtainMyDataSourse;
+
 
 @end
 
@@ -29,6 +31,8 @@
 @property (nonatomic,strong) NSMutableArray *dataSource;
 
 @property (nonatomic,strong) NSString *str;
+
+@property (nonatomic,assign) BOOL isMe;
 
 @property (nonatomic,strong)id<MaterialLibraryViewDelegate>delagate;
 

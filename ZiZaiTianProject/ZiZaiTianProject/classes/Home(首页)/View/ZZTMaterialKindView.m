@@ -35,14 +35,19 @@
     return _buttons;
 }
 
-- (instancetype)init:(NSArray *)array Width:(CGFloat)width{
+-(instancetype)init:(NSArray *)array Width:(CGFloat)width isMe:(BOOL)isMe{
     if(self = [self init]){
         self.buttonData = array;
-        _btnWidth = SCREEN_WIDTH/array.count;
+        _btnWidth = SCREEN_WIDTH / array.count;
         [self initButtons];
         if(self.buttons.count > 0){
-            UIButton *btn = self.buttons[0];
-            btn.selected = YES;
+            UIButton *btn = [[UIButton alloc] init];
+            if(isMe == YES){
+                btn = self.buttons[self.buttons.count - 1];
+            }
+            else{
+                btn = self.buttons[0];
+            }
             [self buttonSelected:btn];
         }
     }
@@ -81,7 +86,6 @@
         [self.buttons addObject:btn];
         [self addSubview:btn];
     }
-
 }
 
 -(void)buttonSelected:(UIButton *)btn{
@@ -90,7 +94,6 @@
         if([btn.titleLabel.text isEqualToString:button.titleLabel.text]){
             button.selected = YES;
             [btn setTitleColor:[UIColor colorWithHexString:@"#7B7BE4"] forState:UIControlStateNormal];
-//            [button setBackgroundColor:[UIColor blackColor]];
             [btn setImage:[UIImage imageNamed:@"排行榜-当前榜单"] forState:UIControlStateNormal];
             //代理传值
             NSDictionary *dic = @{

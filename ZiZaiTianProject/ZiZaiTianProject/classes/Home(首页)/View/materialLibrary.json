@@ -20,20 +20,8 @@
                },
                {
                "typeCode": "2",
-               "type": "收藏夹",
-               "typeList": [{
-                            "detailCode": "1",
-                            "detail": "111"
-                            },
-                            {
-                            "detailCode": "2",
-                            "detail": "222"
-                            },
-                            {
-                            "detailCode": "3",
-                            "detail": "333"
-                            }
-                            ]
+               "type": "我的",
+               "typeList":[]
                }
                ]
   },
@@ -74,11 +62,8 @@
                },
                {
                "typeCode": "5",
-               "type": "自定义",
-               "typeList": [{
-                            "detailCode": "1",
-                            "detail": "2格"
-                            }]
+               "type": "我的",
+               "typeList": []
                }
                ]
   },
@@ -119,11 +104,8 @@
                },
                {
                "typeCode": "5",
-               "type": "自定义",
-               "typeList": [{
-                            "detailCode": "1",
-                            "detail": "2格"
-                            }]
+               "type": "我的",
+               "typeList": []
                }
                ]
   },
@@ -164,11 +146,8 @@
                },
                {
                "typeCode": "5",
-               "type": "所有框",
-               "typeList": [{
-                            "detailCode": "1",
-                            "detail": "2格"
-                            }]
+               "type": "我的",
+               "typeList": []
                }
                ]
   },
@@ -207,7 +186,12 @@
                             "detailCode": "1",
                             "detail": "2格"
                             }]
+               },
+               {
+               "typeCode": "4",
+               "type": "我的",
+               "typeList": []
                }
                ]
-  }
-  ]
+    }
+]

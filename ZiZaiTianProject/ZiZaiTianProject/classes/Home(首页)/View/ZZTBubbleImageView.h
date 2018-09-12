@@ -33,6 +33,7 @@
     CGFloat _len;
     UITextView *TextView;
 }
+
 //当前字体
 @property (retain, nonatomic) UIFont *curFont;
 //最小字体字号
@@ -40,7 +41,7 @@
 
 @property (assign, nonatomic) CGSize minSize;
 
-@property (nonatomic,assign)id<ZZTBubbleImageViewDelegate> bubbleDelegate;
+@property (nonatomic,assign) id<ZZTBubbleImageViewDelegate> bubbleDelegate;
 
 @property (nonatomic,assign) BOOL isHide;
 
@@ -53,8 +54,8 @@
 @property (nonatomic,strong) UIView *superView;
 
 @property (nonatomic,strong) NSString *type;
-@property (nonatomic,strong) NSString *curType;
 
+@property (nonatomic,strong) NSString *curType;
 
 -(instancetype)initWithFrame:(CGRect)frame text:(NSString *)text superView:(UIView *)superView;
 
