@@ -90,17 +90,25 @@
 
 -(void)buttonSelected:(UIButton *)btn{
     self.recodeStr = btn.titleLabel.text;
-    for (UIButton *button in self.buttons) {
+    for (int i = 0; i < self.buttons.count; i++) {
+        UIButton *button = self.buttons[i];
         if([btn.titleLabel.text isEqualToString:button.titleLabel.text]){
             button.selected = YES;
             [btn setTitleColor:[UIColor colorWithHexString:@"#7B7BE4"] forState:UIControlStateNormal];
             [btn setImage:[UIImage imageNamed:@"排行榜-当前榜单"] forState:UIControlStateNormal];
-            //代理传值
-            NSDictionary *dic = @{
-                                  @"text":btn.titleLabel.text
-                                  };
-            NSNotification *notification = [NSNotification notificationWithName:@"btnText" object:nil userInfo:dic];
-            [[NSNotificationCenter defaultCenter] postNotification:notification];
+            
+            if(i == (self.buttons.count - 1)){
+                NSNotification *notification = [NSNotification notificationWithName:@"obtionMyDataSource" object:nil userInfo:nil];
+                [[NSNotificationCenter defaultCenter] postNotification:notification];
+            }else{
+                //代理传值
+                NSDictionary *dic = @{
+                                      @"text":btn.titleLabel.text
+                                      };
+                NSNotification *notification = [NSNotification notificationWithName:@"btnText" object:nil userInfo:dic];
+                [[NSNotificationCenter defaultCenter] postNotification:notification];
+            }
+            
             //点击判断是索引 传出去
         }else{
             button.selected = NO;

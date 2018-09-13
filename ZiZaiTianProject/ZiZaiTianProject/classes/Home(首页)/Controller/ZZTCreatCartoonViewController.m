@@ -375,6 +375,7 @@
         RectangleView *rectangleView = (RectangleView *)self.currentRectangleView;
         //缩小操作
         [rectangleView tapGestureTarget];
+        
     }
     
     //判断view 移动后会触发一次 那一次是不会响应这一条的
@@ -666,9 +667,10 @@
     for(int i = 0;i < self.cartoonEditArray.count;i++){
         ZZTDIYCellModel *cellModel = self.cartoonEditArray[i];
         [cellModel.imageArray removeAllObjects];
+        self.mainView = MainOperationView;
         ZZTCartoonDrawView *currentCell = (ZZTCartoonDrawView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
         for (UIView *view in currentCell.operationView.subviews) {
-            view.hidden = YES;
+            [view removeFromSuperview];
         }
     }
     [self.collectionView reloadData];
@@ -890,7 +892,7 @@
     
     //这里 判断是什么东西
     NSInteger index = [self viewIndexFromArray:array integer:integer];
-    
+    //3 2
     [self exchangeViewAtIndexInView:index exchangeIndex:index - 1 limit:0];
 }
 //在View之中的层级交换接口
@@ -1092,6 +1094,7 @@
     }else{
         [self close];
         self.isAddM = NO;
+        self.mainView = MainOperationView;
     }
 }
 
@@ -1651,6 +1654,7 @@
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"remove" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"removeRectangleView" object:nil];
+
 }
 
 #pragma mark 素材库
@@ -2022,4 +2026,12 @@
         
     }];
 }
+
+//- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+//{
+//    if ([touches anyObject].view != _materialLibraryView) {
+//        // 判断点击的区域如果不是菜单按钮_btnMenu, 则关闭菜单
+//        [_materialLibraryView removeFromSuperview];
+//    }
+//}
 @end

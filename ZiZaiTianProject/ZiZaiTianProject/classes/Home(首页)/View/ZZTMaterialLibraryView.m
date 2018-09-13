@@ -93,28 +93,37 @@
         //注册通知
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btnData:)name:@"btnText" object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(btnIndex:)name:@"btnIndex" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(obtionMyData)name:@"obtionMyDataSource" object:nil];
+
+        
         self.modelType = @"1";
         self.modelSubtype = @"1";
     }
     return self;
 }
-
+-(void)obtionMyData{
+    [_materialTypeView removeFromSuperview];
+    if (self.delagate && [self.delagate respondsToSelector:@selector(obtainMyDataSourse)]) {
+        [self.delagate obtainMyDataSourse];
+    }
+}
 //1 点击事件 获得
 //2级创建的时候 触发一次 二次
 -(void)btnData:(NSNotification *)text{
     //寻找这个对象
     for (ZZTTypeModel *model in self.kinds) {
+        //不遍历 直接拿
+        
         //找到点击的btn 相对应的模型
-       if([model.type isEqualToString:@"我的"]){
-            self.modelType = model.typeCode;
-           _typs = [ZZTDetailModel mj_objectArrayWithKeyValuesArray:model.typeList];
-           [self creatTypeView:_typs];
-            //不需要创建  直接拿数据了
-            if (self.delagate && [self.delagate respondsToSelector:@selector(obtainMyDataSourse)]) {
-                [self.delagate obtainMyDataSourse];
-            }
-           break;
-        }else if ([model.type isEqualToString:text.userInfo[@"text"]]) {
+//       if([model.type isEqualToString:@"我的"]){
+//            self.modelType = model.typeCode;
+////           _typs = [ZZTDetailModel mj_objectArrayWithKeyValuesArray:model.typeList];
+//           NSMutableArray *array = [NSMutableArray array];
+//           [self creatTypeView:array];
+//            //不需要创建  直接拿数据了
+//           break;
+//        }else
+        if ([model.type isEqualToString:text.userInfo[@"text"]]) {
             //记录模型的索引
             self.modelType = model.typeCode;
             //解析模型数据
@@ -154,6 +163,7 @@
             ZZTTypeModel *type = _kinds[0];
             //方框组
             _typs = [ZZTDetailModel mj_objectArrayWithKeyValuesArray:type.typeList];
+            break;
         }
     }
     //创建2级视图
@@ -259,5 +269,16 @@
 -(void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"btnText" object:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"btnIndex" object:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"obtionMyDataSource" object:self];
+}
+
+-(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+    
+    UIView *view = [super hitTest:point withEvent:event];
+    
+    if(view == nil){
+        [self removeFromSuperview];
+    }
+    return view;
 }
 @end

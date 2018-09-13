@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^topUpBtnBlock) (UIButton *sender);
+
 @interface ZZTVIPMidView : UIView
+
+@property (nonatomic,copy) topUpBtnBlock buttonAction;
+
 
 +(instancetype)VIPMidView;
 

@@ -34,6 +34,11 @@
     //充值服务
     ZZTVIPMidView *midView = [ZZTVIPMidView VIPMidView];
     midView.frame = CGRectMake(0,VIPTopView.y+VIPTopView.height +15, SCREEN_WIDTH, 280);
+    midView.buttonAction = ^(UIButton *sender) {
+        if(sender.tag == 1){
+            NSLog(@"1111");
+        }
+    };
     [scrollView addSubview:midView];
     
     //VIP特权
@@ -42,8 +47,6 @@
     [scrollView addSubview:btView];
     
     scrollView.contentSize = CGSizeMake(SCREEN_WIDTH, btView.y+btView.height);
-
 }
-
 
 @end
