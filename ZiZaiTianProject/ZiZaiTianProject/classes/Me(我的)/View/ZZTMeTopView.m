@@ -27,14 +27,17 @@
 
 -(void)setUserModel:(ZZTUserModel *)userModel{
     _userModel = userModel;
-    [self.headImage sd_setImageWithURL:[NSURL URLWithString:userModel.headimg]];
-    [self.userName setText:userModel.nickName];
-    if([userModel.userType isEqualToString:@"1"]){
-        self.VIPBtn.hidden = YES;
+    if(userModel.isLogin == YES){
+        [self.headImage sd_setImageWithURL:[NSURL URLWithString:userModel.headimg]];
+        [self.userName setText:userModel.nickName];
+        if([userModel.userType isEqualToString:@"1"]){
+            self.VIPBtn.hidden = YES;
+        }
+        [self.jiFenLab setText:[NSString stringWithFormat:@"%ld积分",(long)userModel.integralNum]];
+    }else{
+        [self.userName setText:@"未登录"];
     }
-//    _ZBLab setText:userModel.
-    [self.jiFenLab setText:[NSString stringWithFormat:@"%ld积分",(long)userModel.integralNum]];
-//    self.followNum setText:[NSString stringWithFormat:@"%ld粉丝",userModel.]
+    
 }
 +(instancetype)meTopView{
     return [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass(self) owner:nil options:nil] firstObject];
@@ -55,19 +58,25 @@
 
 - (void)buttonClick:(UIButton *)button{
     // 判断下这个block在控制其中有没有被实现
-    if (self.buttonAction) {
+    if (self.buttonAction && self.userModel.isLogin == YES) {
         // 调用block传入参数
-    self.buttonAction(button);
+        self.buttonAction(button);
+    }else{
+        //登录
+        self.loginAction(button);
     }
 }
 
 //跳转签到界面
 - (IBAction)pushSignInView:(id)sender {
-    
-    ZZTSignInViewController *signInVC = [[ZZTSignInViewController alloc] init];
-    signInVC.hidesBottomBarWhenPushed = YES;
-    [[self myViewController].navigationController pushViewController:signInVC animated:YES];
-
+    //登录了才能签到
+    if(self.userModel.isLogin == YES){
+        ZZTSignInViewController *signInVC = [[ZZTSignInViewController alloc] init];
+        signInVC.hidesBottomBarWhenPushed = YES;
+        [[self myViewController].navigationController pushViewController:signInVC animated:YES];
+    }else{
+        self.loginAction(sender);
+    }
 }
 
 @end

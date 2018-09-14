@@ -34,6 +34,7 @@ PODS:
   - SDWebImage (4.4.1):
     - SDWebImage/Core (= 4.4.1)
   - SDWebImage/Core (4.4.1)
+  - SVProgressHUD (2.2.5)
   - "UITableView+FDTemplateLayoutCell (1.6)"
   - UMengAnalytics (4.2.4)
 
@@ -52,6 +53,7 @@ DEPENDENCIES:
   - RTRootNavigationController
   - SDCycleScrollView (~> 1.75)
   - SDWebImage (~> 4.0)
+  - SVProgressHUD
   - "UITableView+FDTemplateLayoutCell"
   - UMengAnalytics
 
@@ -72,6 +74,7 @@ SPEC REPOS:
     - RTRootNavigationController
     - SDCycleScrollView
     - SDWebImage
+    - SVProgressHUD
     - "UITableView+FDTemplateLayoutCell"
     - UMengAnalytics
 
@@ -91,9 +94,10 @@ SPEC CHECKSUMS:
   RTRootNavigationController: d6aa6cbb78a3eaecea4f6e4df63f15dd887836b8
   SDCycleScrollView: 884b88f0266dd4708a0e1934975c69cb971707b1
   SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
   UMengAnalytics: ef8d45f94c0e5771dc364cf6a5731d9d3b101da2
 
-PODFILE CHECKSUM: 92118215e18e44fec10699328396d0815c3e9c10
+PODFILE CHECKSUM: 08d6d4d08fd013bf34b41ce6bca827dcc7bbf1b4
 
 COCOAPODS: 1.5.3

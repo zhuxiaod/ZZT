@@ -22,6 +22,7 @@
 #import "ZZTShoppingMallViewController.h"
 #import "ZZTCartoonViewController.h"
 #import "ZZTMeAttentionViewController.h"
+#import "ZZTLoginRegisterViewController.h"
 
 @interface ZZTMeViewController ()<UITableViewDataSource,UITableViewDelegate,ZZTSignInViewDelegate>
 
@@ -39,6 +40,7 @@
 @property (nonatomic,strong) ZZTSignInView *signView;
 
 @property (nonatomic,strong) ZZTMeTopView *topView;
+
 @end
 
 @implementation ZZTMeViewController
@@ -84,7 +86,6 @@ NSString *bannerID = @"MeCell";
     [self setupTab];
 }
 
-
 #pragma mark - 设置tableView
 -(void)setupTab
 {
@@ -110,6 +111,11 @@ NSString *bannerID = @"MeCell";
             [self.navigationController pushViewController:editVC animated:YES];
         }
     };
+    top.loginAction = ^(UIButton *btn) {
+        //弹出登录页面
+        ZZTLoginRegisterViewController *loginView = [[ZZTLoginRegisterViewController alloc] init];
+        [self presentViewController:loginView animated:YES completion:nil];
+    };
     
     [self.view addSubview:_tableView];
     //注册cell
@@ -120,11 +126,13 @@ NSString *bannerID = @"MeCell";
 -(void)setupTopView{
     self.topView.userModel = self.userData;
 }
+
 #pragma mark - tableView
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 5;
 }
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(section == 0){
@@ -139,6 +147,7 @@ NSString *bannerID = @"MeCell";
         return 1;
     }
 }
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ZZTMeCell *cell = [tableView dequeueReusableCellWithIdentifier:bannerID];
@@ -325,14 +334,24 @@ NSString *bannerID = @"MeCell";
 }
 -(void)loadUserData{
     NSDictionary *paramDict = @{
-                                @"userId":@"1"
+                                @"userId":@"10"
                                 };
     [self.manager POST:[ZZTAPI stringByAppendingString:@"login/usersInfo"] parameters:paramDict progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
-        NSArray *array = [ZZTUserModel mj_objectArrayWithKeyValuesArray:dic];
-        ZZTUserModel *model = array[0];
-        self.userData = model;
-        [self setupTopView];
+        NSLog(@"%@",responseObject);
+        NSInteger code = (long)responseObject[@"code"];
+        if(code == 100){
+            NSDictionary *dic = [[EncryptionTools sharedEncryptionTools] decry:responseObject[@"result"]];
+            NSArray *array = [ZZTUserModel mj_objectArrayWithKeyValuesArray:dic];
+            ZZTUserModel *model = array[0];
+            model.isLogin = NO;
+            self.userData = model;
+            [self setupTopView];
+        }else{
+            ZZTUserModel *model = [[ZZTUserModel alloc] init];
+            model.isLogin = NO;
+            self.userData = model;
+            [self setupTopView];
+        }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];

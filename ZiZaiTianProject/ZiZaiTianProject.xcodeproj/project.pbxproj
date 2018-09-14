@@ -48,6 +48,8 @@
 		0421C033211AC6910068AD21 /* ZZTFangKuangModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0421C032211AC6910068AD21 /* ZZTFangKuangModel.m */; };
 		0422F6A02124120100A8BDBB /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422F69F2124120000A8BDBB /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		042769672147F7B400DE238D /* ZZTRemindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 042769662147F7B400DE238D /* ZZTRemindView.m */; };
+		0427696A214B443600DE238D /* ZZTInAPPPurchaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04276969214B443600DE238D /* ZZTInAPPPurchaseViewController.m */; };
+		042769C5214B5CAD00DE238D /* MLIAPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 042769C3214B5CAD00DE238D /* MLIAPManager.m */; };
 		042A5BE120E7623700F5BA89 /* ZZTCartonnPlayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 042A5BE020E7623700F5BA89 /* ZZTCartonnPlayModel.m */; };
 		042BA0B720E9BF2F003E279A /* ZZTAttentionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 042BA0B520E9BF2F003E279A /* ZZTAttentionCell.m */; };
 		042BA0B820E9BF2F003E279A /* ZZTAttentionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 042BA0B620E9BF2F003E279A /* ZZTAttentionCell.xib */; };
@@ -337,6 +339,10 @@
 		0422F69F2124120000A8BDBB /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
 		042769652147F7B400DE238D /* ZZTRemindView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTRemindView.h; sourceTree = "<group>"; };
 		042769662147F7B400DE238D /* ZZTRemindView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTRemindView.m; sourceTree = "<group>"; };
+		04276968214B443600DE238D /* ZZTInAPPPurchaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTInAPPPurchaseViewController.h; sourceTree = "<group>"; };
+		04276969214B443600DE238D /* ZZTInAPPPurchaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTInAPPPurchaseViewController.m; sourceTree = "<group>"; };
+		042769C3214B5CAD00DE238D /* MLIAPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MLIAPManager.m; sourceTree = "<group>"; };
+		042769C4214B5CAD00DE238D /* MLIAPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLIAPManager.h; sourceTree = "<group>"; };
 		042A5BDF20E7623700F5BA89 /* ZZTCartonnPlayModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTCartonnPlayModel.h; sourceTree = "<group>"; };
 		042A5BE020E7623700F5BA89 /* ZZTCartonnPlayModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZTCartonnPlayModel.m; sourceTree = "<group>"; };
 		042BA0B420E9BF2F003E279A /* ZZTAttentionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZTAttentionCell.h; sourceTree = "<group>"; };
@@ -1397,6 +1403,10 @@
 				040D28272133D0CF002A3B72 /* ZZTSignInViewController.xib */,
 				0450E23C21351D6600AE924B /* ZZTMeAttentionViewController.h */,
 				0450E23D21351D6600AE924B /* ZZTMeAttentionViewController.m */,
+				04276968214B443600DE238D /* ZZTInAPPPurchaseViewController.h */,
+				04276969214B443600DE238D /* ZZTInAPPPurchaseViewController.m */,
+				042769C4214B5CAD00DE238D /* MLIAPManager.h */,
+				042769C3214B5CAD00DE238D /* MLIAPManager.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1617,6 +1627,7 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/JGProgressHUD/JGProgressHUD.bundle",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
 				"${PODS_ROOT}/PYSearch/PYSearch/PYSearch.bundle",
+				"${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -1624,6 +1635,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/JGProgressHUD.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/PYSearch.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SVProgressHUD.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1746,6 +1758,7 @@
 				046683C020F49AA00095C6BC /* CaiNiXiHuanCell.m in Sources */,
 				040D28282133D0CF002A3B72 /* ZZTSignInViewController.m in Sources */,
 				0471A88920F87BD000ABFF35 /* customer.m in Sources */,
+				042769C5214B5CAD00DE238D /* MLIAPManager.m in Sources */,
 				046683C320F49CCB0095C6BC /* ZZTJiuGongGeView.m in Sources */,
 				F7C04C0C20DF3E9E0055E7A8 /* AppDelegate.m in Sources */,
 				040FD50E20EF384200004C71 /* ZZTShoppingBtnCell.m in Sources */,
@@ -1761,6 +1774,7 @@
 				0471A89D20FC40F900ABFF35 /* ZZTCartoonModel.m in Sources */,
 				049A99B620E3288400ED27C9 /* ZXDButton.m in Sources */,
 				040D281A2133A2E2002A3B72 /* ZZTWalletTopView.m in Sources */,
+				0427696A214B443600DE238D /* ZZTInAPPPurchaseViewController.m in Sources */,
 				F7C04C2120DF49190055E7A8 /* ZZTHomeViewController.m in Sources */,
 				04CF25942105AACA0026EC8F /* ZZTMaterialLibraryView.m in Sources */,
 				0471A87220F747FE00ABFF35 /* ZZTWordDescSectionHeadView.m in Sources */,

@@ -14,7 +14,11 @@
 
 typedef void(^ButtonClick)(UIButton * sender);
 
+typedef void(^loginClick)(UIButton * btn);
+
 @property (nonatomic,copy) ButtonClick buttonAction;
+@property (nonatomic,copy) loginClick loginAction;
+
 
 @property (nonatomic,strong) ZZTUserModel *userModel;
 

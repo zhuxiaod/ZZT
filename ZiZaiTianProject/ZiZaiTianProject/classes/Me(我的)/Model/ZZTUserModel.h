@@ -53,4 +53,6 @@
 //连续签到数+
 @property (nonatomic,assign)NSInteger signCount;
 
+@property (nonatomic,assign)BOOL isLogin;
+
 @end

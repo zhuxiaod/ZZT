@@ -17,7 +17,7 @@
 @end
 
 @implementation ZZTLoginRegisterViewController
-
+ 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor redColor];
@@ -110,10 +110,12 @@
     ZXDLoginRegisterView *registerView = self.midView.subviews[1];
     registerView.frame = CGRectMake(self.midView.bounds.size.width * 0.5, 0, self.midView.bounds.size.width * 0.5, self.midView.bounds.size.height);
 }
+
 - (IBAction)dissMiss:(UIButton *)sender {
     [self dismissViewControllerAnimated:YES completion:nil];
 
 }
+
 - (IBAction)clickRegister:(UIButton *)sender {
     sender.selected =! sender.selected;
     
@@ -123,5 +125,17 @@
     [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
     }];
+}
+
+#pragma mark 三方登录
+
+- (IBAction)QQLogin:(UIButton *)sender {
+    
+}
+- (IBAction)WeChatLogin:(UIButton *)sender {
+    
+}
+- (IBAction)sinaLogin:(UIButton *)sender {
+    
 }
 @end
